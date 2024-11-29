@@ -33,6 +33,7 @@ public class Main extends SimpleApplication {
     private UserInputHandler inputHandler;
     private ModelLoader modelLoader;
     private SceneSwitchingManager sceneManager;
+    private SoundManager soundManager;
         
     private Node handsNode;
     private CameraNode camNode;
@@ -91,6 +92,9 @@ public class Main extends SimpleApplication {
         sceneManager = new SceneSwitchingManager(this);
         stateManager.attach(sceneManager);
         
+        // Sound Switch
+        soundManager = new SoundManager(assetManager);
+        
         // Input Handle
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode);
         
@@ -98,14 +102,20 @@ public class Main extends SimpleApplication {
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
         Node classroomScene = modelLoader.loadClassroom();
+        classroomScene.setName("ClassroomScene");
         Node monkey = modelLoader.loadMonkey(classroomScene);
         //Spatial hands = modelLoader.loadHands();
         
         Node blackholeScene = modelLoader.loadBlackhole();
+        blackholeScene.setName("BlackholeScene");
         
         // Initialize the first scene
         sceneManager.switchToNextScene();
         
+        sceneManager.addScene(classroomScene);
+        
+        sceneManager.addScene(blackholeScene);
+
         
         
         animComposer = handsModel.getControl(AnimComposer.class);
@@ -123,10 +133,6 @@ public class Main extends SimpleApplication {
                 System.out.println(anim);  // Print available animations
             }
         }
-        
- 
-        
-        
     }
     
 
@@ -134,6 +140,10 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         inputHandler.firstPersonNavigationUpdate(tpf, playerNode, playerControl);
+        
+        if (sceneManager.hasSceneChanged()) {
+            playSceneMusic(sceneManager.getCurrentSceneName());
+        }
         
 
     }
@@ -143,5 +153,20 @@ public class Main extends SimpleApplication {
         //TODO: add render code
     }
     
+    private void playSceneMusic(String sceneName) {
+        soundManager.stopCurrentBGM(); // Stop any currently playing BGM
+
+        switch (sceneName) {
+            case "ClassroomScene":
+                soundManager.playBGM("quiet_bgm");
+                break;
+            case "BlackholeScene":
+                soundManager.playBGM("mystery_bgm");
+                break;
+            default:
+                System.out.println("No BGM mapped for scene: " + sceneName);
+                break;
+        }
+    }
 
 }

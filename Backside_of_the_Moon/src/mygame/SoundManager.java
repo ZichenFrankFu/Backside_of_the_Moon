@@ -80,6 +80,7 @@ public class SoundManager {
 
     /**
      * Play a sound effect once.
+     * @param name
      */
     public void playSFX(String name) {
         AudioNode sfx = sfxMap.get(name);
@@ -96,16 +97,20 @@ public class SoundManager {
 
     
     public AudioNode getSFXNodeForStep(String name) {
-    AudioNode original = sfxMap.get(name); // Retrieve the original AudioNode
-    if (original != null) {
-        AudioNode clone = original.clone(); // Clone the AudioNode
-        clone.setPositional(false); // Ensure the sound is non-positional
-        clone.setLooping(false); // Ensure the sound does not loop
-        return clone;
-    } else {
-        System.err.println("Sound effect '" + name + "' not found in the SFX map.");
-        return null;
+        AudioNode original = sfxMap.get(name); // Retrieve the original AudioNode
+        if (original != null) {
+            AudioNode clone = original.clone(); // Clone the AudioNode
+            clone.setPositional(false); // Ensure the sound is non-positional
+            clone.setLooping(false); // Ensure the sound does not loop
+            return clone;
+        } else {
+            System.err.println("Sound effect '" + name + "' not found in the SFX map.");
+            return null;
+        }
     }
+    public AudioNode getCurrentBGM() {
+    return currentBGM;
 }
+
 
 }
