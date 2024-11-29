@@ -1,6 +1,8 @@
 package mygame;
 
 import com.jme3.anim.AnimComposer;
+import com.jme3.animation.AnimChannel;
+import com.jme3.animation.AnimControl;
 import com.jme3.asset.AssetManager;
 import com.jme3.asset.TextureKey;
 import com.jme3.asset.plugins.FileLocator;
@@ -61,20 +63,23 @@ public class ModelLoader {
     
     public Node loadHands() {
         // Load the arms model
-        Spatial handsModel = assetManager.loadModel("Models/Hands/arms.j3o");
+        Spatial handsModel = assetManager.loadModel("Models/Hands/arms.glb");
         handsModel.scale(0.5f);  // Adjust the scale as needed.
-        handsNode.setLocalTranslation(new Vector3f(4, 5, 2));
+        
         handsModel.setName("hands");
 
         // Create a node for the hands and attach the model
         handsNode = new Node("HandsNode");
+        handsNode.setLocalTranslation(new Vector3f(4, 5, 2));
         handsNode.attachChild(handsModel);
 
         // Add a character control to the node so we can add other things and
         // control the model rotation
-        physicsHands = new BetterCharacterControl(0.3f, 2.0f, 8f);
-        handsNode.addControl(physicsHands);
-        bulletAppState.getPhysicsSpace().add(physicsHands);
+        //physicsHands = new BetterCharacterControl(0.3f, 2.0f, 8f);
+        //handsNode.addControl(physicsHands);
+        //bulletAppState.getPhysicsSpace().add(physicsHands);
+        
+        
 
         // Add character node to the rootNode
         rootNode.attachChild(handsNode);
@@ -82,7 +87,18 @@ public class ModelLoader {
         // Set up animations if available
         animComposer = handsModel.getControl(AnimComposer.class);
         if (animComposer != null) {
+            System.out.println("AnimComposer");
             animComposer.setCurrentAction("Relax_hands_idle_loop");
+        } else {
+            System.out.println("No AnimComposer");
+        }
+        
+        AnimControl control = handsModel.getControl(AnimControl.class);
+        AnimChannel channel;
+        if (control != null) {
+            for (String anim : control.getAnimationNames()) {
+                System.out.println(anim);  // Print available animations
+            }
         }
               
         return handsNode;
