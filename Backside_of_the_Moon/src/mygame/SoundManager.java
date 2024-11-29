@@ -28,7 +28,7 @@ public class SoundManager {
      */
     private void loadBGMs(AssetManager assetManager) {
         bgmMap.put("quiet_bgm", createAudioNode(assetManager, "Sounds/bgm/quiet_bgm.ogg", true, 0.3f));
-        // bgmMap.put("mystery_bgm", createAudioNode(assetManager, "Sounds/bgm/quite_unsettled_bgm.ogg", true, 0.3f));
+        bgmMap.put("mystery_bgm", createAudioNode(assetManager, "Sounds/bgm/quite_unsettled_bgm.ogg", true, 0.3f));
         bgmMap.put("movement_bgm", createAudioNode(assetManager, "Sounds/bgm/Movement_bgm.ogg", true, 0.3f));
     }
 
