@@ -9,12 +9,14 @@ import java.util.Map;
 public class SoundManager {
 
     private final Map<String, AudioNode> bgmMap;
-    private final Map<String, AudioNode> sfxMap; 
+    private final Map<String, AudioNode> sfxMap;
+    private final Map<String, Boolean> sfxStateMap; // Tracks the play state of looping SFX
     private AudioNode currentBGM; // Keeps track of the currently playing BGM
 
     public SoundManager(AssetManager assetManager) {
         bgmMap = new HashMap<>();
         sfxMap = new HashMap<>();
+        sfxStateMap = new HashMap<>();
         currentBGM = null;
 
         loadBGMs(assetManager);
@@ -25,36 +27,36 @@ public class SoundManager {
      * Loads all background music into the bgmMap.
      */
     private void loadBGMs(AssetManager assetManager) {
-        bgmMap.put("quiet_bgm", createAudioNode(assetManager, "Sounds/bgm/quiet_bgm.ogg", true));
-        bgmMap.put("mystery_bgm", createAudioNode(assetManager, "Sounds/bgm/quite_unsettled_bgm.ogg", true));
-        bgmMap.put("movement_bgm", createAudioNode(assetManager, "Sounds/bgm/Movement_bgm.ogg", true));
+        bgmMap.put("quiet_bgm", createAudioNode(assetManager, "Sounds/bgm/quiet_bgm.ogg", true, 0.3f));
+        // bgmMap.put("mystery_bgm", createAudioNode(assetManager, "Sounds/bgm/quite_unsettled_bgm.ogg", true, 0.3f));
+        bgmMap.put("movement_bgm", createAudioNode(assetManager, "Sounds/bgm/Movement_bgm.ogg", true, 0.3f));
     }
 
     /**
      * Loads all sound effects into the sfxMap.
      */
     private void loadSFX(AssetManager assetManager) {
-        sfxMap.put("click", createAudioNode(assetManager, "Sounds/click.wav", false));
-        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", false));
-        sfxMap.put("elevator_step", createAudioNode(assetManager, "Sounds/elevator_steps.ogg", false));
-        sfxMap.put("game_over", createAudioNode(assetManager, "Sounds/game-over.ogg", false));
-        sfxMap.put("bang", createAudioNode(assetManager, "Sounds/Bang.wav", false));
+        sfxMap.put("pickup", createAudioNode(assetManager, "Sounds/click.wav", false, 1.0f));
+        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 0.7f));
+        sfxMap.put("elevator_step", createAudioNode(assetManager, "Sounds/elevator_steps.ogg", false, 1.0f));
+        sfxMap.put("game_over", createAudioNode(assetManager, "Sounds/game-over.ogg", false, 0.3f));
+        sfxMap.put("bang", createAudioNode(assetManager, "Sounds/Bang.wav", false, 0.3f));
     }
 
     /**
      * Helper to create a preconfigured AudioNode.
      */
-    private AudioNode createAudioNode(AssetManager assetManager, String filePath, boolean loop) {
+    private AudioNode createAudioNode(AssetManager assetManager, String filePath, boolean loop, float volume) {
         AudioNode audio = new AudioNode(assetManager, filePath, false);
         audio.setPositional(false);
         audio.setLooping(loop); // Loop for BGMs, single instance for SFX
-        audio.setVolume(2); // Default volume
+        audio.setVolume(volume); // Default volume
         return audio;
     }
 
     /**
      * Play the specified BGM, stopping any currently playing BGM.
-     * @param name
+     * @param name Name of the background music to play.
      */
     public void playBGM(String name) {
         if (currentBGM != null) {
@@ -79,8 +81,36 @@ public class SoundManager {
     }
 
     /**
+     * Play a looping SFX, like footsteps.
+     * @param name Name of the sound effect to play.
+     */
+    public void playLoopingSFX(String name) {
+        AudioNode sfx = sfxMap.get(name);
+        if (sfx != null && !sfxStateMap.getOrDefault(name, false)) {
+            sfx.play();
+            sfxStateMap.put(name, true); // Mark as playing
+        } else if (sfx == null) {
+            System.err.println("SFX with name '" + name + "' not found!");
+        }
+    }
+
+    /**
+     * Stop a looping SFX, like footsteps.
+     * @param name Name of the sound effect to stop.
+     */
+    public void stopLoopingSFX(String name) {
+        AudioNode sfx = sfxMap.get(name);
+        if (sfx != null && sfxStateMap.getOrDefault(name, false)) {
+            sfx.stop();
+            sfxStateMap.put(name, false); // Mark as not playing
+        } else if (sfx == null) {
+            System.err.println("SFX with name '" + name + "' not found!");
+        }
+    }
+
+    /**
      * Play a sound effect once.
-     * @param name
+     * @param name Name of the sound effect to play.
      */
     public void playSFX(String name) {
         AudioNode sfx = sfxMap.get(name);
@@ -90,27 +120,25 @@ public class SoundManager {
             System.err.println("SFX with name '" + name + "' not found!");
         }
     }
-    
-    public AudioNode getSFXNode(String name) {
-        return sfxMap.get(name);
-    }
 
-    
-    public AudioNode getSFXNodeForStep(String name) {
-        AudioNode original = sfxMap.get(name); // Retrieve the original AudioNode
-        if (original != null) {
-            AudioNode clone = original.clone(); // Clone the AudioNode
-            clone.setPositional(false); // Ensure the sound is non-positional
-            clone.setLooping(false); // Ensure the sound does not loop
-            return clone;
+    /**
+     * Stop a sound effect, if it is playing.
+     * @param name Name of the sound effect to stop.
+     */
+    public void stopSFX(String name) {
+        AudioNode sfx = sfxMap.get(name);
+        if (sfx != null) {
+            sfx.stop();
         } else {
-            System.err.println("Sound effect '" + name + "' not found in the SFX map.");
-            return null;
+            System.err.println("SFX with name '" + name + "' not found!");
         }
     }
+
+    /**
+     * Get the currently playing BGM.
+     * @return The currently playing AudioNode for BGM.
+     */
     public AudioNode getCurrentBGM() {
-    return currentBGM;
-}
-
-
+        return currentBGM;
+    }
 }

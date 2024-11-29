@@ -29,6 +29,7 @@ public class GameState extends AbstractAppState {
     private List<Spatial> pickableItems = new ArrayList<>();
     private Spatial aimedItem;
     private BitmapText notificationText; // Notification for item pick-up
+    private boolean gotKey = false;
 
     private boolean forward = false, backward = false, left = false, right = false, speedBoost = false;
     private float normalSpeed = 5.0f;  // Normal movement speed
@@ -73,14 +74,19 @@ public class GameState extends AbstractAppState {
     
     /**
      * Method to detect and pick up an item. 
+     * @return 
      */
-    public void pickUpItem() {
+    public boolean pickUpItem() {
         if (aimedItem != null) {
             aimedItem.removeFromParent(); // Remove the item from the scene
             pickableItems.remove(aimedItem); // Remove the item from the list of pickable items
             System.out.println("Picked up: " + aimedItem.getName()); // Log the pick-up event
+            if ("Key".equals(aimedItem.getName()) && !gotKey) {
+                gotKey = true;
+            }
             aimedItem = null; // Reset the aimed item
         }
+        return gotKey;
     }
 
     /**

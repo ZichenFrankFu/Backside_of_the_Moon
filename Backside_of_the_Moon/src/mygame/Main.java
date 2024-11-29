@@ -48,9 +48,9 @@ public class Main extends SimpleApplication {
     private BetterCharacterControl monkeyControl;
     private AnimComposer monkeyAnimComposer;
     private float monkeySpeed = 4.0f;
-
-
-
+    
+    // Bag check
+    private boolean gotKey = false;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -113,7 +113,8 @@ public class Main extends SimpleApplication {
         createCrosshair();
         
         // Input Handle
-        inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState);
+        inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
+
         
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
@@ -143,6 +144,12 @@ public class Main extends SimpleApplication {
         }
         
         chasePlayer();
+        gotKey = inputHandler.getGotKey();
+        if (gotKey){
+            System.out.println("Detected Key in Bag!!");
+        } else {
+            System.out.println("No Key!!");
+        }
         
         
 

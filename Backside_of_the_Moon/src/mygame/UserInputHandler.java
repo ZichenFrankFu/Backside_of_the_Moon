@@ -19,14 +19,10 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 
-/**
- *
- * @author frankfu
- */
 public class UserInputHandler {
-    
+
     private GameState gameState;
-    private Vector3f walkDirection = new Vector3f(0,0,0);
+    private Vector3f walkDirection = new Vector3f(0, 0, 0);
     private float speed = 5f;
     private boolean isSpeedUp = false;
 
@@ -35,17 +31,24 @@ public class UserInputHandler {
     private final Camera cam;
     private final CameraNode camNode;
     private final SceneSwitchingManager sceneManager;
-    
-    private Vector3f viewDirection = new Vector3f(0,0,1);
 
-    public UserInputHandler(InputManager inputManager, Camera cam, SceneSwitchingManager sceneManager, CameraNode camNode, GameState gameState) {
+    private Vector3f viewDirection = new Vector3f(0, 0, 1);
+    private final SoundManager soundManager;
+
+    private float stepTimer = 0f; // Timer to control step sound interval
+    private float stepInterval = 0.5f; // Interval in seconds between steps
+    
+    // Bag check
+    private boolean gotKey;
+
+    public UserInputHandler(InputManager inputManager, Camera cam, SceneSwitchingManager sceneManager, CameraNode camNode, GameState gameState, SoundManager soundManager) {
         this.inputManager = inputManager;
         this.cam = cam;
         this.sceneManager = sceneManager;
         this.camNode = camNode;
         this.gameState = gameState;
-        
-        
+        this.soundManager = soundManager;
+
         setupKeys();
         setupMouseListener();
     }
@@ -57,10 +60,9 @@ public class UserInputHandler {
         inputManager.addMapping("MoveDown", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("SpeedUp", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SwitchScene", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("Pickup",new KeyTrigger(KeyInput.KEY_F));
+        inputManager.addMapping("Pickup", new KeyTrigger(KeyInput.KEY_F));
 
         inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "SpeedUp", "SwitchScene", "Pickup");
-
     }
 
     private final ActionListener actionListener = new ActionListener() {
@@ -82,23 +84,25 @@ public class UserInputHandler {
                 case "SpeedUp":
                     isSpeedUp = isPressed;
                     break;
-                case "SwitchScene": 
+                case "SwitchScene":
                     sceneManager.switchToNextScene();
                     break;
                 case "Pickup":
-                    gameState.pickUpItem();
+//                    gameState.pickUpItem();
+                    gotKey = gameState.pickUpItem();
+                    if (isPressed) {
+                        soundManager.playSFX("pickup"); // Play the pickup sound
+                    }
                     break;
             }
         }
-        
-        
     };
 
     private void setupMouseListener() {
         inputManager.addRawInputListener(new RawInputListener() {
             @Override
             public void onMouseMotionEvent(MouseMotionEvent evt) {
-                float mouseSensitivity = 0.3f; // Adjust sensitivity to your liking
+                float mouseSensitivity = 0.3f;
                 float valueX = evt.getDX() * mouseSensitivity;
                 float valueY = evt.getDY() * mouseSensitivity;
 
@@ -136,40 +140,25 @@ public class UserInputHandler {
     }
 
     private void tiltCamera(float value) {
-        // Limit pitch to prevent flipping
-        float mouseSensitivity = 0.2f; // Adjust sensitivity if needed
-        float maxPitch = FastMath.HALF_PI - 0.1f; // Prevents flipping to look directly up or down
+        float mouseSensitivity = 0.2f;
+        float maxPitch = FastMath.HALF_PI - 0.1f;
 
-        // Get the current rotation
         Quaternion currentRotation = camNode.getLocalRotation();
         Vector3f left = camNode.getLocalRotation().mult(Vector3f.UNIT_X);
 
-        // Calculate pitch rotation
         Quaternion pitchRotation = new Quaternion().fromAngleAxis(-value * mouseSensitivity * FastMath.DEG_TO_RAD, left);
         Quaternion newRotation = pitchRotation.mult(currentRotation);
 
-        // Constrain the pitch to avoid flipping
-        Vector3f newDirection = newRotation.getRotationColumn(2); // Z-axis represents forward direction
+        Vector3f newDirection = newRotation.getRotationColumn(2);
         if (newDirection.y > -maxPitch && newDirection.y < maxPitch) {
             camNode.setLocalRotation(newRotation);
         }
     }
-    
-    // Scene switch action listener
-    private final ActionListener switchSceneListener = new ActionListener() {
-        @Override
-        public void onAction(String name, boolean isPressed, float tpf) {
-            if (name.equals("SwitchScene") && isPressed) {
-                sceneManager.switchToNextScene();
-            }
-        }
-    };
-    
-    public void firstPersonNavigationUpdate(float tpf, Node playerNode, BetterCharacterControl playerControl){
-        // Get current forward and left vectors of the playerNode:
+
+    public void firstPersonNavigationUpdate(float tpf, Node playerNode, BetterCharacterControl playerControl) {
         Vector3f modelForwardDir = playerNode.getWorldRotation().mult(Vector3f.UNIT_Z);
         Vector3f modelLeftDir = playerNode.getWorldRotation().mult(Vector3f.UNIT_X);
-        // Determine the change in direction
+
         walkDirection.set(0, 0, 0);
         if (left) {
             walkDirection.addLocal(modelLeftDir.mult(speed));
@@ -184,19 +173,33 @@ public class UserInputHandler {
             walkDirection.addLocal(modelForwardDir.mult(speed).negate());
         }
         if (isSpeedUp) {
-            walkDirection.multLocal(2); // Double the speed when Shift is pressed
+            walkDirection.multLocal(2);
         }
         playerControl.setWalkDirection(walkDirection);
         playerControl.setViewDirection(viewDirection);
+
+        // Handle step sound
+        if (!walkDirection.equals(Vector3f.ZERO)) {
+            stepTimer += tpf;
+            if (stepTimer >= stepInterval) {
+                soundManager.playSFX("step");
+                stepTimer = 0f;
+            }
+        } else {
+            stepTimer = 0f; // Reset the timer when not moving
+        }
     }
-    
-    
-    public Vector3f getWalkDirection(){
+
+    public Vector3f getWalkDirection() {
         return walkDirection;
     }
-    
-    public Vector3f getViewDirection(){
+
+    public Vector3f getViewDirection() {
         return viewDirection;
     }
-}
     
+    
+    public boolean getGotKey(){
+        return gotKey;
+    }
+}
