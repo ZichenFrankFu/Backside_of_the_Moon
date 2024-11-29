@@ -19,27 +19,32 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 
+/**
+ * Handles user input for the game.
+ * @author frankfu
+ */
 public class UserInputHandler {
 
-    private GameState gameState;
-    private Vector3f walkDirection = new Vector3f(0, 0, 0);
-    private float speed = 5f;
-    private boolean isSpeedUp = false;
-
-    private boolean left = false, right = false, up = false, down = false;
+    private final GameState gameState;
     private final InputManager inputManager;
     private final Camera cam;
     private final CameraNode camNode;
     private final SceneSwitchingManager sceneManager;
-
-    private Vector3f viewDirection = new Vector3f(0, 0, 1);
     private final SoundManager soundManager;
 
-    private float stepTimer = 0f; // Timer to control step sound interval
-    private float stepInterval = 0.5f; // Interval in seconds between steps
-    
-    // Bag check
-    private boolean gotKey;
+    // Movement controls
+    private Vector3f walkDirection = new Vector3f(0, 0, 0);
+    private Vector3f viewDirection = new Vector3f(0, 0, 1);
+    private float speed = 5f;
+    private boolean isSpeedUp = false;
+    private boolean left = false, right = false, up = false, down = false;
+
+    // Step sound controls
+    private float stepTimer = 0f;
+    private float stepInterval = 0.5f; // Interval in seconds between step sounds
+
+    // Key check
+    private boolean gotKey = false;
 
     public UserInputHandler(InputManager inputManager, Camera cam, SceneSwitchingManager sceneManager, CameraNode camNode, GameState gameState, SoundManager soundManager) {
         this.inputManager = inputManager;
@@ -56,13 +61,13 @@ public class UserInputHandler {
     private void setupKeys() {
         inputManager.addMapping("MoveLeft", new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("MoveRight", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("MoveUp", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("MoveDown", new KeyTrigger(KeyInput.KEY_S));
+        inputManager.addMapping("MoveForward", new KeyTrigger(KeyInput.KEY_W));
+        inputManager.addMapping("MoveBackward", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("SpeedUp", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SwitchScene", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("Pickup", new KeyTrigger(KeyInput.KEY_F));
 
-        inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "SpeedUp", "SwitchScene", "Pickup");
+        inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveForward", "MoveBackward", "SpeedUp", "SwitchScene", "Pickup");
     }
 
     private final ActionListener actionListener = new ActionListener() {
@@ -75,10 +80,10 @@ public class UserInputHandler {
                 case "MoveRight":
                     right = isPressed;
                     break;
-                case "MoveUp":
+                case "MoveForward":
                     up = isPressed;
                     break;
-                case "MoveDown":
+                case "MoveBackward":
                     down = isPressed;
                     break;
                 case "SpeedUp":
@@ -88,10 +93,9 @@ public class UserInputHandler {
                     sceneManager.switchToNextScene();
                     break;
                 case "Pickup":
-//                    gameState.pickUpItem();
                     gotKey = gameState.pickUpItem();
                     if (isPressed) {
-                        soundManager.playSFX("pickup"); // Play the pickup sound
+                        soundManager.playSFX("pickup"); // Play pickup sound
                     }
                     break;
             }
@@ -197,9 +201,8 @@ public class UserInputHandler {
     public Vector3f getViewDirection() {
         return viewDirection;
     }
-    
-    
-    public boolean getGotKey(){
+
+    public boolean getGotKey() {
         return gotKey;
     }
 }

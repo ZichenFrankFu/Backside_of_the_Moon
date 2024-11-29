@@ -220,9 +220,9 @@ public class ModelLoader {
                 Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
                 cake.setName("Key");
                 cake.setLocalScale(5.0f);
-                cake.setLocalTranslation(1.0f - i, 6.0f, 2.0f);
+                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
                 
-                
+           
                 RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
                 cake.addControl(cakeControl);
                 bulletAppState.getPhysicsSpace().add(cakeControl); 

@@ -7,7 +7,6 @@ import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.font.BitmapText;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
@@ -102,8 +101,6 @@ public class Main extends SimpleApplication {
         // Sound Switch
         soundManager = new SoundManager(assetManager);
         
-        
-        
         // UI
         setNotificationText();
         gameState = new GameState(cam, inputManager, notificationText);
@@ -115,7 +112,6 @@ public class Main extends SimpleApplication {
         // Input Handle
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
 
-        
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
         Node classroomScene = modelLoader.loadClassroom();
@@ -126,14 +122,11 @@ public class Main extends SimpleApplication {
         Node blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadOto(blackholeScene);
         modelLoader.loadCakes(10, classroomScene, gameState);
+        modelLoader.loadCakes(10, blackholeScene, gameState);
         
         // Initialize the first scene
         sceneManager.switchToNextScene();
-
-        
     }
-    
-
 
     @Override
     public void simpleUpdate(float tpf) {
@@ -150,9 +143,6 @@ public class Main extends SimpleApplication {
         } else {
             System.out.println("No Key!!");
         }
-        
-        
-
     }
 
     @Override
@@ -194,7 +184,6 @@ public class Main extends SimpleApplication {
     }
     
     private void setNotificationText(){
-        // Initialize the HUD text for showing item notifications
         notificationText = new BitmapText(guiFont, false);
         notificationText.setSize(guiFont.getCharSet().getRenderedSize());
         notificationText.setText("");
@@ -203,7 +192,7 @@ public class Main extends SimpleApplication {
     }
     
     private void playSceneMusic(String sceneName) {
-        soundManager.stopCurrentBGM(); // Stop any currently playing BGM
+        soundManager.stopCurrentBGM();
 
         switch (sceneName) {
             case "ClassroomScene":
@@ -220,33 +209,12 @@ public class Main extends SimpleApplication {
     
     private void chasePlayer() {
         if (monkeyNode != null && playerNode != null) {
-            // Calculate direction towards player
             Vector3f monsterPosition = monkeyNode.getWorldTranslation();
             Vector3f playerPosition = playerNode.getWorldTranslation();
             Vector3f directionToPlayer = playerPosition.subtract(monsterPosition).normalizeLocal();
 
-            // Set the walk direction to move towards the player
-            monkeyControl.setWalkDirection(directionToPlayer.mult(monkeySpeed)); // Adjustable speed by multiplying the vector
+            monkeyControl.setWalkDirection(directionToPlayer.mult(monkeySpeed));
             monkeyControl.setViewDirection(directionToPlayer.negate());
-            
-            // Manage animation based on whether the monkey is moving
-            if (monkeyAnimComposer != null) {
-                if (!directionToPlayer.equals(Vector3f.ZERO)) {
-                    if (!"Walk".equals(monkeyAnimComposer.getCurrentAction())) {
-                        monkeyAnimComposer.setCurrentAction("Walk");
-                        monkeyAnimComposer.setGlobalSpeed(20.0f);
-                    }
-                } else {
-                    if (!"Idle".equals(monkeyAnimComposer.getCurrentAction())) {
-                        monkeyAnimComposer.setCurrentAction("Idle");
-                    }
-                }
-            }
-            
         }
-        
-        
     }
-    
-        
 }
