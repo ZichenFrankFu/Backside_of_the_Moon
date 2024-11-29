@@ -1,11 +1,13 @@
 package mygame;
 
+import com.jme3.anim.AnimComposer;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.font.BitmapText;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
@@ -40,6 +42,14 @@ public class Main extends SimpleApplication {
     private BitmapText crosshair;
     float iconWidth = 52;
     float iconHeight = 47;
+    
+    // Monster chasing
+    private Node monkeyNode;
+    private BetterCharacterControl monkeyControl;
+    private AnimComposer monkeyAnimComposer;
+    private float monkeySpeed = 4.0f;
+
+
 
 
     public static void main(String[] args) {
@@ -56,14 +66,13 @@ public class Main extends SimpleApplication {
         this.setShowSettings(false);
         this.inputManager.setCursorVisible(false);
         inputManager.setCursorVisible(false);
-        //flyCam.setEnabled(false);
         
         // Physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
         
         // Add gravity
-        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -1.62f, 0));
+        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
 
         // Create player Node
         playerNode = new Node("the player");
@@ -83,7 +92,7 @@ public class Main extends SimpleApplication {
         // Camera Node Setup
         camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0, 4, -6));
+        camNode.setLocalTranslation(new Vector3f(0, 4, -3));
         playerNode.attachChild(camNode);
         
         // Scene Switch
@@ -93,8 +102,7 @@ public class Main extends SimpleApplication {
         // Sound Switch
         soundManager = new SoundManager(assetManager);
         
-        // Input Handle
-        inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode);
+        
         
         // UI
         setNotificationText();
@@ -104,14 +112,19 @@ public class Main extends SimpleApplication {
         createLoadButton();
         createCrosshair();
         
+        // Input Handle
+        inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState);
         
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
         Node classroomScene = modelLoader.loadClassroom();
-        modelLoader.loadMonkey(classroomScene);
+        monkeyNode = modelLoader.loadMonkey(classroomScene);
+        monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
+        monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
+        
         Node blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadOto(blackholeScene);
-        modelLoader.loadCakes(3, classroomScene, gameState);
+        modelLoader.loadCakes(10, classroomScene, gameState);
         
         // Initialize the first scene
         sceneManager.switchToNextScene();
@@ -128,6 +141,9 @@ public class Main extends SimpleApplication {
         if (sceneManager.hasSceneChanged()) {
             playSceneMusic(sceneManager.getCurrentSceneName());
         }
+        
+        chasePlayer();
+        
         
 
     }
@@ -193,6 +209,36 @@ public class Main extends SimpleApplication {
                 System.out.println("No BGM mapped for scene: " + sceneName);
                 break;
         }
+    }
+    
+    private void chasePlayer() {
+        if (monkeyNode != null && playerNode != null) {
+            // Calculate direction towards player
+            Vector3f monsterPosition = monkeyNode.getWorldTranslation();
+            Vector3f playerPosition = playerNode.getWorldTranslation();
+            Vector3f directionToPlayer = playerPosition.subtract(monsterPosition).normalizeLocal();
+
+            // Set the walk direction to move towards the player
+            monkeyControl.setWalkDirection(directionToPlayer.mult(monkeySpeed)); // Adjustable speed by multiplying the vector
+            monkeyControl.setViewDirection(directionToPlayer.negate());
+            
+            // Manage animation based on whether the monkey is moving
+            if (monkeyAnimComposer != null) {
+                if (!directionToPlayer.equals(Vector3f.ZERO)) {
+                    if (!"Walk".equals(monkeyAnimComposer.getCurrentAction())) {
+                        monkeyAnimComposer.setCurrentAction("Walk");
+                        monkeyAnimComposer.setGlobalSpeed(20.0f);
+                    }
+                } else {
+                    if (!"Idle".equals(monkeyAnimComposer.getCurrentAction())) {
+                        monkeyAnimComposer.setCurrentAction("Idle");
+                    }
+                }
+            }
+            
+        }
+        
+        
     }
 
 }

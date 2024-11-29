@@ -24,6 +24,8 @@ import com.jme3.scene.Node;
  * @author frankfu
  */
 public class UserInputHandler {
+    
+    private GameState gameState;
     private Vector3f walkDirection = new Vector3f(0,0,0);
     private float speed = 5f;
     private boolean isSpeedUp = false;
@@ -36,11 +38,12 @@ public class UserInputHandler {
     
     private Vector3f viewDirection = new Vector3f(0,0,1);
 
-    public UserInputHandler(InputManager inputManager, Camera cam, SceneSwitchingManager sceneManager, CameraNode camNode) {
+    public UserInputHandler(InputManager inputManager, Camera cam, SceneSwitchingManager sceneManager, CameraNode camNode, GameState gameState) {
         this.inputManager = inputManager;
         this.cam = cam;
         this.sceneManager = sceneManager;
         this.camNode = camNode;
+        this.gameState = gameState;
         
         
         setupKeys();
@@ -54,9 +57,9 @@ public class UserInputHandler {
         inputManager.addMapping("MoveDown", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("SpeedUp", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SwitchScene", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("Jump",new KeyTrigger(KeyInput.KEY_J));
+        inputManager.addMapping("Pickup",new KeyTrigger(KeyInput.KEY_F));
 
-        inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "SpeedUp", "SwitchScene", "Jump");
+        inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "SpeedUp", "SwitchScene", "Pickup");
 
     }
 
@@ -81,6 +84,9 @@ public class UserInputHandler {
                     break;
                 case "SwitchScene": 
                     sceneManager.switchToNextScene();
+                    break;
+                case "Pickup":
+                    gameState.pickUpItem();
                     break;
             }
         }

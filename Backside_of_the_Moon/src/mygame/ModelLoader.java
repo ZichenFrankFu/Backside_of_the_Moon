@@ -72,6 +72,7 @@ public class ModelLoader {
         Node classroomScene = new Node("Classroom Scene");
         Spatial classroom = assetManager.loadModel("Models/NoDeskClassroom/noDeskClassroom.j3o");
         classroom.setLocalScale(2.0f);
+        classroom.setLocalTranslation(0,5f, 0);
         classroomScene.attachChild(classroom);
         sceneManager.addScene(classroomScene);
         
@@ -112,12 +113,14 @@ public class ModelLoader {
         return classroomScene;
     }
     
+    
+    
     public Node loadMonkey(Node classroomScene) {
         // Load and scale the BloodyMonkey model
         Node bloodyMonkey = (Node) assetManager.loadModel("Models/Monkey/Jaime.j3o");
         bloodyMonkey.rotate(0, FastMath.DEG_TO_RAD * 180, 0);
         bloodyMonkey.setLocalScale(2.0f);
-        bloodyMonkey.setLocalTranslation(0, 3.0f, 0);
+        bloodyMonkey.setLocalTranslation(0, 5.0f, 10.0f);
         classroomScene.attachChild(bloodyMonkey);
         
         //Load materials onto BloodyMonkey model
@@ -127,10 +130,17 @@ public class ModelLoader {
         bloodyMonkeyMaterial.setTexture("DiffuseMap", bloodyMonkeyTexture);
         bloodyMonkey.setMaterial(bloodyMonkeyMaterial);
         
-        // Monkey Physics
-        RigidBodyControl monkeyControl = new RigidBodyControl(0.5f); 
+        // Monkey Physics using BetterCharacterControl for proper movement
+        BetterCharacterControl monkeyControl = new BetterCharacterControl(1.5f, 4, 30f);
         bloodyMonkey.addControl(monkeyControl);
-        bulletAppState.getPhysicsSpace().add(monkeyControl); 
+        bulletAppState.getPhysicsSpace().add(monkeyControl);
+        
+        // Set up the AnimControl for animations
+        AnimControl animControl = bloodyMonkey.getControl(AnimControl.class);
+        if (animControl != null) {
+            AnimChannel animChannel = animControl.createChannel();
+            animChannel.setAnim("Walk"); // Set the default animation to Idle
+        }
         
         return bloodyMonkey;
     }
@@ -210,6 +220,9 @@ public class ModelLoader {
                 Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
                 cake.setName("Key");
                 cake.setLocalScale(5.0f);
+                cake.setLocalTranslation(1.0f - i, 6.0f, 2.0f);
+                
+                
                 RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
                 cake.addControl(cakeControl);
                 bulletAppState.getPhysicsSpace().add(cakeControl); 
@@ -219,7 +232,7 @@ public class ModelLoader {
                 Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
                 cake.setName("Cake");
                 cake.setLocalScale(5.0f);
-
+                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
                 RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
                 cake.addControl(cakeControl);
                 bulletAppState.getPhysicsSpace().add(cakeControl); 
