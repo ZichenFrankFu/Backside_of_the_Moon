@@ -52,7 +52,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        
+        // Settings
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
         this.setShowSettings(false);
@@ -65,29 +65,27 @@ public class Main extends SimpleApplication {
         // Add gravity
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -1.62f, 0));
 
-        
+        // Create player Node
         playerNode = new Node("the player");
         Spatial handsModel = assetManager.loadModel("Models/Hands/arms.glb");
         handsModel.scale(2f);
         playerNode.attachChild(handsModel);
         playerNode.setLocalTranslation(new Vector3f(0, 6, 0));
         rootNode.attachChild(playerNode);
+        
+        // Player Control
         playerControl = new BetterCharacterControl(1.5f, 4, 30f);
         playerControl.setJumpForce(new Vector3f(0, 300, 0));
         playerControl.setGravity(new Vector3f(0, -10, 0));
         playerNode.addControl(playerControl);
         bulletAppState.getPhysicsSpace().add(playerControl);
         
-                // Camera Node Setup
+        // Camera Node Setup
         camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
         camNode.setLocalTranslation(new Vector3f(0, 4, -6));
         playerNode.attachChild(camNode);
         flyCam.setEnabled(false);
-        
-        
-        
-        
         
         // Scene Switch
         sceneManager = new SceneSwitchingManager(this);

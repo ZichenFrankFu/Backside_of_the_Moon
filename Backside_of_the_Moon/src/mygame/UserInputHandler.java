@@ -79,6 +79,9 @@ public class UserInputHandler {
                 case "SpeedUp":
                     isSpeedUp = isPressed;
                     break;
+                case "SwitchScene": 
+                    sceneManager.switchToNextScene();
+                    break;
             }
         }
         
@@ -128,7 +131,7 @@ public class UserInputHandler {
 
     private void tiltCamera(float value) {
         // Limit pitch to prevent flipping
-        float mouseSensitivity = 0.1f; // Adjust sensitivity if needed
+        float mouseSensitivity = 0.2f; // Adjust sensitivity if needed
         float maxPitch = FastMath.HALF_PI - 0.1f; // Prevents flipping to look directly up or down
 
         // Get the current rotation
