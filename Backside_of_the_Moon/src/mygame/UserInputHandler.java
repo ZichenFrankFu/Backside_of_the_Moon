@@ -24,19 +24,22 @@ import com.jme3.scene.Node;
  * @author frankfu
  */
 public class UserInputHandler {
-    
+    // Parameters
     private GameState gameState;
-    private Vector3f walkDirection = new Vector3f(0,0,0);
-    private float speed = 5f;
-    private boolean isSpeedUp = false;
-
-    private boolean left = false, right = false, up = false, down = false;
     private final InputManager inputManager;
     private final Camera cam;
     private final CameraNode camNode;
     private final SceneSwitchingManager sceneManager;
     
+    // Walk controls
+    private Vector3f walkDirection = new Vector3f(0,0,0);
     private Vector3f viewDirection = new Vector3f(0,0,1);
+    private float playerSpeed = 5f;
+    private boolean isSpeedUp = false;
+    private boolean left = false, right = false, up = false, down = false;
+    
+    // Bag check
+    private boolean gotKey;
 
     public UserInputHandler(InputManager inputManager, Camera cam, SceneSwitchingManager sceneManager, CameraNode camNode, GameState gameState) {
         this.inputManager = inputManager;
@@ -53,13 +56,14 @@ public class UserInputHandler {
     private void setupKeys() {
         inputManager.addMapping("MoveLeft", new KeyTrigger(KeyInput.KEY_A));
         inputManager.addMapping("MoveRight", new KeyTrigger(KeyInput.KEY_D));
-        inputManager.addMapping("MoveUp", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("MoveDown", new KeyTrigger(KeyInput.KEY_S));
+        inputManager.addMapping("MoveForward", new KeyTrigger(KeyInput.KEY_W));
+        inputManager.addMapping("MoveBackward", new KeyTrigger(KeyInput.KEY_S));
         inputManager.addMapping("SpeedUp", new KeyTrigger(KeyInput.KEY_LSHIFT));
         inputManager.addMapping("SwitchScene", new KeyTrigger(KeyInput.KEY_SPACE));
         inputManager.addMapping("Pickup",new KeyTrigger(KeyInput.KEY_F));
 
-        inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveUp", "MoveDown", "SpeedUp", "SwitchScene", "Pickup");
+        inputManager.addListener(actionListener, "MoveLeft", "MoveRight", "MoveForward", "MoveBackward", "SpeedUp");
+        inputManager.addListener(actionListener, "SwitchScene", "Pickup");
 
     }
 
@@ -73,10 +77,10 @@ public class UserInputHandler {
                 case "MoveRight":
                     right = isPressed;
                     break;
-                case "MoveUp":
+                case "MoveForward":
                     up = isPressed;
                     break;
-                case "MoveDown":
+                case "MoveBackward":
                     down = isPressed;
                     break;
                 case "SpeedUp":
@@ -86,7 +90,7 @@ public class UserInputHandler {
                     sceneManager.switchToNextScene();
                     break;
                 case "Pickup":
-                    gameState.pickUpItem();
+                    gotKey = gameState.pickUpItem();
                     break;
             }
         }
@@ -155,15 +159,6 @@ public class UserInputHandler {
         }
     }
     
-    // Scene switch action listener
-    private final ActionListener switchSceneListener = new ActionListener() {
-        @Override
-        public void onAction(String name, boolean isPressed, float tpf) {
-            if (name.equals("SwitchScene") && isPressed) {
-                sceneManager.switchToNextScene();
-            }
-        }
-    };
     
     public void firstPersonNavigationUpdate(float tpf, Node playerNode, BetterCharacterControl playerControl){
         // Get current forward and left vectors of the playerNode:
@@ -172,16 +167,16 @@ public class UserInputHandler {
         // Determine the change in direction
         walkDirection.set(0, 0, 0);
         if (left) {
-            walkDirection.addLocal(modelLeftDir.mult(speed));
+            walkDirection.addLocal(modelLeftDir.mult(playerSpeed));
         }
         if (right) {
-            walkDirection.addLocal(modelLeftDir.mult(speed).negate());
+            walkDirection.addLocal(modelLeftDir.mult(playerSpeed).negate());
         }
         if (up) {
-            walkDirection.addLocal(modelForwardDir.mult(speed));
+            walkDirection.addLocal(modelForwardDir.mult(playerSpeed));
         }
         if (down) {
-            walkDirection.addLocal(modelForwardDir.mult(speed).negate());
+            walkDirection.addLocal(modelForwardDir.mult(playerSpeed).negate());
         }
         if (isSpeedUp) {
             walkDirection.multLocal(2); // Double the speed when Shift is pressed
@@ -197,6 +192,10 @@ public class UserInputHandler {
     
     public Vector3f getViewDirection(){
         return viewDirection;
+    }
+    
+    public boolean getGotKey(){
+        return gotKey;
     }
 }
     

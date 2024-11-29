@@ -48,8 +48,9 @@ public class Main extends SimpleApplication {
     private BetterCharacterControl monkeyControl;
     private AnimComposer monkeyAnimComposer;
     private float monkeySpeed = 4.0f;
-
-
+    
+    // Bag check
+    private boolean gotKey = false;
 
 
     public static void main(String[] args) {
@@ -125,11 +126,10 @@ public class Main extends SimpleApplication {
         Node blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadOto(blackholeScene);
         modelLoader.loadCakes(10, classroomScene, gameState);
+        modelLoader.loadCakes(10, blackholeScene, gameState);
         
         // Initialize the first scene
         sceneManager.switchToNextScene();
-
-        
     }
     
 
@@ -143,9 +143,12 @@ public class Main extends SimpleApplication {
         }
         
         chasePlayer();
-        
-        
-
+        gotKey = inputHandler.getGotKey();
+        if (gotKey){
+            System.out.println("Detected Key in Bag!!");
+        } else {
+            System.out.println("No Key!!");
+        }
     }
 
     @Override
@@ -221,24 +224,7 @@ public class Main extends SimpleApplication {
             // Set the walk direction to move towards the player
             monkeyControl.setWalkDirection(directionToPlayer.mult(monkeySpeed)); // Adjustable speed by multiplying the vector
             monkeyControl.setViewDirection(directionToPlayer.negate());
-            
-            // Manage animation based on whether the monkey is moving
-            if (monkeyAnimComposer != null) {
-                if (!directionToPlayer.equals(Vector3f.ZERO)) {
-                    if (!"Walk".equals(monkeyAnimComposer.getCurrentAction())) {
-                        monkeyAnimComposer.setCurrentAction("Walk");
-                        monkeyAnimComposer.setGlobalSpeed(20.0f);
-                    }
-                } else {
-                    if (!"Idle".equals(monkeyAnimComposer.getCurrentAction())) {
-                        monkeyAnimComposer.setCurrentAction("Idle");
-                    }
-                }
-            }
-            
         }
-        
-        
     }
     
         
