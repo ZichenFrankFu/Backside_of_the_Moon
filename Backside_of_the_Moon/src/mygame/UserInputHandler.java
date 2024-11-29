@@ -42,7 +42,7 @@ public class UserInputHandler {
         this.sceneManager = sceneManager;
         this.camNode = camNode;
         
-        inputManager.setCursorVisible(false); 
+        
         setupKeys();
         setupMouseListener();
     }
