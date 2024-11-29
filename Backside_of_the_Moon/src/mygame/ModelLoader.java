@@ -32,6 +32,7 @@ import com.jme3.texture.Texture;
 import java.io.File;
 import java.io.IOException;
 
+
 public class ModelLoader {
     private final AssetManager assetManager;
     private final Node rootNode;
@@ -69,7 +70,8 @@ public class ModelLoader {
         
         // Load the classroom scene
         Node classroomScene = new Node("Classroom Scene");
-        Spatial classroom = assetManager.loadModel("Models/NoDeskClassroom/noDeskClassroom.gltf");
+        Spatial classroom = assetManager.loadModel("Models/NoDeskClassroom/noDeskClassroom.j3o");
+        classroom.setLocalScale(2.0f);
         classroomScene.attachChild(classroom);
         sceneManager.addScene(classroomScene);
         
@@ -142,22 +144,6 @@ public class ModelLoader {
         blackholeScene.attachChild(blackhole);
         sceneManager.addScene(blackholeScene);
         
-        // load Oto
-        // code to convert Oto example to j3o file 
-        /*
-        Node Oto = (Node) assetManager.loadModel("Textures/Oto/Oto.mesh.xml");
-        try {
-          File file = new File("assets/Models/Oto/Oto.j3o");
-          BinaryExporter exporter = BinaryExporter.getInstance();
-          exporter.save(Oto, file);
-        } catch (IOException e) {
-          System.out.println("Unable to save j3o file: " + e.getMessage());
-        }
-        */
-        Spatial Oto = assetManager.loadModel("Models/Oto/Oto.j3o");
-
-        blackholeScene.attachChild(Oto);
-        
         // Blackhole lights
         AmbientLight ambient = new AmbientLight();
         ambient.setColor(ColorRGBA.White.mult(1.2f)); 
@@ -176,22 +162,73 @@ public class ModelLoader {
         return blackholeScene;
     }
     
+    public Node loadOto(Node blackholeScene) {
+        /*
+        Node Oto = (Node) assetManager.loadModel("Textures/Oto/Oto.mesh.xml");
+        try {
+          File file = new File("assets/Models/Oto/Oto.j3o");
+          BinaryExporter exporter = BinaryExporter.getInstance();
+          exporter.save(Oto, file);
+        } catch (IOException e) {
+          System.out.println("Unable to save j3o file: " + e.getMessage());
+        }
+        */
+        Node Oto = (Node) assetManager.loadModel("Models/Oto/Oto.j3o");
+        blackholeScene.attachChild(Oto);
+        
+        // Oto Physics
+        RigidBodyControl OtoControl = new RigidBodyControl(0.5f); 
+        Oto.addControl(OtoControl);
+        bulletAppState.getPhysicsSpace().add(OtoControl); 
+        
+        return Oto;
+    }
+    
     public Node loadTerrain() {
-    // Instantiate the Terrain class
-    Terrain terrainApp = new Terrain();
-    terrainApp.simpleInitApp(); // Initialize the terrain
+        // Instantiate the Terrain class
+        Terrain terrainApp = new Terrain();
+        terrainApp.simpleInitApp(); // Initialize the terrain
 
-    // Load Room3 node from the Terrain class
-    Node terrainNode = terrainApp.loadRoom3();
+        // Load Room3 node from the Terrain class
+        Node terrainNode = terrainApp.loadRoom3();
 
-    // Attach the terrain to the rootNode
-    rootNode.attachChild(terrainNode);
+        // Attach the terrain to the rootNode
+        rootNode.attachChild(terrainNode);
 
-    // Ensure all physics-related or scene manager actions are handled
-    RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
-    terrainNode.addControl(terrainPhysics);
-    bulletAppState.getPhysicsSpace().add(terrainPhysics);
+        // Ensure all physics-related or scene manager actions are handled
+        RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
+        terrainNode.addControl(terrainPhysics);
+        bulletAppState.getPhysicsSpace().add(terrainPhysics);
 
-    return terrainNode;
-}
+        return terrainNode;
+    }   
+    
+    public void loadCakes(int num, Node Scene, GameState gameState){
+        int keyInd = (int) (Math.random() * num);
+        for(int i = 0; i < num; i++){
+            if(i == keyInd){
+                Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
+                cake.setName("Key");
+                cake.setLocalScale(5.0f);
+                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
+                cake.addControl(cakeControl);
+                bulletAppState.getPhysicsSpace().add(cakeControl); 
+                gameState.addPickableItem(cake);
+                Scene.attachChild(cake);
+            } else {
+                Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
+                cake.setName("Cake");
+                cake.setLocalScale(5.0f);
+
+                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
+                cake.addControl(cakeControl);
+                bulletAppState.getPhysicsSpace().add(cakeControl); 
+                gameState.addPickableItem(cake);
+                Scene.attachChild(cake);
+
+            }
+            
+        }
+        
+    }
 }

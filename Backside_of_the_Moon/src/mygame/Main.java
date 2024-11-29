@@ -49,9 +49,6 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        // Set up game state
-        gameState = new GameState(cam, inputManager, notificationText);
-        stateManager.attach(gameState);
         
         // Settings
         this.setDisplayFps(false);
@@ -99,27 +96,25 @@ public class Main extends SimpleApplication {
         // Input Handle
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode);
         
-        // Load Model
-        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
-        Node classroomScene = modelLoader.loadClassroom();
-        classroomScene.setName("ClassroomScene");
-        Node monkey = modelLoader.loadMonkey(classroomScene);
-        Node blackholeScene = modelLoader.loadBlackhole();
-        blackholeScene.setName("BlackholeScene");
-        
-        // Initialize the first scene
-        sceneManager.switchToNextScene();
-        
         // UI
-        loadSaveButton();
-        loadLoadButton();
         setNotificationText();
+        gameState = new GameState(cam, inputManager, notificationText);
+        stateManager.attach(gameState);
+        createSaveButton();
+        createLoadButton();
         createCrosshair();
         
         
-        //sceneManager.addScene(classroomScene);
+        // Load Model
+        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
+        Node classroomScene = modelLoader.loadClassroom();
+        modelLoader.loadMonkey(classroomScene);
+        Node blackholeScene = modelLoader.loadBlackhole();
+        modelLoader.loadOto(blackholeScene);
+        modelLoader.loadCakes(3, classroomScene, gameState);
         
-        //sceneManager.addScene(blackholeScene);
+        // Initialize the first scene
+        sceneManager.switchToNextScene();
 
         
     }
@@ -142,7 +137,7 @@ public class Main extends SimpleApplication {
         //TODO: add render code
     }
     
-    public void loadSaveButton(){
+    public void createSaveButton(){
         Picture frame = new Picture("User interface frame");
         frame.setImage(assetManager, "Interface/save.png", false); 
         frame.setWidth(iconWidth);
@@ -153,7 +148,7 @@ public class Main extends SimpleApplication {
         frame.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
     }
     
-    public void loadLoadButton(){
+    public void createLoadButton(){
         Picture frame2 = new Picture("Button 2");
         frame2.setImage(assetManager, "Interface/load.png", false);
         frame2.setWidth(iconWidth);
@@ -179,7 +174,7 @@ public class Main extends SimpleApplication {
         // Initialize the HUD text for showing item notifications
         notificationText = new BitmapText(guiFont, false);
         notificationText.setSize(guiFont.getCharSet().getRenderedSize());
-        notificationText.setText("Press F to pickup ");
+        notificationText.setText("");
         notificationText.setColor(ColorRGBA.Red);
         guiNode.attachChild(notificationText);
     }
