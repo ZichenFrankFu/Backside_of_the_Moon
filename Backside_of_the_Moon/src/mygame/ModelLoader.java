@@ -69,7 +69,7 @@ public class ModelLoader {
         */
         
         // Load the classroom scene
-        Node classroomScene = new Node("Classroom Scene");
+        Node classroomScene = new Node("ClassroomScene");
         Spatial classroom = assetManager.loadModel("Models/NoDeskClassroom/noDeskClassroom.j3o");
         classroom.setLocalScale(2.0f);
         classroom.setLocalTranslation(0,5f, 0);
@@ -147,7 +147,7 @@ public class ModelLoader {
     
     public Node loadBlackhole() {
         // Load the blackhole scene
-        Node blackholeScene = new Node("Blackhole Scene");
+        Node blackholeScene = new Node("BlackholeScene");
         Spatial blackhole = assetManager.loadModel("Models/Blackhole/scene.j3o");
         blackhole.setLocalScale(9.0f);
         blackhole.setLocalTranslation(0,0,-40.0f);
