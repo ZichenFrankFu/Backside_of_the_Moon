@@ -1,29 +1,17 @@
 package mygame;
 
-import com.jme3.anim.AnimComposer;
-import com.jme3.animation.AnimChannel;
-import com.jme3.animation.AnimControl;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.font.BitmapText;
-import com.jme3.input.ChaseCamera;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
-import com.jme3.material.Material;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
-import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.control.CameraControl;
 import com.jme3.scene.control.CameraControl.ControlDirection;
-import com.jme3.scene.shape.Box;
 import com.jme3.ui.Picture;
 
 /**
@@ -40,6 +28,7 @@ public class Main extends SimpleApplication {
     private UserInputHandler inputHandler;
     private ModelLoader modelLoader;
     private SceneSwitchingManager sceneManager;
+    private SoundManager soundManager;
         
     // FPS control
     private CameraNode camNode;
@@ -104,14 +93,19 @@ public class Main extends SimpleApplication {
         sceneManager = new SceneSwitchingManager(this);
         stateManager.attach(sceneManager);
         
+        // Sound Switch
+        soundManager = new SoundManager(assetManager);
+        
         // Input Handle
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode);
         
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
         Node classroomScene = modelLoader.loadClassroom();
+        classroomScene.setName("ClassroomScene");
         Node monkey = modelLoader.loadMonkey(classroomScene);
         Node blackholeScene = modelLoader.loadBlackhole();
+        blackholeScene.setName("BlackholeScene");
         
         // Initialize the first scene
         sceneManager.switchToNextScene();
@@ -123,6 +117,11 @@ public class Main extends SimpleApplication {
         createCrosshair();
         
         
+        //sceneManager.addScene(classroomScene);
+        
+        //sceneManager.addScene(blackholeScene);
+
+        
     }
     
 
@@ -130,6 +129,10 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         inputHandler.firstPersonNavigationUpdate(tpf, playerNode, playerControl);
+        
+        if (sceneManager.hasSceneChanged()) {
+            playSceneMusic(sceneManager.getCurrentSceneName());
+        }
         
 
     }
@@ -179,6 +182,22 @@ public class Main extends SimpleApplication {
         notificationText.setText("Press F to pickup ");
         notificationText.setColor(ColorRGBA.Red);
         guiNode.attachChild(notificationText);
+    }
+    
+    private void playSceneMusic(String sceneName) {
+        soundManager.stopCurrentBGM(); // Stop any currently playing BGM
+
+        switch (sceneName) {
+            case "ClassroomScene":
+                soundManager.playBGM("quiet_bgm");
+                break;
+            case "BlackholeScene":
+                soundManager.playBGM("mystery_bgm");
+                break;
+            default:
+                System.out.println("No BGM mapped for scene: " + sceneName);
+                break;
+        }
     }
 
 }

@@ -176,4 +176,22 @@ public class ModelLoader {
         return blackholeScene;
     }
     
+    public Node loadTerrain() {
+    // Instantiate the Terrain class
+    Terrain terrainApp = new Terrain();
+    terrainApp.simpleInitApp(); // Initialize the terrain
+
+    // Load Room3 node from the Terrain class
+    Node terrainNode = terrainApp.loadRoom3();
+
+    // Attach the terrain to the rootNode
+    rootNode.attachChild(terrainNode);
+
+    // Ensure all physics-related or scene manager actions are handled
+    RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
+    terrainNode.addControl(terrainPhysics);
+    bulletAppState.getPhysicsSpace().add(terrainPhysics);
+
+    return terrainNode;
+}
 }

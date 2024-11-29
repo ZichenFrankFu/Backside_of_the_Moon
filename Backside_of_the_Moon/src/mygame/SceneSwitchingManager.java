@@ -14,11 +14,13 @@ public class SceneSwitchingManager extends AbstractAppState {
     private Node currentScene;
     private List<Node> scenes;
     private int currentSceneIndex;
+    private int lastSceneIndex;
 
     public SceneSwitchingManager(SimpleApplication app) {
         this.app = app;
         this.scenes = new ArrayList<>();
         this.currentSceneIndex = -1;
+        this.lastSceneIndex = -1;
     }
 
     @Override
@@ -69,8 +71,35 @@ public class SceneSwitchingManager extends AbstractAppState {
 
 // Destruct the current scene completely before loading the next one
         destructScene();
+        lastSceneIndex = currentSceneIndex;
         
         currentSceneIndex = (currentSceneIndex + 1) % scenes.size();
         loadScene(scenes.get(currentSceneIndex));
+    }
+    
+    /**
+     * Checks if the scene has changed since the last frame.
+     *
+     * @return true if the scene has changed; false otherwise.
+     */
+    public boolean hasSceneChanged() {
+        if (currentSceneIndex != lastSceneIndex) {
+            lastSceneIndex = currentSceneIndex; // Reset after detecting change
+            return true;
+        }
+        return false;
+    }
+
+    
+    /**
+     * Gets the name of the current scene.
+     *
+     * @return the name of the current scene, or null if no scene is loaded.
+     */
+    public String getCurrentSceneName() {
+        if (currentScene != null) {
+            return currentScene.getName();
+        }
+        return null;
     }
 }
