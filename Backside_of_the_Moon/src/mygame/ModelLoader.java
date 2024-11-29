@@ -113,6 +113,33 @@ public class ModelLoader {
         return classroomScene;
     }
     
+    public Node loadTeleportGate(){
+        Node teleportGateNode = new Node("TeleportGate");
+        Spatial teleportGate = assetManager.loadModel("Models/TeleportGate/scene.j3o");
+        teleportGate.setLocalScale(0.4f);
+        teleportGate.setLocalTranslation(-15,0f,-2);
+        teleportGateNode.setCullHint(Spatial.CullHint.Never); // Ensure it is not culled
+
+        DirectionalLight gateLight = new DirectionalLight();
+        gateLight.setDirection(new Vector3f(1, -1, 0));
+        gateLight.setColor(ColorRGBA.White.mult(1.5f));
+        teleportGate.addLight(gateLight);
+        
+        AmbientLight ambientLightGate = new AmbientLight();
+        ambientLightGate.setColor(ColorRGBA.White.mult(1.0f)); // Bright ambient light to fill shadows
+        teleportGate.addLight(ambientLightGate);
+        
+        // Gate Physics
+        RigidBodyControl gatePhy = new RigidBodyControl(0f);
+        teleportGateNode.addControl(gatePhy);
+        bulletAppState.getPhysicsSpace().add(gatePhy);
+        
+        teleportGateNode.attachChild(teleportGate);
+        rootNode.attachChild(teleportGateNode);
+        
+        return teleportGateNode;
+    }
+    
     
     
     public Node loadMonkey(Node classroomScene) {

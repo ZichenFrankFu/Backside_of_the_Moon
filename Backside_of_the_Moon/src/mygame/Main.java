@@ -178,6 +178,7 @@ public class Main extends SimpleApplication {
             gotKey = inputHandler.getGotKey();
             if (gotKey) {
                 System.out.println("Detected Key in Bag!!");
+                modelLoader.loadTeleportGate();
             } else {
                 System.out.println("No Key!!");
             }
