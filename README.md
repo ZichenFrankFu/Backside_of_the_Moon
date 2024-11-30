@@ -11,24 +11,23 @@ Rogue-like, horror, mockumentary, single-player.
 ## **Inspiration**
 
 [**Backrooms.**](https://store.steampowered.com/app/1987080/Inside\_the\_Backrooms/)
-![backrooms](images/backrooms.png)
-
+<img width="481" alt="backrooms" src="https://github.com/user-attachments/assets/aa0f76e4-5c86-4d13-a8dd-7ad70376a2ff">
 We are all impressed by the simplistic art style of Backroom’s room designs, which creates a sense of isolation and horror, even in the provided vast spaces. We want to create rooms that have similar art styles, where the familiar becomes unsettlingly unfamiliar.
 
 [**Inscryption.**](https://store.steampowered.com/app/1092790/Inscryption/)
-![Inscryption](images/incryption.png)
+![incryption](https://github.com/user-attachments/assets/b556dd81-69f8-449c-b21f-290f7f5b77e2)
 Inspired by the boss designs in Inscryption, where creatures are defined by their vague shapes and key features like floating eyes and hands, we aim to create monsters that would evoke a similar sense of psychological horror. 
 
 [**Classrooms.**](https://store.steampowered.com/app/2099110/The\_Classrooms/)
-![classrooms](images/classrooms.png)
+![classrooms](https://github.com/user-attachments/assets/72b5429d-c7e1-4c1c-afdc-ae5585f8fc18)
 Our user interface style choice (mockumentary) is inspired from this game to promote a realistic sense. The health is represented as the battery of the camera. The monsters can either be sensitive to movement, light, or sound, which makes those the key elements to escape from specific rooms.
 
 [**Fork Road.**](https://store.steampowered.com/app/2976400/Fork\_Road/) 
-![forkroad](images/forkroad.png)
+<img width="760" alt="forkroad" src="https://github.com/user-attachments/assets/ba6dc941-ec78-4326-af23-9e0fbb546c6a">
 This game inspires the design of our Choice rooms. We want to incorporate several psychological tricks, such as distraction, to make the choice process more interesting and horrifying. 
 
 [**SCP.**](https://scp-wiki.wikidot.com/)
-![scp](images/scp.png)
+![scp](https://github.com/user-attachments/assets/37700e1d-d3cd-4332-800d-f323d9b0734f)
 SCP (Secure,Contain, Protect) Foundation inspires our story set ups: this universe has many anomalies, which can be either creatures or objects with supernatural power. The anomalies are “contained” by the SCP Foundation to protect humanity. 
 
 ## **Platform**
