@@ -176,7 +176,17 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 
 <img width="536" alt="Screenshot 2024-11-06 at 22 14 33" src="https://github.com/user-attachments/assets/c928d5b1-4148-44f0-93d4-be70a6416265">
 
+
 **Third Deliverable**
+
+*The Start Scene*
+To make the game more playable and complete, we have created a start scene, as well as a brief prologue at the start of the game for storytelling. 
+
+<img width="884" alt="Screenshot 2024-11-30 at 17 45 07" src="https://github.com/user-attachments/assets/9bea8504-9ae7-4bac-abba-0dbfdb3ef326">
+<img width="877" alt="Screenshot 2024-11-30 at 17 45 29" src="https://github.com/user-attachments/assets/8f608730-efd3-4ec3-9e76-cda46559be45">
+
+*The 3rd Room*
+We have created a 3rd "room" that the player can enter. It's a natural scenary room consisting of a terrain with a lake, trees, fog, sunlight and skybox. 
 
 *Particles*
 
@@ -194,11 +204,13 @@ There is a lake in the 3rd scene.
 
 <img width="712" alt="Screenshot 2024-11-30 at 15 50 23" src="https://github.com/user-attachments/assets/09d40898-21d5-4c60-ac9d-fb56ec0480c2">
 
+
 *Sky*
 
 A skybox is created, and the lake reflects the skybox. 
 
 <img width="711" alt="Screenshot 2024-11-30 at 15 50 59" src="https://github.com/user-attachments/assets/cd3bcbac-12ac-4d75-9c5c-c8f36d1848eb">
+
 
 *Sounds and Music*
 
