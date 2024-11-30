@@ -68,8 +68,20 @@ public class SceneSwitchingManager extends AbstractAppState {
         if (scenes.isEmpty()) {
             return;
         }
-
-// Destruct the current scene completely before loading the next one
+        
+        /*
+        // Ensure scene switching happens on the rendering thread
+        app.enqueue(() -> {
+        // Destruct the current scene completely before loading the next one
+        destructScene();
+        lastSceneIndex = currentSceneIndex;
+        
+        currentSceneIndex = (currentSceneIndex + 1) % scenes.size();
+        loadScene(scenes.get(currentSceneIndex));
+        });
+        */
+        
+        // Destruct the current scene completely before loading the next one
         destructScene();
         lastSceneIndex = currentSceneIndex;
         

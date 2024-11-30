@@ -90,6 +90,8 @@ public class UserInputHandler {
                     isSpeedUp = isPressed;
                     break;
                 case "SwitchScene":
+                    //ifDestructTerrain = true;
+                    //sceneManager.switchToNextScene();
                     sceneManager.switchToNextScene();
                     break;
                 case "Pickup":

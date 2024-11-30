@@ -4,18 +4,28 @@ import com.jme3.anim.AnimComposer;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.font.BitmapText;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
+import com.jme3.light.DirectionalLight;
 import com.jme3.material.RenderState;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.BloomFilter;
+import com.jme3.post.filters.DepthOfFieldFilter;
+import com.jme3.post.filters.FogFilter;
+import com.jme3.post.filters.LightScatteringFilter;
 import com.jme3.renderer.RenderManager;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.CameraControl.ControlDirection;
+import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.ui.Picture;
+import com.jme3.water.WaterFilter;
 
 import java.util.List;
 
@@ -58,6 +68,16 @@ public class Main extends SimpleApplication {
     // Text sequence
     private List<String> textSequence;
     private int currentTextIndex = 0;
+    
+    //Terrain
+    private FilterPostProcessor fpp;
+    private FogFilter fogFilter;
+    private final Vector3f lightDir = new Vector3f(-0.39f, -0.32f, -0.74f);
+    private LightScatteringFilter sunLightFilter;
+    private Node reflectedScene;
+    private DepthOfFieldFilter dofFilter;
+    private BloomFilter bloom;
+    private Node room3;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -235,6 +255,17 @@ public class Main extends SimpleApplication {
                 System.out.println("Detected Key in Bag!!");
             }
         }
+        
+        /*      
+        boolean destructTerrain = inputHandler.getDestructTerrain();
+        if (destructTerrain){
+            enqueue(() -> {
+                // Perform terrain modification here, such as removing a part of the terrain
+                room3.detachAllChildren(); // Replace with your specific operation
+                room3.updateGeometricState();
+            });
+        }
+        */
     }
 
     @Override
@@ -308,5 +339,106 @@ public class Main extends SimpleApplication {
             monkeyControl.setWalkDirection(directionToPlayer.mult(monkeySpeed));
             monkeyControl.setViewDirection(directionToPlayer.negate());
         }
+    }
+    
+    public Node loadRoom3() {
+        
+        room3 = new Node("Room3 Node");
+
+        // Add Terrain
+        Spatial terrainGeo = assetManager.loadModel("Scenes/room_3.j3o");
+        terrainGeo.setLocalTranslation(0, 5, 0);
+        terrainGeo.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+        room3.attachChild(terrainGeo);
+
+        // Add Trees
+        Spatial tree1 = assetManager.loadModel("Models/Tree/Tree.j3o");
+        tree1.scale(10);
+        tree1.setQueueBucket(RenderQueue.Bucket.Transparent);
+        tree1.setLocalTranslation(0, 7f, 0);
+        tree1.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+        room3.attachChild(tree1);
+
+        Spatial tree2 = tree1.clone();
+        tree2.setLocalTranslation(-50, 7f, -50);
+        tree2.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+        room3.attachChild(tree2);
+
+        // Add Sky
+        Spatial mySky = assetManager.loadModel("Scenes/mySky.j3o");
+        room3.attachChild(mySky);
+
+        // Add Reflected Scene and Water
+        reflectedScene = new Node("Scene");
+
+        Spatial boat = assetManager.loadModel("Models/Swan_Boat/swanboat.j3o");
+        boat.scale(4);
+        boat.setLocalTranslation(200, 2, -100);
+
+        reflectedScene.attachChild(mySky);
+
+        reflectedScene.attachChild(boat);
+
+        room3.attachChild(reflectedScene);
+
+        // Add Bonfire and Forest
+        Spatial bonfire = assetManager.loadModel("Models/bonfire/bonfire_pot.j3o");
+        bonfire.scale(8);
+        bonfire.setLocalTranslation(-20, 13, -20);
+        bonfire.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
+        room3.attachChild(bonfire);
+
+        Spatial forest = assetManager.loadModel("Models/manyTrees/multiple_trees.j3o");
+        forest.scale(8);
+        forest.setLocalTranslation(-150, 5, -170);
+        room3.attachChild(forest);
+
+        // Add Particle Effects
+        ParticleEffects particle = new ParticleEffects(assetManager, room3);
+        particle.dust();
+        particle.sparks();
+        particle.burst();
+        particle.fire();
+
+        // Initialize fpp and Add Filters
+        fpp = new FilterPostProcessor(assetManager);
+        viewPort.addProcessor(fpp);
+
+        FogFilter fogFilter = new FogFilter();
+        fogFilter.setFogDistance(500);
+        fogFilter.setFogDensity(0.2f);
+        fogFilter.setFogColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
+        fpp.addFilter(fogFilter);
+
+        WaterFilter water = new WaterFilter(reflectedScene, lightDir);
+        water.setWaterHeight(3f);
+        fpp.addFilter(water);
+
+        LightScatteringFilter sunLightFilter = new LightScatteringFilter(lightDir.mult(-3000));
+        fpp.addFilter(sunLightFilter);
+
+        BloomFilter bloom = new BloomFilter();
+        fpp.addFilter(bloom);
+
+        DirectionalLight sun = new DirectionalLight();
+        sun.setDirection(lightDir);
+        sun.setColor(ColorRGBA.White.clone().multLocal(2));
+        room3.addLight(sun);
+
+        DirectionalLightShadowFilter dlsf = new DirectionalLightShadowFilter(assetManager, 1024, 2);
+        dlsf.setLight(sun);
+        fpp.addFilter(dlsf);
+        
+        rootNode.attachChild(room3);
+        
+        room3.setLocalTranslation(0, 0, -20);
+        
+        RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
+        room3.addControl(terrainPhysics);
+        bulletAppState.getPhysicsSpace().add(terrainPhysics);
+        
+        sceneManager.addScene(room3);
+        
+        return room3;
     }
 }
