@@ -78,6 +78,9 @@ public class Ending {
         isActive = true;
         isTextPhase = true;
         showTextSequence();
+        if (currentTextIndex == 0){
+            updateTextDisplay();
+        }
     }
     
     private void showTextSequence() {
@@ -87,9 +90,6 @@ public class Ending {
     
     private void updateTextDisplay() {
         Camera cam = app.getCamera();
-        if (currentTextIndex == currentTextSequence.size() - 1){
-            isTextPhase = false;
-        }
         if (currentTextIndex < currentTextSequence.size()) {
             String text = currentTextSequence.get(currentTextIndex);
             textDisplay.setText(text);
@@ -98,11 +98,14 @@ public class Ending {
         } else {
             transitionToImage();
         }
+        if (currentTextIndex == currentTextSequence.size()){
+            isTextPhase = false;
+            transitionToImage();
+        }
     }
     
     private void transitionToImage() {
         if (textDisplay != null) {
-            endingNode.detachAllChildren();
             endingNode.attachChild(endingImage);
         }
     }
@@ -119,9 +122,6 @@ public class Ending {
             if (name.equals("NextEnding") && isPressed) {
                 if (isTextPhase) {
                     updateTextDisplay();
-                } else {
-                    transitionToImage();
-                }
             }
         }
     };
