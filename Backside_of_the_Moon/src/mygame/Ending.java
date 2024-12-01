@@ -122,6 +122,7 @@ public class Ending {
             if (name.equals("NextEnding") && isPressed) {
                 if (isTextPhase) {
                     updateTextDisplay();
+                }
             }
         }
     };
