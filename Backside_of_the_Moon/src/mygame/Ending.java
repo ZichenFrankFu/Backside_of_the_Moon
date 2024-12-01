@@ -76,7 +76,6 @@ public class Ending {
 
     public void startEnding() {
         isActive = true;
-        isTextPhase = true;
         showTextSequence();
         if (currentTextIndex == 0){
             updateTextDisplay();
@@ -85,7 +84,6 @@ public class Ending {
     
     private void showTextSequence() {
         endingNode.attachChild(textDisplay);
-        isTextPhase = true;
     }
     
     private void updateTextDisplay() {
@@ -122,6 +120,8 @@ public class Ending {
             if (name.equals("NextEnding") && isPressed) {
                 if (isTextPhase) {
                     updateTextDisplay();
+                } else {
+                    //((Main) app).resetGame();
                 }
             }
         }

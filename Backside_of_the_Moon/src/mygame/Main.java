@@ -156,7 +156,7 @@ public class Main extends SimpleApplication {
                 "Attendance, mandatory.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/horror_door.jpg", null);
+                ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", null);
                 ending.startEnding();
                 
                 //System.out.println("Player collided with the monkey!");
@@ -526,5 +526,30 @@ public class Main extends SimpleApplication {
         return room3;
     }
     
+    /*
+    public void resetGame() {
+        // Stop all background tasks or sounds
+        //soundManager.stopAllSounds();
+
+        // Detach all nodes from the root
+        rootNode.detachAllChildren();
+        guiNode.detachAllChildren();
+
+        // Reset physics space
+        bulletAppState.getPhysicsSpace().destroy();
+        bulletAppState = null;
+
+        // Reset player variables
+        startScreenActive = true;
+        textSequenceActive = false;
+        gotKey = false;
+        enteredEnding = false;
+        currentTextIndex = 0;
+
+        // Reinitialize the game
+        simpleInitApp();
+        initializeGame();
+    }
+    */
     
 }
