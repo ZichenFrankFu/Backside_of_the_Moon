@@ -140,8 +140,21 @@ public class Main extends SimpleApplication {
                 System.out.println("Player is in the teleport gate!");
             }
             
-            if (checkMonkeyPlayerCollision()) {
-                System.out.println("Player collided with the monkey!");
+             if (checkMonkeyPlayerCollision() && enteredEnding == false) {
+                
+                ending.cleanupEnding(rootNode);
+                
+                List<String> textSequenceClassroom = List.of(
+                "The desks have teeth. The windows have eyes.",
+                "Your steps were loud where silence was demanded.",
+                "You are seated now, and the class shall begin again.",
+                "Attendance, mandatory.",
+                ""
+                );
+                ending.setEnding(textSequenceClassroom, "Textures/horror_door.jpg", null);
+                ending.startEnding();
+                
+                //System.out.println("Player collided with the monkey!");
             }
         }
     }
