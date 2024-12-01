@@ -84,6 +84,9 @@ public class Main extends SimpleApplication {
     private DepthOfFieldFilter dofFilter;
     private BloomFilter bloom;
     private Node room3;
+    
+    private boolean enteredEnding;
+    private Ending ending;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -92,6 +95,8 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        
+        ending = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
