@@ -26,7 +26,6 @@ import com.jme3.scene.control.CameraControl.ControlDirection;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.ui.Picture;
 import com.jme3.water.WaterFilter;
-
 import java.util.List;
 
 public class Main extends SimpleApplication {
@@ -48,13 +47,15 @@ public class Main extends SimpleApplication {
     // UI
     private BitmapText notificationText;
     private BitmapText crosshair;
-    private BitmapText textDisplay; // For displaying the text sequence
+    private BitmapText textDisplay;
     private Picture startScreen;
     private boolean startScreenActive = true;
     private boolean textSequenceActive = false;
-    
     float iconWidth = 52;
     float iconHeight = 47;
+    
+    // Scene Count
+    int sceneCount = 0;
 
     // Monster chasing
     private Node monkeyNode;
@@ -64,6 +65,9 @@ public class Main extends SimpleApplication {
 
     // Bag check
     private boolean gotKey = false;
+    
+    // Teleport Gate
+    private Node teleportGateNode;
 
     // Text sequence
     private List<String> textSequence;
@@ -86,6 +90,12 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        // Settings
+        this.setDisplayFps(false);
+        this.setDisplayStatView(false);
+        this.setShowSettings(false);
+        this.inputManager.setCursorVisible(false);
+        
         // Show start screen
         showStartScreen();
 
@@ -104,8 +114,104 @@ public class Main extends SimpleApplication {
                 "We’ve been here before... you and I... countless times",
                 "Now, let’s see if you can figure out why."
         );
+        
     }
+    
+    @Override
+    public void simpleUpdate(float tpf) {
+        if (!startScreenActive && !textSequenceActive) {
+            inputHandler.firstPersonNavigationUpdate(tpf, playerNode, playerControl);
 
+            if (sceneManager.hasSceneChanged()) {
+                playSceneMusic(sceneManager.getCurrentSceneName());
+            }
+
+            chasePlayer();
+            gotKey = inputHandler.getGotKey();
+            if (gotKey) {
+                //teleportGateNode = modelLoader.loadTeleportGate();
+            }
+            
+            // Check if player is standing in the teleport gate
+            if (isPlayerInTeleportGate()) {
+                System.out.println("Player is in the teleport gate!");
+                //sceneManager.switchToNextScene();
+            }
+        }
+    }
+    
+    @Override
+    public void simpleRender(RenderManager rm) {}
+    
+    /*
+    * Helper functions
+    */
+    
+    private void initializeGame() {
+        // Physics
+        bulletAppState = new BulletAppState();
+        stateManager.attach(bulletAppState);
+
+        // Add gravity
+        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
+
+        // Sound Manager
+        soundManager = new SoundManager(assetManager);
+        soundManager.playBGM("quiet_bgm"); // Play background music for the classroom
+
+        // Create player Node
+        playerNode = new Node("the player");
+        Spatial handsModel = assetManager.loadModel("Models/Hands/arms.glb");
+        handsModel.scale(2f);
+        playerNode.attachChild(handsModel);
+        playerNode.setLocalTranslation(new Vector3f(5f, 1.5f, 5f));
+        rootNode.attachChild(playerNode);
+
+        // Player Control
+        playerControl = new BetterCharacterControl(1.5f, 4, 30f);
+        playerControl.setGravity(new Vector3f(0, -10, 0));
+        playerNode.addControl(playerControl);
+        bulletAppState.getPhysicsSpace().add(playerControl);
+
+        // Camera Node Setup
+        camNode = new CameraNode("CamNode", cam);
+        camNode.setControlDir(ControlDirection.SpatialToCamera);
+        camNode.setLocalTranslation(new Vector3f(0, 4, -3));
+        playerNode.attachChild(camNode);
+
+        // Scene Switch
+        sceneManager = new SceneSwitchingManager(this);
+        stateManager.attach(sceneManager);
+
+        // UI
+        setNotificationText();
+        gameState = new GameState(cam, inputManager, notificationText);
+        stateManager.attach(gameState);
+        createCrosshair();
+        createSaveButton();
+        createLoadButton();
+
+        // Input Handle
+        inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
+
+        // Load Model
+        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
+        Node classroomScene = modelLoader.loadClassroom();
+        monkeyNode = modelLoader.loadMonkey(classroomScene);
+        monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
+        monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
+
+        Node blackholeScene = modelLoader.loadBlackhole();
+        modelLoader.loadOto(blackholeScene);
+        modelLoader.loadCatnana(10, classroomScene, gameState);
+        modelLoader.loadCakes(10, blackholeScene, gameState);
+        
+        teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
+
+        // Initialize the first scene
+        sceneManager.switchToNextScene();
+    }
+    
     private void showStartScreen() {
         startScreen = new Picture("Start Screen");
         startScreen.setImage(assetManager, "Textures/horror_door.jpg", true);
@@ -156,76 +262,6 @@ public class Main extends SimpleApplication {
         }
     }
 
-    private void initializeGame() {
-        // Settings
-        this.setDisplayFps(false);
-        this.setDisplayStatView(false);
-        this.setShowSettings(false);
-        this.inputManager.setCursorVisible(false);
-
-        // Physics
-        bulletAppState = new BulletAppState();
-        stateManager.attach(bulletAppState);
-
-        // Add gravity
-        bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
-
-        // Sound Manager
-        soundManager = new SoundManager(assetManager);
-        soundManager.playBGM("quiet_bgm"); // Play background music for the classroom
-
-        // Create player Node
-        playerNode = new Node("the player");
-        Spatial handsModel = assetManager.loadModel("Models/Hands/arms.glb");
-        handsModel.scale(2f);
-        playerNode.attachChild(handsModel);
-        playerNode.setLocalTranslation(new Vector3f(0, 6, 0));
-        rootNode.attachChild(playerNode);
-
-        // Player Control
-        playerControl = new BetterCharacterControl(1.5f, 4, 30f);
-        playerControl.setJumpForce(new Vector3f(0, 300, 0));
-        playerControl.setGravity(new Vector3f(0, -10, 0));
-        playerNode.addControl(playerControl);
-        bulletAppState.getPhysicsSpace().add(playerControl);
-
-        // Camera Node Setup
-        camNode = new CameraNode("CamNode", cam);
-        camNode.setControlDir(ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0, 4, -3));
-        playerNode.attachChild(camNode);
-
-        // Scene Switch
-        sceneManager = new SceneSwitchingManager(this);
-        stateManager.attach(sceneManager);
-
-        // UI
-        setNotificationText();
-        gameState = new GameState(cam, inputManager, notificationText);
-        stateManager.attach(gameState);
-        createCrosshair();
-        createSaveButton();
-        createLoadButton();
-
-        // Input Handle
-        inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
-
-        // Load Model
-        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
-        Node classroomScene = modelLoader.loadClassroom();
-        monkeyNode = modelLoader.loadMonkey(classroomScene);
-        monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
-        monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
-
-        Node blackholeScene = modelLoader.loadBlackhole();
-        modelLoader.loadOto(blackholeScene);
-        modelLoader.loadCakes(10, classroomScene, gameState);
-        modelLoader.loadCakes(10, blackholeScene, gameState);
-
-        // Initialize the first scene
-        sceneManager.switchToNextScene();
-    }
-
     private final ActionListener nextTextListener = new ActionListener() {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
@@ -240,24 +276,28 @@ public class Main extends SimpleApplication {
         }
     };
 
-    @Override
-    public void simpleUpdate(float tpf) {
-        if (!startScreenActive && !textSequenceActive) {
-            inputHandler.firstPersonNavigationUpdate(tpf, playerNode, playerControl);
-
-            if (sceneManager.hasSceneChanged()) {
-                playSceneMusic(sceneManager.getCurrentSceneName());
-            }
-
-            chasePlayer();
-            gotKey = inputHandler.getGotKey();
-            if (gotKey) {
-                System.out.println("Detected Key in Bag!!");
-                modelLoader.loadTeleportGate();
-            } else {
-                System.out.println("No Key!!");
-            }
+    
+        
+    private boolean isPlayerInTeleportGate() {
+        if (teleportGateNode == null || playerNode == null) {
+            return false;
         }
+
+        // Get the position of both the player and the teleport gate
+        Vector3f playerPosition = playerNode.getWorldTranslation();
+        Vector3f gatePosition = teleportGateNode.getWorldTranslation();
+
+        // Calculate the distance between the player and the teleport gate
+        float distance = playerPosition.distance(gatePosition);
+        System.out.println(distance);
+
+        // Define a threshold for the teleport range (e.g., 3 units)
+        float teleportThreshold = 3.8f;
+
+        // Check if the player is within the range of the teleport gate
+        return distance <= teleportThreshold;
+    }
+
         
         /*      
         boolean destructTerrain = inputHandler.getDestructTerrain();
@@ -269,10 +309,9 @@ public class Main extends SimpleApplication {
             });
         }
         */
-    }
+    
 
-    @Override
-    public void simpleRender(RenderManager rm) {}
+    
 
     
     public void createSaveButton(){
@@ -343,6 +382,8 @@ public class Main extends SimpleApplication {
             monkeyControl.setViewDirection(directionToPlayer.negate());
         }
     }
+    
+    
     
     public Node loadRoom3() {
         

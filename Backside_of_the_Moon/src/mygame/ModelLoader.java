@@ -9,11 +9,7 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.export.binary.BinaryExporter;
 import com.jme3.input.ChaseCamera;
-import com.jme3.input.KeyInput;
-import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.KeyTrigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
@@ -22,15 +18,10 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.renderer.RenderManager;
 import com.jme3.scene.CameraNode;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
-import com.jme3.scene.shape.Box;
 import com.jme3.texture.Texture;
-import java.io.File;
-import java.io.IOException;
 
 
 public class ModelLoader {
@@ -72,7 +63,7 @@ public class ModelLoader {
         Node classroomScene = new Node("ClassroomScene");
         Spatial classroom = assetManager.loadModel("Models/NoDeskClassroom/noDeskClassroom.j3o");
         classroom.setLocalScale(2.0f);
-        classroom.setLocalTranslation(0,5f, 0);
+        classroom.setLocalTranslation(0,0,0);
         classroomScene.attachChild(classroom);
         sceneManager.addScene(classroomScene);
         
@@ -94,11 +85,11 @@ public class ModelLoader {
         
         DirectionalLight mainLightClassroom = new DirectionalLight();
         mainLightClassroom.setDirection(new Vector3f(-1, -1, -1).normalizeLocal());
-        mainLightClassroom.setColor(ColorRGBA.White.mult(2.0f)); // Brighter white light
+        mainLightClassroom.setColor(ColorRGBA.White.mult(2.0f)); 
         classroom.addLight(mainLightClassroom);
 
         AmbientLight ambientLightClassroom = new AmbientLight();
-        ambientLightClassroom.setColor(ColorRGBA.White.mult(1.0f)); // Bright ambient light to fill shadows
+        ambientLightClassroom.setColor(ColorRGBA.White.mult(1.0f));
         classroom.addLight(ambientLightClassroom);
         
         // Classroom Physics
@@ -113,12 +104,12 @@ public class ModelLoader {
         return classroomScene;
     }
     
-    public Node loadTeleportGate(){
+    public Node loadTeleportGate(Node scene){
         Node teleportGateNode = new Node("TeleportGate");
         Spatial teleportGate = assetManager.loadModel("Models/TeleportGate/scene.j3o");
-        teleportGate.setLocalScale(0.4f);
-        teleportGate.setLocalTranslation(-15,0f,-2);
-        teleportGateNode.setCullHint(Spatial.CullHint.Never); // Ensure it is not culled
+        teleportGate.setLocalScale(10f);
+        teleportGate.setLocalTranslation(-12,2f,-1);
+        teleportGateNode.setCullHint(Spatial.CullHint.Never);
 
         DirectionalLight gateLight = new DirectionalLight();
         gateLight.setDirection(new Vector3f(1, -1, 0));
@@ -126,20 +117,20 @@ public class ModelLoader {
         teleportGate.addLight(gateLight);
         
         AmbientLight ambientLightGate = new AmbientLight();
-        ambientLightGate.setColor(ColorRGBA.White.mult(1.0f)); // Bright ambient light to fill shadows
+        ambientLightGate.setColor(ColorRGBA.White.mult(1.0f));
         teleportGate.addLight(ambientLightGate);
+        
         
         // Gate Physics
         RigidBodyControl gatePhy = new RigidBodyControl(0f);
-        teleportGateNode.addControl(gatePhy);
+        teleportGate.addControl(gatePhy);
         bulletAppState.getPhysicsSpace().add(gatePhy);
         
         teleportGateNode.attachChild(teleportGate);
-        rootNode.attachChild(teleportGateNode);
+        scene.attachChild(teleportGateNode);
         
         return teleportGateNode;
     }
-    
     
     
     public Node loadMonkey(Node classroomScene) {
@@ -176,7 +167,7 @@ public class ModelLoader {
         // Load the blackhole scene
         Node blackholeScene = new Node("BlackholeScene");
         Spatial blackhole = assetManager.loadModel("Models/Blackhole/scene.j3o");
-        blackhole.setLocalScale(9.0f);
+        blackhole.setLocalScale(12.0f);
         blackhole.setLocalTranslation(0,0,-40.0f);
         blackholeScene.attachChild(blackhole);
         sceneManager.addScene(blackholeScene);
@@ -257,6 +248,38 @@ public class ModelLoader {
                 Scene.attachChild(cake);
             } else {
                 Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
+                cake.setName("Cake");
+                cake.setLocalScale(5.0f);
+                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
+                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
+                cake.addControl(cakeControl);
+                bulletAppState.getPhysicsSpace().add(cakeControl); 
+                gameState.addPickableItem(cake);
+                Scene.attachChild(cake);
+
+            }
+            
+        }
+        
+    }
+    
+    public void loadCatnana(int num, Node Scene, GameState gameState){
+        int keyInd = (int) (Math.random() * num);
+        for(int i = 0; i < num; i++){
+            if(i == keyInd){
+                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
+                cake.setName("Key");
+                cake.setLocalScale(2.0f);
+                cake.setLocalTranslation(1.0f + i, 3.0f, 2.0f);
+                
+           
+                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
+                cake.addControl(cakeControl);
+                bulletAppState.getPhysicsSpace().add(cakeControl); 
+                gameState.addPickableItem(cake);
+                Scene.attachChild(cake);
+            } else {
+                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
                 cake.setName("Cake");
                 cake.setLocalScale(5.0f);
                 cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
