@@ -1,6 +1,5 @@
 package mygame;
 
-import com.jme3.anim.AnimComposer;
 import com.jme3.animation.AnimChannel;
 import com.jme3.animation.AnimControl;
 import com.jme3.asset.AssetManager;
@@ -9,7 +8,6 @@ import com.jme3.asset.plugins.FileLocator;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.BetterCharacterControl;
 import com.jme3.bullet.control.RigidBodyControl;
-import com.jme3.input.ChaseCamera;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
@@ -17,8 +15,6 @@ import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
-import com.jme3.scene.CameraNode;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.texture.Texture;
@@ -29,20 +25,13 @@ public class ModelLoader {
     private final Node rootNode;
     private final SceneSwitchingManager sceneManager;
     private final BulletAppState bulletAppState;
-    private final Camera cam;
     
-    private Node handsNode;
-    private CameraNode camNode;
-    private AnimComposer animComposer;
-    private ChaseCamera chaseCam;
-    private BetterCharacterControl physicsHands;
 
-    public ModelLoader(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState, SceneSwitchingManager sceneManager, Camera cam) {
+    public ModelLoader(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState, SceneSwitchingManager sceneManager) {
         this.assetManager = assetManager;
         this.rootNode = rootNode;
         this.bulletAppState = bulletAppState;
         this.sceneManager = sceneManager;
-        this.cam = cam;
         
         assetManager.registerLocator("assets/", FileLocator.class);
         
@@ -53,10 +42,45 @@ public class ModelLoader {
         rootNode.addLight(sun);
     }
     
+    /*
+    * Scenes
+    */
+    
+     public Node loadTeleportGate(Node scene){
+        /*
+         * Transition Teleport gate
+         */
+        Node teleportGateNode = new Node("TeleportGate");
+        Spatial teleportGate = assetManager.loadModel("Models/TeleportGate/scene.j3o");
+        teleportGate.setLocalScale(10f);
+        teleportGate.setLocalTranslation(-12,2f,-1);
+        teleportGateNode.setCullHint(Spatial.CullHint.Never);
 
+        // Gate lights
+        DirectionalLight gateLight = new DirectionalLight();
+        gateLight.setDirection(new Vector3f(1, -1, 0));
+        gateLight.setColor(ColorRGBA.White.mult(1.5f));
+        teleportGate.addLight(gateLight);
+        
+        AmbientLight ambientLightGate = new AmbientLight();
+        ambientLightGate.setColor(ColorRGBA.White.mult(1.0f));
+        teleportGate.addLight(ambientLightGate);
+        
+        // Gate Physics
+        RigidBodyControl gatePhy = new RigidBodyControl(0f);
+        teleportGate.addControl(gatePhy);
+        bulletAppState.getPhysicsSpace().add(gatePhy);
+        
+        teleportGateNode.attachChild(teleportGate);
+        scene.attachChild(teleportGateNode);
+        
+        return teleportGateNode;
+    }
+    
+    
     public Node loadClassroom() {        
         /*
-        * Scene 1: Class room
+        * Scene 1: Classroom
         */
         
         // Load the classroom scene
@@ -103,37 +127,62 @@ public class ModelLoader {
         
         return classroomScene;
     }
-    
-    public Node loadTeleportGate(Node scene){
-        Node teleportGateNode = new Node("TeleportGate");
-        Spatial teleportGate = assetManager.loadModel("Models/TeleportGate/scene.j3o");
-        teleportGate.setLocalScale(10f);
-        teleportGate.setLocalTranslation(-12,2f,-1);
-        teleportGateNode.setCullHint(Spatial.CullHint.Never);
+ 
+    public Node loadBlackhole() {
+        /*
+        * Scene 2: Blackhole
+        */
+        // Load the blackhole scene
+        Node blackholeScene = new Node("BlackholeScene");
+        Spatial blackhole = assetManager.loadModel("Models/Blackhole/scene.j3o");
+        blackhole.setLocalScale(12.0f);
+        blackhole.setLocalTranslation(0,0,-40.0f);
+        blackholeScene.attachChild(blackhole);
+        sceneManager.addScene(blackholeScene);
+        
+        // Blackhole lights
+        AmbientLight ambient = new AmbientLight();
+        ambient.setColor(ColorRGBA.White.mult(1.2f)); 
+        blackholeScene.addLight(ambient);
 
-        DirectionalLight gateLight = new DirectionalLight();
-        gateLight.setDirection(new Vector3f(1, -1, 0));
-        gateLight.setColor(ColorRGBA.White.mult(1.5f));
-        teleportGate.addLight(gateLight);
+        DirectionalLight glow = new DirectionalLight();
+        glow.setDirection(new Vector3f(-0.5f, -1, -0.5f));
+        glow.setColor(new ColorRGBA(0.5f, 0.4f, 0.3f, 1.0f).mult(0.2f)); 
+        blackholeScene.addLight(glow);
+
+        PointLight glowEffect = new PointLight();
+        glowEffect.setPosition(new Vector3f(0, 0, -5));
+        glowEffect.setColor(new ColorRGBA(0.7f, 0.5f, 0.3f, 1.0f).mult(0.3f)); 
+        glowEffect.setRadius(10f); 
+        blackholeScene.addLight(glowEffect);
         
-        AmbientLight ambientLightGate = new AmbientLight();
-        ambientLightGate.setColor(ColorRGBA.White.mult(1.0f));
-        teleportGate.addLight(ambientLightGate);
-        
-        
-        // Gate Physics
-        RigidBodyControl gatePhy = new RigidBodyControl(0f);
-        teleportGate.addControl(gatePhy);
-        bulletAppState.getPhysicsSpace().add(gatePhy);
-        
-        teleportGateNode.attachChild(teleportGate);
-        scene.attachChild(teleportGateNode);
-        
-        return teleportGateNode;
+        return blackholeScene;
     }
     
     
-    public Node loadMonkey(Node classroomScene) {
+    public Node loadTerrain() {
+        // Instantiate the Terrain class
+        Terrain terrainApp = new Terrain();
+        terrainApp.simpleInitApp(); // Initialize the terrain
+
+        // Load Room3 node from the Terrain class
+        Node terrainNode = terrainApp.loadRoom3();
+
+        // Attach the terrain to the rootNode
+        rootNode.attachChild(terrainNode);
+
+        // Ensure all physics-related or scene manager actions are handled
+        RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
+        terrainNode.addControl(terrainPhysics);
+        bulletAppState.getPhysicsSpace().add(terrainPhysics);
+
+        return terrainNode;
+    }   
+    
+    /*
+    * Monsters
+    */
+       public Node loadMonkey(Node classroomScene) {
         // Load and scale the BloodyMonkey model
         Node bloodyMonkey = (Node) assetManager.loadModel("Models/Monkey/Jaime.j3o");
         bloodyMonkey.rotate(0, FastMath.DEG_TO_RAD * 180, 0);
@@ -162,34 +211,7 @@ public class ModelLoader {
         
         return bloodyMonkey;
     }
-    
-    public Node loadBlackhole() {
-        // Load the blackhole scene
-        Node blackholeScene = new Node("BlackholeScene");
-        Spatial blackhole = assetManager.loadModel("Models/Blackhole/scene.j3o");
-        blackhole.setLocalScale(12.0f);
-        blackhole.setLocalTranslation(0,0,-40.0f);
-        blackholeScene.attachChild(blackhole);
-        sceneManager.addScene(blackholeScene);
-        
-        // Blackhole lights
-        AmbientLight ambient = new AmbientLight();
-        ambient.setColor(ColorRGBA.White.mult(1.2f)); 
-        blackholeScene.addLight(ambient);
-
-        DirectionalLight glow = new DirectionalLight();
-        glow.setDirection(new Vector3f(-0.5f, -1, -0.5f));
-        glow.setColor(new ColorRGBA(0.5f, 0.4f, 0.3f, 1.0f).mult(0.2f)); 
-        blackholeScene.addLight(glow);
-
-        PointLight glowEffect = new PointLight();
-        glowEffect.setPosition(new Vector3f(0, 0, -5));
-        glowEffect.setColor(new ColorRGBA(0.7f, 0.5f, 0.3f, 1.0f).mult(0.3f)); 
-        glowEffect.setRadius(10f); 
-        blackholeScene.addLight(glowEffect);
-        return blackholeScene;
-    }
-    
+       
     public Node loadOto(Node blackholeScene) {
         /*
         Node Oto = (Node) assetManager.loadModel("Textures/Oto/Oto.mesh.xml");
@@ -209,27 +231,50 @@ public class ModelLoader {
         Oto.addControl(OtoControl);
         bulletAppState.getPhysicsSpace().add(OtoControl); 
         
+        // Set up the AnimControl for animations
+        AnimControl animControl = Oto.getControl(AnimControl.class);
+        if (animControl != null) {
+            AnimChannel animChannel = animControl.createChannel();
+            animChannel.setAnim("Walk"); // Set the default animation to Idle
+        }
+        
         return Oto;
     }
     
-    public Node loadTerrain() {
-        // Instantiate the Terrain class
-        Terrain terrainApp = new Terrain();
-        terrainApp.simpleInitApp(); // Initialize the terrain
+    public void loadCatnana(int num, Node Scene, GameState gameState){
+        int keyInd = (int) (Math.random() * num);
+        for(int i = 0; i < num; i++){
+            if(i == keyInd){
+                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
+                cake.setName("Key");
+                cake.setLocalScale(2.0f);
+                cake.setLocalTranslation(1.0f + i, 3.0f, 2.0f);
 
-        // Load Room3 node from the Terrain class
-        Node terrainNode = terrainApp.loadRoom3();
 
-        // Attach the terrain to the rootNode
-        rootNode.attachChild(terrainNode);
+                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
+                cake.addControl(cakeControl);
+                bulletAppState.getPhysicsSpace().add(cakeControl); 
+                gameState.addPickableItem(cake);
+                Scene.attachChild(cake);
+            } else {
+                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
+                cake.setName("Cake");
+                cake.setLocalScale(5.0f);
+                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
+                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
+                cake.addControl(cakeControl);
+                bulletAppState.getPhysicsSpace().add(cakeControl); 
+                gameState.addPickableItem(cake);
+                Scene.attachChild(cake);
 
-        // Ensure all physics-related or scene manager actions are handled
-        RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
-        terrainNode.addControl(terrainPhysics);
-        bulletAppState.getPhysicsSpace().add(terrainPhysics);
+            }
 
-        return terrainNode;
-    }   
+        }
+    }
+    
+    /*
+    * Pickable Items
+    */
     
     public void loadCakes(int num, Node Scene, GameState gameState){
         int keyInd = (int) (Math.random() * num);
@@ -258,40 +303,54 @@ public class ModelLoader {
                 Scene.attachChild(cake);
 
             }
-            
         }
-        
     }
     
-    public void loadCatnana(int num, Node Scene, GameState gameState){
+    public void loadStars(int num, Node scene, GameState gameState) {
+        // Randomly select one star to be the "Key"
         int keyInd = (int) (Math.random() * num);
-        for(int i = 0; i < num; i++){
-            if(i == keyInd){
-                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
-                cake.setName("Key");
-                cake.setLocalScale(2.0f);
-                cake.setLocalTranslation(1.0f + i, 3.0f, 2.0f);
-                
-           
-                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
-                cake.addControl(cakeControl);
-                bulletAppState.getPhysicsSpace().add(cakeControl); 
-                gameState.addPickableItem(cake);
-                Scene.attachChild(cake);
-            } else {
-                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
-                cake.setName("Cake");
-                cake.setLocalScale(5.0f);
-                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
-                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
-                cake.addControl(cakeControl);
-                bulletAppState.getPhysicsSpace().add(cakeControl); 
-                gameState.addPickableItem(cake);
-                Scene.attachChild(cake);
 
+        // Load the star model and create a reusable material
+        Spatial starModel = assetManager.loadModel("Models/Star/scene.j3o");
+        Material starMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        // Set a moon-like color (soft grayish white)
+        starMat.setColor("Diffuse", new ColorRGBA(0.3f, 0.3f, 0.3f, 1.0f));  // Dark gray to reduce brightness
+        starMat.setColor("Ambient", new ColorRGBA(0.2f, 0.2f, 0.2f, 1.0f));  // Even darker for ambient light
+        starMat.setBoolean("UseMaterialColors", true);
+        // Remove or reduce shininess
+        starMat.setFloat("Shininess", 8f);
+
+
+        for (int i = 0; i < num; i++) {
+            // Clone the star model to create a new instance for each star
+            Spatial star = starModel.clone();
+            star.setMaterial(starMat);  // Reuse the same material for all stars
+            star.setLocalScale(0.05f);
+
+            // Set different translations for each star to avoid overlapping
+            float xPos = 1.0f + (i % 3) * 4.0f;  // Adjusted to give some spacing
+            float yPos = 6.0f;
+            float zPos = 2.0f + (i / 3) * 4.0f;
+            star.setLocalTranslation(xPos, yPos, zPos);
+
+            // Set unique name for the key star
+            if (i == keyInd) {
+                star.setName("Key");
+            } else {
+                star.setName("Star");
             }
-            
+
+            // Add RigidBodyControl to the star
+            RigidBodyControl starControl = new RigidBodyControl(0.5f);
+            star.addControl(starControl);
+            bulletAppState.getPhysicsSpace().add(starControl);
+
+            // Add the star to the game state as a pickable item
+            gameState.addPickableItem(star);
+            scene.attachChild(star);
         }
-        
     }
+
+    
+ 
 }

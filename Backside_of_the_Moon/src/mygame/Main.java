@@ -201,7 +201,7 @@ public class Main extends SimpleApplication {
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
 
         // Load Model
-        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
+        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager);
         classroomScene = modelLoader.loadClassroom();
         monkeyNode = modelLoader.loadMonkey(classroomScene);
         monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
@@ -210,7 +210,7 @@ public class Main extends SimpleApplication {
         blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadOto(blackholeScene);
         modelLoader.loadCakes(10, classroomScene, gameState);
-        modelLoader.loadCakes(10, blackholeScene, gameState);
+        modelLoader.loadStars(10, blackholeScene, gameState);
         
 
         // Initialize the first scene
