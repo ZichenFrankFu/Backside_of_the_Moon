@@ -41,6 +41,7 @@ public class SoundManager {
         sfxMap.put("elevator_step", createAudioNode(assetManager, "Sounds/elevator_steps.ogg", false, 1.0f));
         sfxMap.put("game_over", createAudioNode(assetManager, "Sounds/game-over.ogg", false, 0.3f));
         sfxMap.put("bang", createAudioNode(assetManager, "Sounds/Bang.wav", false, 0.3f));
+        // sfxMap.put("dead", createAudioNode(assetManager, "Sounds/dead.wav", false, 0.3f));
     }
 
     /**
