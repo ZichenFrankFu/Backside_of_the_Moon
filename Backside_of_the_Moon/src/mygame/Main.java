@@ -54,8 +54,10 @@ public class Main extends SimpleApplication {
     float iconWidth = 52;
     float iconHeight = 47;
     
-    // Scene Count
+    // Scene Manage
     int sceneCount = 0;
+    Node classroomScene;
+    Node blackholeScene;
 
     // Monster chasing
     private Node monkeyNode;
@@ -129,13 +131,17 @@ public class Main extends SimpleApplication {
             chasePlayer();
             gotKey = inputHandler.getGotKey();
             if (gotKey) {
-                //teleportGateNode = modelLoader.loadTeleportGate();
+                teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
+
             }
             
             // Check if player is standing in the teleport gate
             if (isPlayerInTeleportGate()) {
                 System.out.println("Player is in the teleport gate!");
-                //sceneManager.switchToNextScene();
+            }
+            
+            if (checkMonkeyPlayerCollision()) {
+                System.out.println("Player collided with the monkey!");
             }
         }
     }
@@ -196,17 +202,16 @@ public class Main extends SimpleApplication {
 
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
-        Node classroomScene = modelLoader.loadClassroom();
+        classroomScene = modelLoader.loadClassroom();
         monkeyNode = modelLoader.loadMonkey(classroomScene);
         monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
         monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
 
-        Node blackholeScene = modelLoader.loadBlackhole();
+        blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadOto(blackholeScene);
-        modelLoader.loadCatnana(10, classroomScene, gameState);
+        modelLoader.loadCakes(10, classroomScene, gameState);
         modelLoader.loadCakes(10, blackholeScene, gameState);
         
-        teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
 
         // Initialize the first scene
         sceneManager.switchToNextScene();
@@ -289,7 +294,7 @@ public class Main extends SimpleApplication {
 
         // Calculate the distance between the player and the teleport gate
         float distance = playerPosition.distance(gatePosition);
-        System.out.println(distance);
+        //System.out.println(distance);
 
         // Define a threshold for the teleport range (e.g., 3 units)
         float teleportThreshold = 3.8f;
@@ -310,7 +315,24 @@ public class Main extends SimpleApplication {
         }
         */
     
+    private boolean checkMonkeyPlayerCollision() {
+        if (playerNode == null || monkeyNode == null) {
+            return false;
+        }
 
+        // Get the positions of the player and the monkey
+        Vector3f playerPosition = playerNode.getWorldTranslation();
+        Vector3f monkeyPosition = monkeyNode.getWorldTranslation();
+
+        // Calculate the distance between them
+        float distance = playerPosition.distance(monkeyPosition);
+
+        // Define a collision threshold (e.g., 2.0f units)
+        float collisionThreshold = 3.0f;
+
+        // Check if the player and monkey are close enough
+        return distance <= collisionThreshold;
+    }
     
 
     
