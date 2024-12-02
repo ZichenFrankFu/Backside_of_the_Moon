@@ -207,4 +207,8 @@ public class UserInputHandler {
     public boolean getGotKey() {
         return gotKey;
     }
+    
+    public void resetGotKey(){
+        gotKey = false;
+    }
 }

@@ -52,8 +52,8 @@ public class ModelLoader {
          */
         Node teleportGateNode = new Node("TeleportGate");
         Spatial teleportGate = assetManager.loadModel("Models/TeleportGate/scene.j3o");
-        teleportGate.setLocalScale(10f);
-        teleportGate.setLocalTranslation(-12,2f,-1);
+        teleportGate.setLocalScale(15f);
+        teleportGate.setLocalTranslation(-12,10f,-1);
         teleportGateNode.setCullHint(Spatial.CullHint.Never);
 
         // Gate lights
@@ -167,25 +167,6 @@ public class ModelLoader {
     }
     
     
-    public Node loadTerrain() {
-        // Instantiate the Terrain class
-        Terrain terrainApp = new Terrain();
-        terrainApp.simpleInitApp(); // Initialize the terrain
-
-        // Load Room3 node from the Terrain class
-        Node terrainNode = terrainApp.loadRoom3();
-
-        // Attach the terrain to the rootNode
-        rootNode.attachChild(terrainNode);
-
-        // Ensure all physics-related or scene manager actions are handled
-        RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
-        terrainNode.addControl(terrainPhysics);
-        bulletAppState.getPhysicsSpace().add(terrainPhysics);
-
-        return terrainNode;
-    }   
-    
     /*
     * Monsters
     */
@@ -193,8 +174,8 @@ public class ModelLoader {
         // Load and scale the BloodyMonkey model
         Node bloodyMonkey = (Node) assetManager.loadModel("Models/Monkey/Jaime.j3o");
         bloodyMonkey.rotate(0, FastMath.DEG_TO_RAD * 180, 0);
-        bloodyMonkey.setLocalScale(2.0f);
-        bloodyMonkey.setLocalTranslation(0, 5.0f, 10.0f);
+        bloodyMonkey.setLocalScale(4.0f);
+        bloodyMonkey.setLocalTranslation(15.0f, 3.0f, 18.0f);
         classroomScene.attachChild(bloodyMonkey);
         
         //Load materials onto BloodyMonkey model
@@ -237,74 +218,56 @@ public class ModelLoader {
         }
         
         Oto.setLocalTranslation(-10, 0, -10);
+        BetterCharacterControl otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f);
+        Oto.addControl(otoControl);
+        bulletAppState.getPhysicsSpace().add(otoControl); // Ensure it is added to the physics space
         
         return Oto;
-    }
-    
-    public void loadCatnana(int num, Node Scene, GameState gameState){
-        int keyInd = (int) (Math.random() * num);
-        for(int i = 0; i < num; i++){
-            if(i == keyInd){
-                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
-                cake.setName("Key");
-                cake.setLocalScale(2.0f);
-                cake.setLocalTranslation(1.0f + i, 3.0f, 2.0f);
-
-
-                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
-                cake.addControl(cakeControl);
-                bulletAppState.getPhysicsSpace().add(cakeControl); 
-                gameState.addPickableItem(cake);
-                Scene.attachChild(cake);
-            } else {
-                Spatial cake = assetManager.loadModel("Models/Catnana/scene.gltf");
-                cake.setName("Cake");
-                cake.setLocalScale(5.0f);
-                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
-                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
-                cake.addControl(cakeControl);
-                bulletAppState.getPhysicsSpace().add(cakeControl); 
-                gameState.addPickableItem(cake);
-                Scene.attachChild(cake);
-
-            }
-
-        }
     }
     
     /*
     * Pickable Items
     */
     
-    public void loadCakes(int num, Node Scene, GameState gameState){
+    public void loadCakes(int num, Node scene, GameState gameState) {
+        // Randomly select one cake to be the "Key"
         int keyInd = (int) (Math.random() * num);
-        for(int i = 0; i < num; i++){
-            if(i == keyInd){
-                Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
-                cake.setName("Key");
-                cake.setLocalScale(5.0f);
-                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
-                
-           
-                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
-                cake.addControl(cakeControl);
-                bulletAppState.getPhysicsSpace().add(cakeControl); 
-                gameState.addPickableItem(cake);
-                Scene.attachChild(cake);
-            } else {
-                Spatial cake = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
-                cake.setName("Cake");
-                cake.setLocalScale(5.0f);
-                cake.setLocalTranslation(1.0f + i, 6.0f, 2.0f);
-                RigidBodyControl cakeControl = new RigidBodyControl(0.5f); 
-                cake.addControl(cakeControl);
-                bulletAppState.getPhysicsSpace().add(cakeControl); 
-                gameState.addPickableItem(cake);
-                Scene.attachChild(cake);
+        if (keyInd == num){
+            keyInd = num - 1;
+        }
 
+        // Load the cake model once and create a reusable material
+        Spatial cakeModel = assetManager.loadModel("Models/Items/CAFETERIAcake.j3o");
+
+        for (int i = 0; i < num; i++) {
+            // Clone the cake model to create a new instance for each cake
+            Spatial cake = cakeModel.clone();
+            cake.setLocalScale(5.0f);
+
+            // Set different translations for each cake to avoid overlapping
+            float xPos = 1.0f + i * 1.0f;  // Adjusted to give some spacing
+            float yPos = 6.0f;
+            float zPos = 2.0f;
+            cake.setLocalTranslation(xPos, yPos, zPos);
+
+            // Set unique name for the key cake
+            if (i == keyInd) {
+                cake.setName("Key");
+            } else {
+                cake.setName("Cake");
             }
+
+            // Add RigidBodyControl to the cake
+            RigidBodyControl cakeControl = new RigidBodyControl(0.5f);
+            cake.addControl(cakeControl);
+            bulletAppState.getPhysicsSpace().add(cakeControl);
+
+            // Add the cake to the game state as a pickable item
+            gameState.addPickableItem(cake);
+            scene.attachChild(cake);
         }
     }
+
     
     public void loadStars(int num, Node scene, GameState gameState) {
         // Randomly select one star to be the "Key"

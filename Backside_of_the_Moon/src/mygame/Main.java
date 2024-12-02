@@ -55,11 +55,14 @@ public class Main extends SimpleApplication {
     float iconHeight = 47;
     
     // Scene Manage
-    int sceneCount = 0;
-    Node classroomScene;
-    Node blackholeScene;
+    private int sceneCount = 0;
+    private Node classroomScene;
+    private Node blackholeScene;
+    private int moveNext = 0;
+    
 
-    // Monster chasing
+    private boolean stopChasing = false;
+    // Monkey chasing
     private Node monkeyNode;
     private BetterCharacterControl monkeyControl;
     private AnimComposer monkeyAnimComposer;
@@ -90,7 +93,7 @@ public class Main extends SimpleApplication {
     private Node reflectedScene;
     private DepthOfFieldFilter dofFilter;
     private BloomFilter bloom;
-    private Node room3;
+    private Node terrainScene;
     
     private boolean enteredEnding;
     private Ending ending;
@@ -102,7 +105,6 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        
         ending = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
@@ -140,19 +142,46 @@ public class Main extends SimpleApplication {
                 playSceneMusic(sceneManager.getCurrentSceneName());
             }
 
-            chasePlayer();
-            chasePlayerWhenNotSeen();
+            if (!stopChasing){
+                monkeyChasePlayer();
+                otoChasePlayerWhenNotSeen();
+            }
             
             gotKey = inputHandler.getGotKey();
             if (gotKey) {
-                teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
+                switch (sceneCount){
+                    case 0:
+                        teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
+                        break;
+                    case 1: 
+                        teleportGateNode = modelLoader.loadTeleportGate(blackholeScene);
+                        break;
+                    case 2: 
+                        teleportGateNode = modelLoader.loadTeleportGate(terrainScene);
+                        break;
+                    default: 
+                        break;
+                }
+                
+                
+            } else if (teleportGateNode != null && !gotKey) {
+                teleportGateNode.removeFromParent();
             }
             
             // Check if player is standing in the teleport gate
             if (isPlayerInTeleportGate()) {
-                System.out.println("Player is in the teleport gate!");
+                System.out.println("moveNext " + moveNext);
+                if (moveNext == 0){
+                    sceneManager.switchToNextScene();
+                    gotKey = false;
+                    teleportGateNode.removeFromParent();
+                    sceneCount++;
+                }
+                stopChasing = true; 
+                moveNext++; 
             }
             
+            /*
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 
                 ending.cleanupEnding(rootNode);
@@ -181,6 +210,7 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
                 ending.startEnding();
             }
+            */
         }
     }
     
@@ -205,10 +235,12 @@ public class Main extends SimpleApplication {
 
         // Create player Node
         playerNode = new Node("the player");
+        /*
         Spatial handsModel = assetManager.loadModel("Models/Hands/arms.glb");
         handsModel.scale(2f);
         playerNode.attachChild(handsModel);
-        playerNode.setLocalTranslation(new Vector3f(5f, 1.5f, 5f));
+        */
+        playerNode.setLocalTranslation(new Vector3f(5f, 1f, 1f));
         rootNode.attachChild(playerNode);
 
         // Player Control
@@ -227,7 +259,7 @@ public class Main extends SimpleApplication {
         sceneManager = new SceneSwitchingManager(this);
         stateManager.attach(sceneManager);
 
-        // UI
+        // Static UI
         setNotificationText();
         gameState = new GameState(cam, inputManager, notificationText);
         stateManager.attach(gameState);
@@ -241,26 +273,42 @@ public class Main extends SimpleApplication {
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager);
         classroomScene = modelLoader.loadClassroom();
+        modelLoader.loadCakes(10, classroomScene, gameState);
         monkeyNode = modelLoader.loadMonkey(classroomScene);
         monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
         monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
 
         blackholeScene = modelLoader.loadBlackhole();
-        modelLoader.loadCakes(10, classroomScene, gameState);
         modelLoader.loadStars(10, blackholeScene, gameState);
         otoNode = modelLoader.loadOto(blackholeScene);
         otoControl = otoNode.getControl(BetterCharacterControl.class);
-        if (otoControl == null) {
-            // If not attached, add it manually
-            otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f); // Adjust dimensions and mass as needed
-            otoNode.addControl(otoControl);
-            bulletAppState.getPhysicsSpace().add(otoControl); // Ensure it is added to the physics space
-        }
         otoAnimComposer = otoNode.getControl(AnimComposer.class);
+        
+        loadTerrain();
 
         // Initialize the first scene
         sceneManager.switchToNextScene();
     }
+    
+    private void playSceneMusic(String sceneName) {
+        soundManager.stopCurrentBGM();
+
+        switch (sceneName) {
+            case "ClassroomScene":
+                soundManager.playBGM("quiet_bgm");
+                break;
+            case "BlackholeScene":
+                soundManager.playBGM("mystery_bgm");
+                break;
+            default:
+                System.out.println("No BGM mapped for scene: " + sceneName);
+                break;
+        }
+    }
+    
+    /*
+    * Static UI
+    */
     
     private void showStartScreen() {
         startScreen = new Picture("Start Screen");
@@ -325,57 +373,6 @@ public class Main extends SimpleApplication {
             }
         }
     };
-        
-    private boolean isPlayerInTeleportGate() {
-        if (teleportGateNode == null || playerNode == null) {
-            return false;
-        }
-
-        // Get the position of both the player and the teleport gate
-        Vector3f playerPosition = playerNode.getWorldTranslation();
-        Vector3f gatePosition = teleportGateNode.getWorldTranslation();
-
-        // Calculate the distance between the player and the teleport gate
-        float distance = playerPosition.distance(gatePosition);
-        //System.out.println(distance);
-
-        // Define a threshold for the teleport range (e.g., 3 units)
-        float teleportThreshold = 3.8f;
-
-        // Check if the player is within the range of the teleport gate
-        return distance <= teleportThreshold;
-    }
-
-        
-        /*      
-        boolean destructTerrain = inputHandler.getDestructTerrain();
-        if (destructTerrain){
-            enqueue(() -> {
-                // Perform terrain modification here, such as removing a part of the terrain
-                room3.detachAllChildren(); // Replace with your specific operation
-                room3.updateGeometricState();
-            });
-        }
-        */
-    
-    private boolean checkMonsterPlayerCollision(Node monsterNode) {
-        if (playerNode == null || monsterNode == null) {
-            return false;
-        }
-
-        // Get the positions of the player and the monkey
-        Vector3f playerPosition = playerNode.getWorldTranslation();
-        Vector3f monsterPosition = monsterNode.getWorldTranslation();
-
-        // Calculate the distance between them
-        float distance = playerPosition.distance(monsterPosition);
-
-        // Define a collision threshold (e.g., 2.0f units)
-        float collisionThreshold = 3.0f;
-
-        // Check if the player and monkey are close enough
-        return distance <= collisionThreshold;
-    }
     
     public void createSaveButton(){
         Picture frame = new Picture("User interface frame");
@@ -419,23 +416,56 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(notificationText);
     }
     
-    private void playSceneMusic(String sceneName) {
-        soundManager.stopCurrentBGM();
-
-        switch (sceneName) {
-            case "ClassroomScene":
-                soundManager.playBGM("quiet_bgm");
-                break;
-            case "BlackholeScene":
-                soundManager.playBGM("mystery_bgm");
-                break;
-            default:
-                System.out.println("No BGM mapped for scene: " + sceneName);
-                break;
+    
+    /*
+    * Collision Check
+    */
+        
+    private boolean isPlayerInTeleportGate() {
+        if (teleportGateNode == null || playerNode == null) {
+            return false;
         }
+
+        // Get the position of both the player and the teleport gate
+        Vector3f playerPosition = playerNode.getWorldTranslation();
+        Vector3f gatePosition = teleportGateNode.getWorldTranslation();
+
+        // Calculate the distance between the player and the teleport gate
+        float distance = playerPosition.distance(gatePosition);
+        //System.out.println(distance);
+
+        // Define a threshold for the teleport range (e.g., 3 units)
+        float teleportThreshold = 3.8f;
+
+        // Check if the player is within the range of the teleport gate
+        return distance <= teleportThreshold;
+    }
+
+    
+    private boolean checkMonsterPlayerCollision(Node monsterNode) {
+        if (playerNode == null || monsterNode == null) {
+            return false;
+        }
+
+        // Get the positions of the player and the monkey
+        Vector3f playerPosition = playerNode.getWorldTranslation();
+        Vector3f monsterPosition = monsterNode.getWorldTranslation();
+
+        // Calculate the distance between them
+        float distance = playerPosition.distance(monsterPosition);
+
+        // Define a collision threshold (e.g., 2.0f units)
+        float collisionThreshold = 3.0f;
+
+        // Check if the player and monkey are close enough
+        return distance <= collisionThreshold;
     }
     
-    private void chasePlayer() {
+    
+    /*
+    * Monster Logic
+    */
+    private void monkeyChasePlayer() {
         if (monkeyNode != null && playerNode != null) {
             Vector3f monsterPosition = monkeyNode.getWorldTranslation();
             Vector3f playerPosition = playerNode.getWorldTranslation();
@@ -446,7 +476,7 @@ public class Main extends SimpleApplication {
         }
     }
     
-    private void chasePlayerWhenNotSeen() {
+    private void otoChasePlayerWhenNotSeen() {
     if (otoNode != null && playerNode != null) {
         // Get positions
         Vector3f otoPosition = otoNode.getWorldTranslation();
@@ -465,7 +495,6 @@ public class Main extends SimpleApplication {
         float fullSpeedThreshold = -0.7f; // Fully behind the player
         float slowSpeedThreshold = 0.7f; // Visible on the side
         
-        Vector3f facingDirectionToPlayer = directionToOto.negate(); // Flip direction
         
         if (dotProduct < fullSpeedThreshold) {
             // Player is not looking at Oto, move at full speed
@@ -486,15 +515,15 @@ public class Main extends SimpleApplication {
     }
     }
     
-    public Node loadRoom3() {
+    public Node loadTerrain() {
         
-        room3 = new Node("Room3 Node");
+        terrainScene = new Node("terrainNode");
 
         // Add Terrain
         Spatial terrainGeo = assetManager.loadModel("Scenes/room_3.j3o");
         terrainGeo.setLocalTranslation(0, 5, 0);
         terrainGeo.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
-        room3.attachChild(terrainGeo);
+        terrainScene.attachChild(terrainGeo);
 
         // Add Trees
         Spatial tree1 = assetManager.loadModel("Models/Tree/Tree.j3o");
@@ -502,16 +531,16 @@ public class Main extends SimpleApplication {
         tree1.setQueueBucket(RenderQueue.Bucket.Transparent);
         tree1.setLocalTranslation(0, 7f, 0);
         tree1.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
-        room3.attachChild(tree1);
+        terrainScene.attachChild(tree1);
 
         Spatial tree2 = tree1.clone();
         tree2.setLocalTranslation(-50, 7f, -50);
         tree2.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
-        room3.attachChild(tree2);
+        terrainScene.attachChild(tree2);
 
         // Add Sky
         Spatial mySky = assetManager.loadModel("Scenes/mySky.j3o");
-        room3.attachChild(mySky);
+        terrainScene.attachChild(mySky);
 
         // Add Reflected Scene and Water
         reflectedScene = new Node("Scene");
@@ -524,22 +553,22 @@ public class Main extends SimpleApplication {
 
         reflectedScene.attachChild(boat);
 
-        room3.attachChild(reflectedScene);
+        terrainScene.attachChild(reflectedScene);
 
         // Add Bonfire and Forest
         Spatial bonfire = assetManager.loadModel("Models/bonfire/bonfire_pot.j3o");
         bonfire.scale(8);
         bonfire.setLocalTranslation(-20, 13, -20);
         bonfire.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
-        room3.attachChild(bonfire);
+        terrainScene.attachChild(bonfire);
 
         Spatial forest = assetManager.loadModel("Models/manyTrees/multiple_trees.j3o");
         forest.scale(8);
         forest.setLocalTranslation(-150, 5, -170);
-        room3.attachChild(forest);
+        terrainScene.attachChild(forest);
 
         // Add Particle Effects
-        ParticleEffects particle = new ParticleEffects(assetManager, room3);
+        ParticleEffects particle = new ParticleEffects(assetManager, terrainScene);
         particle.dust();
         particle.sparks();
         particle.burst();
@@ -556,7 +585,7 @@ public class Main extends SimpleApplication {
         fpp.addFilter(fogFilter);
 
         WaterFilter water = new WaterFilter(reflectedScene, lightDir);
-        water.setWaterHeight(3f);
+        water.setWaterHeight(2f);
         fpp.addFilter(water);
 
         LightScatteringFilter sunLightFilter = new LightScatteringFilter(lightDir.mult(-3000));
@@ -568,49 +597,23 @@ public class Main extends SimpleApplication {
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(2));
-        room3.addLight(sun);
+        terrainScene.addLight(sun);
 
         DirectionalLightShadowFilter dlsf = new DirectionalLightShadowFilter(assetManager, 1024, 2);
         dlsf.setLight(sun);
         fpp.addFilter(dlsf);
         
-        rootNode.attachChild(room3);
+        rootNode.attachChild(terrainScene);
         
-        room3.setLocalTranslation(0, 0, -20);
+        terrainScene.setLocalTranslation(0, 0, -20);
         
         RigidBodyControl terrainPhysics = new RigidBodyControl(0f); // Static terrain
-        room3.addControl(terrainPhysics);
+        terrainScene.addControl(terrainPhysics);
         bulletAppState.getPhysicsSpace().add(terrainPhysics);
         
-        sceneManager.addScene(room3);
+        sceneManager.addScene(terrainScene);
         
-        return room3;
+        return terrainScene;
     }
-    
-    /*
-    public void resetGame() {
-        // Stop all background tasks or sounds
-        //soundManager.stopAllSounds();
-
-        // Detach all nodes from the root
-        rootNode.detachAllChildren();
-        guiNode.detachAllChildren();
-
-        // Reset physics space
-        bulletAppState.getPhysicsSpace().destroy();
-        bulletAppState = null;
-
-        // Reset player variables
-        startScreenActive = true;
-        textSequenceActive = false;
-        gotKey = false;
-        enteredEnding = false;
-        currentTextIndex = 0;
-
-        // Reinitialize the game
-        simpleInitApp();
-        initializeGame();
-    }
-    */
     
 }
