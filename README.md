@@ -182,6 +182,7 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 *The Start Scene*
 
 To make the game more playable and complete, we have created a start scene, as well as a brief prologue at the start of the game for storytelling. 
+
 <img width="884" alt="Screenshot 2024-11-30 at 17 45 07" src="https://github.com/user-attachments/assets/9bea8504-9ae7-4bac-abba-0dbfdb3ef326">
 <img width="877" alt="Screenshot 2024-11-30 at 17 45 29" src="https://github.com/user-attachments/assets/8f608730-efd3-4ec3-9e76-cda46559be45">
 
