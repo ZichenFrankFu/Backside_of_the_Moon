@@ -180,11 +180,13 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 **Third Deliverable**
 
 *The Start Scene*
+
 To make the game more playable and complete, we have created a start scene, as well as a brief prologue at the start of the game for storytelling. 
 <img width="884" alt="Screenshot 2024-11-30 at 17 45 07" src="https://github.com/user-attachments/assets/9bea8504-9ae7-4bac-abba-0dbfdb3ef326">
 <img width="877" alt="Screenshot 2024-11-30 at 17 45 29" src="https://github.com/user-attachments/assets/8f608730-efd3-4ec3-9e76-cda46559be45">
 
 *Player Death and Bad Ends*
+
 The player now dies if caught by a monster, triggering a game-over message followed by a death scene. There are three distinct “Bad Endings,” each corresponding to being caught by a specific monster in a different room. 
 For example, being caught by the monster in the classroom (Room 1) triggers "Attendence, Mandatory" Bad End:
 ![ending_classroom](https://github.com/user-attachments/assets/5df3514c-82ba-42d6-adb2-d395f35ef63b)
@@ -196,6 +198,7 @@ Being caught by the monster in the terrain scene (Room 3) triggers "The Silent C
 ![ending_tree](https://github.com/user-attachments/assets/0c299e37-6140-4353-bd18-55cafd6212b7)
 
 *The 3rd Room*
+
 We have created a 3rd "room" that the player can enter. It's a natural scenary room consisting of a terrain with a lake, trees, fog, sunlight and skybox. 
 
 *Particles*
