@@ -164,7 +164,7 @@ public class Main extends SimpleApplication {
                 "Attendance, mandatory.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", "Sounds/monster.wav");
+                ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", null);
                 ending.startEnding();
             }
              
