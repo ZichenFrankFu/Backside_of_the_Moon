@@ -2,6 +2,7 @@ package mygame;
 
 import com.jme3.audio.AudioNode;
 import com.jme3.asset.AssetManager;
+import com.jme3.math.Vector3f;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,12 +38,13 @@ public class SoundManager {
      */
     private void loadSFX(AssetManager assetManager) {
         sfxMap.put("pickup", createAudioNode(assetManager, "Sounds/click.wav", false, 1.0f));
-//        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 0.7f));
-        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", 0.7f));
+        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 0.7f));
+        // sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", 0.7f));
         sfxMap.put("elevator_step", createAudioNode(assetManager, "Sounds/elevator_steps.ogg", false, 1.0f));
         sfxMap.put("game_over", createAudioNode(assetManager, "Sounds/game-over.ogg", false, 0.3f));
         sfxMap.put("bang", createAudioNode(assetManager, "Sounds/Bang.wav", false, 0.3f));
-        sfxMap.put("monster", createAudioNode(assetManager, "Sounds/monster.wav", false, 0.8f));
+
+        sfxMap.put("monster", createAudioNode_pos(assetManager, "Sounds/Bang.wav", false, 0.5f));
     }
 
     /**
@@ -64,14 +66,24 @@ public class SoundManager {
     * @param volume       The volume of the step sound.
     * @return The configured AudioNode for the step sound.
     */
-   private AudioNode createAudioNode(AssetManager assetManager, String filePath, float volume) {
-       AudioNode audio = new AudioNode(assetManager, filePath, false);
-       audio.setPositional(true);       // Step sounds are positional
-       audio.setLooping(true);          // Step sounds are looping
-       audio.setVolume(volume);         // Set default volume
-       return audio;
-   }
+    private AudioNode createAudioNode(AssetManager assetManager, String filePath, float volume) {
+        AudioNode audio = new AudioNode(assetManager, filePath, false);
+        audio.setPositional(true); // for positional sound
+        audio.setLooping(true);  
+        audio.setVolume(volume);   
+        return audio;
+    }
 
+        /**
+        * Helper to create a preconfigured AudioNode.
+        */
+       private AudioNode createAudioNode_pos(AssetManager assetManager, String filePath, boolean loop, float volume) {
+           AudioNode audio = new AudioNode(assetManager, filePath, false);
+           audio.setPositional(true);
+           audio.setLooping(loop); // Loop for BGMs, single instance for SFX
+           audio.setVolume(volume); // Default volume
+           return audio;
+        }
 
     /**
      * Play the specified BGM, stopping any currently playing BGM.
@@ -105,6 +117,7 @@ public class SoundManager {
      */
     public void playLoopingSFX(String name) {
         AudioNode sfx = sfxMap.get(name);
+        
         if (sfx != null && !sfxStateMap.getOrDefault(name, false)) {
             sfx.play();
             sfxStateMap.put(name, true); // Mark as playing
@@ -127,6 +140,25 @@ public class SoundManager {
         }
     }
 
+
+    /**
+    * Play a positional sound effect.
+    *
+    * @param name The name of the sound effect (must exist in the sfxMap).
+    * @param position The position in the game world to play the sound.
+    */
+   public void playPositionalSFX(String name, Vector3f position) {
+       AudioNode sfx = sfxMap.get(name);
+       if (sfx != null) {
+           sfx.setLocalTranslation(position); // Set the position
+           sfx.playInstance(); // Play the sound at the given position
+       } else {
+           System.err.println("Positional SFX with name '" + name + "' not found in SoundManager!");
+       }
+   }
+
+
+
     /**
      * Play a sound effect once.
      * @param name Name of the sound effect to play.
@@ -134,7 +166,7 @@ public class SoundManager {
     public void playSFX(String name) {
         AudioNode sfx = sfxMap.get(name);
         if (sfx != null) {
-            //sfx.playInstance();
+            sfx.playInstance();
         } else {
             System.err.println("SFX with name '" + name + "' not found!");
         }

@@ -70,6 +70,9 @@ public class Main extends SimpleApplication {
     private AnimComposer monkeyAnimComposer;
     private float monkeySpeed = 4.0f;
     
+    // Monster sound timer
+    private float monsterSoundTimer = 0.0f;
+    
     // Oto Chasing
     private Node otoNode;
     private BetterCharacterControl otoControl;
@@ -145,6 +148,19 @@ public class Main extends SimpleApplication {
                 playSceneMusic(sceneManager.getCurrentSceneName());
             }
 
+            // Add positional sound from monster
+            monsterSoundTimer += tpf;
+            if (monsterSoundTimer >= 5f) { // Play every 5 seconds
+                if (monkeyNode != null) { // Ensure the monster node exists
+                    Vector3f monsterPosition = monkeyNode.getWorldTranslation();
+                    soundManager.playPositionalSFX("monster", monsterPosition); // Use the new method
+                    System.out.println("Monster sound played at position: " + monsterPosition);
+                } else {
+                    System.err.println("Monster node (monkeyNode) is null!");
+                }
+                monsterSoundTimer = 0f; // Reset the timer
+            }
+            
             if (!stopChasing){
                 monkeyChasePlayer();
                 otoChasePlayerWhenNotSeen();
