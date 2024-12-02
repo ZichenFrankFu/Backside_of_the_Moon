@@ -156,7 +156,7 @@ public class Main extends SimpleApplication {
                 "Attendance, mandatory.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", null);
+                ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", "Sounds/monster.wav");
                 ending.startEnding();
                 
                 //System.out.println("Player collided with the monkey!");
