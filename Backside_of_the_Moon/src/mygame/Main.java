@@ -64,7 +64,7 @@ public class Main extends SimpleApplication {
     private BetterCharacterControl monkeyControl;
     private AnimComposer monkeyAnimComposer;
     private float monkeySpeed = 4.0f;
-
+   
     // Bag check
     private boolean gotKey = false;
     
@@ -422,8 +422,6 @@ public class Main extends SimpleApplication {
             monkeyControl.setViewDirection(directionToPlayer.negate());
         }
     }
-    
-    
     
     public Node loadRoom3() {
         

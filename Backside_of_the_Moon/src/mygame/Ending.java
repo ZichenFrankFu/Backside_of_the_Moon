@@ -121,6 +121,7 @@ public class Ending {
                 if (isTextPhase) {
                     updateTextDisplay();
                 } else {
+                    quitGame();
                     //((Main) app).resetGame();
                 }
             }

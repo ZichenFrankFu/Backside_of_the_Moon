@@ -50,7 +50,7 @@ public class ParticleEffects extends SimpleApplication {
         dustEmitter.setSelectRandomImage(true);
         dustEmitter.setRandomAngle(true);
         dustEmitter.getParticleInfluencer().setVelocityVariation(1f);
-        dustEmitter.setLocalTranslation(new Vector3f(50, 5, 50));
+        dustEmitter.setLocalTranslation(new Vector3f(-5, 2, 5));
         rootNode.attachChild(dustEmitter);
     }
     

@@ -131,9 +131,9 @@ public class Terrain extends SimpleApplication {
                 
         //Particle Effects
         ParticleEffects particle = new ParticleEffects(assetManager, rootNode);
-        particle.dust();
-        particle.sparks();
-        particle.burst();
+        //particle.dust();
+        //particle.sparks();
+        //particle.burst();
         particle.fire();
         
         //Shading & Lighting -- Does not work for now somehow

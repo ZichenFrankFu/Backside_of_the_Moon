@@ -156,6 +156,13 @@ public class ModelLoader {
         glowEffect.setRadius(10f); 
         blackholeScene.addLight(glowEffect);
         
+        //Particle Effects
+        ParticleEffects particle = new ParticleEffects(assetManager, rootNode);
+        particle.dust();
+        //particle.sparks();
+        //particle.burst();
+        //particle.fire();
+        
         return blackholeScene;
     }
     
