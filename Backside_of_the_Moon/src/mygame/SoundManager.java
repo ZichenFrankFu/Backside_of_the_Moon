@@ -30,6 +30,9 @@ public class SoundManager {
         bgmMap.put("quiet_bgm", createAudioNode(assetManager, "Sounds/bgm/quiet_bgm.ogg", true, 0.3f));
         bgmMap.put("mystery_bgm", createAudioNode(assetManager, "Sounds/bgm/quite_unsettled_bgm.ogg", true, 0.3f));
         bgmMap.put("movement_bgm", createAudioNode(assetManager, "Sounds/bgm/Movement_bgm.ogg", true, 0.3f));
+        
+        bgmMap.put("classroom_ending", createAudioNode(assetManager, "Sounds/bgm/classroom_ending.wav", true, 0.3f));
+        bgmMap.put("blackhole_ending", createAudioNode(assetManager, "Sounds/bgm/blackhole_ending.wav", true, 0.3f));
     }
 
     /**
@@ -37,7 +40,8 @@ public class SoundManager {
      */
     private void loadSFX(AssetManager assetManager) {
         sfxMap.put("pickup", createAudioNode(assetManager, "Sounds/click.wav", false, 1.0f));
-        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 0.7f));
+        //sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 0.7f));
+        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", 0.7f));
         sfxMap.put("elevator_step", createAudioNode(assetManager, "Sounds/elevator_steps.ogg", false, 1.0f));
         sfxMap.put("game_over", createAudioNode(assetManager, "Sounds/game-over.ogg", false, 0.3f));
         sfxMap.put("bang", createAudioNode(assetManager, "Sounds/Bang.wav", false, 0.3f));
@@ -134,6 +138,23 @@ public class SoundManager {
             System.err.println("SFX with name '" + name + "' not found!");
         }
     }
+    
+    /**
+    * Overloaded method to create a positional audio node specifically for step sounds.
+    *
+    * @param assetManager The asset manager to load the sound file.
+    * @param filePath     The file path to the step sound.
+    * @param volume       The volume of the step sound.
+    * @return The configured AudioNode for the step sound.
+    */
+   private AudioNode createAudioNode(AssetManager assetManager, String filePath, float volume) {
+       AudioNode audio = new AudioNode(assetManager, filePath, false);
+       audio.setPositional(true);       // Step sounds are positional
+       audio.setLooping(true);          // Step sounds are looping
+       audio.setVolume(volume);         // Set default volume
+       return audio;
+   }
+
 
     /**
      * Get the currently playing BGM.
