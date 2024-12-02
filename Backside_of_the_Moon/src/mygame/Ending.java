@@ -8,6 +8,7 @@ import com.jme3.ui.Picture;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.math.ColorRGBA;
+import com.jme3.renderer.Camera;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class Ending {
     private final SoundManager soundManager;
 
     private List<String> currentTextSequence;
-    private int currentTextIndex;
+    private int currentTextIndex = 0;
     private boolean isTextPhase;
     private boolean isActive;
 
@@ -34,16 +35,16 @@ public class Ending {
         this.textDisplay.setSize(defaultFont.getCharSet().getRenderedSize() * 1.5f);
         this.textDisplay.setColor(ColorRGBA.White);
         this.textDisplay.setText(""); // Start with no text
-
         this.endingNode = new Node("Ending Node");
         app.getGuiNode().attachChild(this.endingNode);
         this.endingNode.attachChild(this.textDisplay);
+        endingNode.attachChild(textDisplay);
 
         this.endingImage = new Picture("Ending Image");
 
         // Set up input mapping for transitioning through the ending
         app.getInputManager().addMapping("NextEnding", new KeyTrigger(com.jme3.input.KeyInput.KEY_SPACE));
-        app.getInputManager().addListener(endTransitionListener, "NextEnding");
+        app.getInputManager().addListener(nextTextListener, "NextEnding");
 
         this.isActive = false;
         this.isTextPhase = true;
@@ -58,7 +59,7 @@ public class Ending {
      */
     public void setEnding(List<String> textSequence, String imagePath, String soundKey) {
         this.currentTextSequence = textSequence;
-        this.currentTextIndex = 0;
+        //this.currentTextIndex = 0;
 
         // Configure the ending image
         endingImage.setImage(app.getAssetManager(), imagePath, true);
@@ -70,44 +71,65 @@ public class Ending {
         if (soundKey != null && !soundKey.isEmpty()) {
             soundManager.playSFX(soundKey);
         }
+        
     }
 
     public void startEnding() {
         isActive = true;
-        isTextPhase = true;
-        displayNextText();
+        showTextSequence();
+        if (currentTextIndex == 0){
+            updateTextDisplay();
+        }
     }
-
-    private void displayNextText() {
+    
+    private void showTextSequence() {
+        endingNode.attachChild(textDisplay);
+    }
+    
+    private void updateTextDisplay() {
+        Camera cam = app.getCamera();
         if (currentTextIndex < currentTextSequence.size()) {
             String text = currentTextSequence.get(currentTextIndex);
             textDisplay.setText(text);
+            currentTextIndex = currentTextIndex + 1;
             centerText();
-            currentTextIndex++;
         } else {
             transitionToImage();
         }
+        if (currentTextIndex == currentTextSequence.size()){
+            isTextPhase = false;
+            transitionToImage();
+        }
+    }
+    
+    private void transitionToImage() {
+        if (textDisplay != null) {
+            endingNode.attachChild(endingImage);
+        }
     }
 
-    private void transitionToImage() {
-        isTextPhase = false;
-        endingNode.detachChild(textDisplay); // Remove text
-        endingNode.attachChild(endingImage); // Show image
-    }
+    private final ActionListener nextTextListener = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean isPressed, float tpf) {
+            
+            if (currentTextSequence == null) {
+                System.err.println("Error: currentTextSequence is null.");
+                return;
+            }
+            
+            if (name.equals("NextEnding") && isPressed) {
+                if (isTextPhase) {
+                    updateTextDisplay();
+                } else {
+                    //((Main) app).resetGame();
+                }
+            }
+        }
+    };
 
     private void quitGame() {
         app.stop(); // Quit the game
     }
-
-    private final ActionListener endTransitionListener = (name, isPressed, tpf) -> {
-        if (!isActive || !isPressed) return;
-
-        if (isTextPhase) {
-            displayNextText();
-        } else {
-            quitGame();
-        }
-    };
 
     public boolean isActive() {
         return isActive;
@@ -122,4 +144,13 @@ public class Ending {
                 0
         );
     }
+    
+    public void cleanupEnding(Node rootNode) {
+        if (rootNode != null) {
+            rootNode.detachAllChildren(); // Remove all child nodes
+            app.getGuiNode().detachChild(rootNode); // Detach the ending node itself
+        }
+        this.isActive = false; // Reset active state
+    }
 }
+

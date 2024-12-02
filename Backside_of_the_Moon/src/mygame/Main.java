@@ -84,6 +84,9 @@ public class Main extends SimpleApplication {
     private DepthOfFieldFilter dofFilter;
     private BloomFilter bloom;
     private Node room3;
+    
+    private boolean enteredEnding;
+    private Ending ending;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -92,6 +95,8 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        
+        ending = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
@@ -140,8 +145,21 @@ public class Main extends SimpleApplication {
                 System.out.println("Player is in the teleport gate!");
             }
             
-            if (checkMonkeyPlayerCollision()) {
-                System.out.println("Player collided with the monkey!");
+             if (checkMonkeyPlayerCollision() && enteredEnding == false) {
+                
+                ending.cleanupEnding(rootNode);
+                
+                List<String> textSequenceClassroom = List.of(
+                "The desks have teeth. The windows have eyes.",
+                "Your steps were loud where silence was demanded.",
+                "You are seated now, and the class shall begin again.",
+                "Attendance, mandatory.",
+                ""
+                );
+                ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", null);
+                ending.startEnding();
+                
+                //System.out.println("Player collided with the monkey!");
             }
         }
     }
@@ -201,7 +219,7 @@ public class Main extends SimpleApplication {
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
 
         // Load Model
-        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager, cam);
+        modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager);
         classroomScene = modelLoader.loadClassroom();
         monkeyNode = modelLoader.loadMonkey(classroomScene);
         monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
@@ -210,7 +228,7 @@ public class Main extends SimpleApplication {
         blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadOto(blackholeScene);
         modelLoader.loadCakes(10, classroomScene, gameState);
-        modelLoader.loadCakes(10, blackholeScene, gameState);
+        modelLoader.loadStars(10, blackholeScene, gameState);
         
 
         // Initialize the first scene
@@ -508,5 +526,30 @@ public class Main extends SimpleApplication {
         return room3;
     }
     
+    /*
+    public void resetGame() {
+        // Stop all background tasks or sounds
+        //soundManager.stopAllSounds();
+
+        // Detach all nodes from the root
+        rootNode.detachAllChildren();
+        guiNode.detachAllChildren();
+
+        // Reset physics space
+        bulletAppState.getPhysicsSpace().destroy();
+        bulletAppState = null;
+
+        // Reset player variables
+        startScreenActive = true;
+        textSequenceActive = false;
+        gotKey = false;
+        enteredEnding = false;
+        currentTextIndex = 0;
+
+        // Reinitialize the game
+        simpleInitApp();
+        initializeGame();
+    }
+    */
     
 }
