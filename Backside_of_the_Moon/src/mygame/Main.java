@@ -64,6 +64,13 @@ public class Main extends SimpleApplication {
     private BetterCharacterControl monkeyControl;
     private AnimComposer monkeyAnimComposer;
     private float monkeySpeed = 4.0f;
+    
+    // Oto Chasing
+    private Node otoNode;
+    private BetterCharacterControl otoControl;
+    private AnimComposer otoAnimComposer;
+    private float otoSpeed = 15.0f;
+    private float otoHalfSpeed = 2.0f;
    
     // Bag check
     private boolean gotKey = false;
@@ -134,10 +141,11 @@ public class Main extends SimpleApplication {
             }
 
             chasePlayer();
+            chasePlayerWhenNotSeen();
+            
             gotKey = inputHandler.getGotKey();
             if (gotKey) {
                 teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
-
             }
             
             // Check if player is standing in the teleport gate
@@ -145,7 +153,7 @@ public class Main extends SimpleApplication {
                 System.out.println("Player is in the teleport gate!");
             }
             
-             if (checkMonkeyPlayerCollision() && enteredEnding == false) {
+             if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 
                 ending.cleanupEnding(rootNode);
                 
@@ -158,8 +166,20 @@ public class Main extends SimpleApplication {
                 );
                 ending.setEnding(textSequenceClassroom, "Textures/classroom.jpg", null);
                 ending.startEnding();
+            }
+             
+            if (checkMonsterPlayerCollision(otoNode) && enteredEnding == false) {
                 
-                //System.out.println("Player collided with the monkey!");
+                ending.cleanupEnding(rootNode);
+                
+                List<String> textSequenceClassroom = List.of(
+                "The void knows no mercy, and the stars do not mourn.",
+                "The blackness does not end; it only consumes.",
+                "You are stretched thin, and now, you are no more.",
+                ""
+                );
+                ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
+                ending.startEnding();
             }
         }
     }
@@ -226,10 +246,17 @@ public class Main extends SimpleApplication {
         monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
 
         blackholeScene = modelLoader.loadBlackhole();
-        modelLoader.loadOto(blackholeScene);
         modelLoader.loadCakes(10, classroomScene, gameState);
         modelLoader.loadStars(10, blackholeScene, gameState);
-        
+        otoNode = modelLoader.loadOto(blackholeScene);
+        otoControl = otoNode.getControl(BetterCharacterControl.class);
+        if (otoControl == null) {
+            // If not attached, add it manually
+            otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f); // Adjust dimensions and mass as needed
+            otoNode.addControl(otoControl);
+            bulletAppState.getPhysicsSpace().add(otoControl); // Ensure it is added to the physics space
+        }
+        otoAnimComposer = otoNode.getControl(AnimComposer.class);
 
         // Initialize the first scene
         sceneManager.switchToNextScene();
@@ -298,8 +325,6 @@ public class Main extends SimpleApplication {
             }
         }
     };
-
-    
         
     private boolean isPlayerInTeleportGate() {
         if (teleportGateNode == null || playerNode == null) {
@@ -333,17 +358,17 @@ public class Main extends SimpleApplication {
         }
         */
     
-    private boolean checkMonkeyPlayerCollision() {
-        if (playerNode == null || monkeyNode == null) {
+    private boolean checkMonsterPlayerCollision(Node monsterNode) {
+        if (playerNode == null || monsterNode == null) {
             return false;
         }
 
         // Get the positions of the player and the monkey
         Vector3f playerPosition = playerNode.getWorldTranslation();
-        Vector3f monkeyPosition = monkeyNode.getWorldTranslation();
+        Vector3f monsterPosition = monsterNode.getWorldTranslation();
 
         // Calculate the distance between them
-        float distance = playerPosition.distance(monkeyPosition);
+        float distance = playerPosition.distance(monsterPosition);
 
         // Define a collision threshold (e.g., 2.0f units)
         float collisionThreshold = 3.0f;
@@ -351,8 +376,6 @@ public class Main extends SimpleApplication {
         // Check if the player and monkey are close enough
         return distance <= collisionThreshold;
     }
-    
-
     
     public void createSaveButton(){
         Picture frame = new Picture("User interface frame");
@@ -421,6 +444,46 @@ public class Main extends SimpleApplication {
             monkeyControl.setWalkDirection(directionToPlayer.mult(monkeySpeed));
             monkeyControl.setViewDirection(directionToPlayer.negate());
         }
+    }
+    
+    private void chasePlayerWhenNotSeen() {
+    if (otoNode != null && playerNode != null) {
+        // Get positions
+        Vector3f otoPosition = otoNode.getWorldTranslation();
+        Vector3f playerPosition = playerNode.getWorldTranslation();
+        
+        // Calculate direction to Oto from player
+        Vector3f directionToOto = otoPosition.subtract(playerPosition).normalizeLocal();
+        
+        // Get the player's view direction (you might need to adjust how to get this in your framework)
+        Vector3f playerViewDirection = playerNode.getControl(BetterCharacterControl.class).getViewDirection();
+        
+        // Calculate the dot product to determine if the player is looking at Oto
+        float dotProduct = playerViewDirection.dot(directionToOto);
+        
+        // Define thresholds
+        float fullSpeedThreshold = -0.7f; // Fully behind the player
+        float slowSpeedThreshold = 0.7f; // Visible on the side
+        
+        Vector3f facingDirectionToPlayer = directionToOto.negate(); // Flip direction
+        
+        if (dotProduct < fullSpeedThreshold) {
+            // Player is not looking at Oto, move at full speed
+            Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
+            otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed));
+            otoControl.setViewDirection(directionToPlayer);
+            otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
+        } else if (dotProduct < slowSpeedThreshold) {
+            // Player sees Oto partially, move at slow speed
+            Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
+            otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed * 0.5f)); // Adjust the slow speed multiplier
+            otoControl.setViewDirection(directionToPlayer);
+            otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
+        } else {
+            // Player is looking directly at Oto, stop moving
+            otoControl.setWalkDirection(Vector3f.ZERO);
+        }
+    }
     }
     
     public Node loadRoom3() {

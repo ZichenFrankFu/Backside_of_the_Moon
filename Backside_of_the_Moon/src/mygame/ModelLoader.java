@@ -220,16 +220,7 @@ public class ModelLoader {
     }
        
     public Node loadOto(Node blackholeScene) {
-        /*
-        Node Oto = (Node) assetManager.loadModel("Textures/Oto/Oto.mesh.xml");
-        try {
-          File file = new File("assets/Models/Oto/Oto.j3o");
-          BinaryExporter exporter = BinaryExporter.getInstance();
-          exporter.save(Oto, file);
-        } catch (IOException e) {
-          System.out.println("Unable to save j3o file: " + e.getMessage());
-        }
-        */
+        
         Node Oto = (Node) assetManager.loadModel("Models/Oto/Oto.j3o");
         blackholeScene.attachChild(Oto);
         
@@ -244,6 +235,8 @@ public class ModelLoader {
             AnimChannel animChannel = animControl.createChannel();
             animChannel.setAnim("Walk"); // Set the default animation to Idle
         }
+        
+        Oto.setLocalTranslation(-10, 0, -10);
         
         return Oto;
     }
