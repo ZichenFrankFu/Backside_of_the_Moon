@@ -31,6 +31,7 @@ public class UserInputHandler {
     private final CameraNode camNode;
     private final SceneSwitchingManager sceneManager;
     private final SoundManager soundManager;
+    private boolean enableSpaceSwitching;
 
     // Movement controls
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
@@ -89,17 +90,15 @@ public class UserInputHandler {
                 case "SpeedUp":
                     isSpeedUp = isPressed;
                     break;
-                case "SwitchScene":
-                    //ifDestructTerrain = true;
-                    //sceneManager.switchToNextScene();
-                    sceneManager.switchToNextScene();
-                    break;
                 case "Pickup":
                     gotKey = gameState.pickUpItem();
                     if (isPressed) {
                         soundManager.playSFX("pickup"); // Play pickup sound
                     }
                     break;
+            }
+            if (name.equals("SwitchScene") && enableSpaceSwitching){
+                sceneManager.switchToNextScene();
             }
         }
     };
@@ -210,5 +209,9 @@ public class UserInputHandler {
     
     public void resetGotKey(){
         gotKey = false;
+    }
+    
+    public void enableSpaceSwitching(boolean enable){
+        enableSpaceSwitching = enable;
     }
 }

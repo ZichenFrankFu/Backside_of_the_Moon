@@ -53,12 +53,14 @@ public class Main extends SimpleApplication {
     private boolean textSequenceActive = false;
     float iconWidth = 52;
     float iconHeight = 47;
+    private BitmapText moveNextText;
     
     // Scene Manage
     private int sceneCount = 0;
     private Node classroomScene;
     private Node blackholeScene;
     private int moveNext = 0;
+    private boolean enableSpaceSwitching = false;
     
 
     private boolean stopChasing = false;
@@ -80,6 +82,7 @@ public class Main extends SimpleApplication {
     
     // Teleport Gate
     private Node teleportGateNode;
+    private boolean hasTeleport = false;
 
     // Text sequence
     private List<String> textSequence;
@@ -147,40 +150,47 @@ public class Main extends SimpleApplication {
                 otoChasePlayerWhenNotSeen();
             }
             
+            
             gotKey = inputHandler.getGotKey();
-            if (gotKey) {
-                switch (sceneCount){
-                    case 0:
-                        teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
-                        break;
-                    case 1: 
-                        teleportGateNode = modelLoader.loadTeleportGate(blackholeScene);
-                        break;
-                    case 2: 
-                        teleportGateNode = modelLoader.loadTeleportGate(terrainScene);
-                        break;
-                    default: 
-                        break;
-                }
-                
-                
-            } else if (teleportGateNode != null && !gotKey) {
-                teleportGateNode.removeFromParent();
+            if (gotKey && !hasTeleport && sceneCount == 0) {
+                teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
+                hasTeleport = true;
+            }
+            if (gotKey && sceneCount == 1) {
+                // Good ending
             }
             
+            System.out.println("SceneCount " + sceneCount);
+            System.out.println("gotKey " + gotKey);
+            
             // Check if player is standing in the teleport gate
-            if (isPlayerInTeleportGate()) {
-                System.out.println("moveNext " + moveNext);
+            if (isPlayerInTeleportGate() && sceneCount == 0) {
                 if (moveNext == 0){
+                    setMoveNextText(true);
                     sceneManager.switchToNextScene();
                     gotKey = false;
-                    teleportGateNode.removeFromParent();
-                    sceneCount++;
+                    inputHandler.resetGotKey();
+                    enableSpaceSwitching = true;
+                    inputHandler.enableSpaceSwitching(enableSpaceSwitching);
                 }
                 stopChasing = true; 
                 moveNext++; 
             }
             
+            if (sceneCount == 1){
+                playerNode.setLocalTranslation(new Vector3f(5f, 13f, 1f));
+                moveNextText.setText("");
+                guiNode.attachChild(moveNextText);
+                enableSpaceSwitching = false;
+                stopChasing = false;
+                inputHandler.enableSpaceSwitching(enableSpaceSwitching);
+                //setMoveNextText(false);
+            }
+            
+            
+            
+            
+           
             /*
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 
@@ -211,6 +221,7 @@ public class Main extends SimpleApplication {
                 ending.startEnding();
             }
             */
+            
         }
     }
     
@@ -240,19 +251,19 @@ public class Main extends SimpleApplication {
         handsModel.scale(2f);
         playerNode.attachChild(handsModel);
         */
-        playerNode.setLocalTranslation(new Vector3f(5f, 1f, 1f));
+        playerNode.setLocalTranslation(new Vector3f(5f, 13f, 1f));
         rootNode.attachChild(playerNode);
 
         // Player Control
         playerControl = new BetterCharacterControl(1.5f, 4, 30f);
-        playerControl.setGravity(new Vector3f(0, -10, 0));
+        playerControl.setGravity(new Vector3f(0, -9.8f, 0));
         playerNode.addControl(playerControl);
         bulletAppState.getPhysicsSpace().add(playerControl);
 
         // Camera Node Setup
         camNode = new CameraNode("CamNode", cam);
         camNode.setControlDir(ControlDirection.SpatialToCamera);
-        camNode.setLocalTranslation(new Vector3f(0, 4, -3));
+        camNode.setLocalTranslation(new Vector3f(0, 4, 0));
         playerNode.attachChild(camNode);
 
         // Scene Switch
@@ -269,6 +280,7 @@ public class Main extends SimpleApplication {
 
         // Input Handle
         inputHandler = new UserInputHandler(inputManager, cam, sceneManager, camNode, gameState, soundManager);
+        inputHandler.enableSpaceSwitching(enableSpaceSwitching);
 
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager);
@@ -284,7 +296,11 @@ public class Main extends SimpleApplication {
         otoControl = otoNode.getControl(BetterCharacterControl.class);
         otoAnimComposer = otoNode.getControl(AnimComposer.class);
         
-        loadTerrain();
+        
+        
+        terrainScene = loadTerrain();
+        
+        
 
         // Initialize the first scene
         sceneManager.switchToNextScene();
@@ -371,6 +387,10 @@ public class Main extends SimpleApplication {
                     updateTextDisplay();
                 }
             }
+            
+            if (name.equals("NextText") && isPressed && enableSpaceSwitching){
+                sceneCount++;
+            }
         }
     };
     
@@ -416,6 +436,29 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(notificationText);
     }
     
+    private void setMoveNextText(boolean show){
+        moveNextText = new BitmapText(guiFont, false);
+        moveNextText.setSize(guiFont.getCharSet().getRenderedSize());
+        
+        moveNextText.setColor(ColorRGBA.Red);
+        // Position the message text slightly below the crosshair
+        float screenWidth = settings.getWidth();
+        float screenHeight = settings.getHeight();
+        float offset = 30; // Adjust offset as needed to position the text below
+        moveNextText.setLocalTranslation(
+            (screenWidth - moveNextText.getLineWidth()) / 2,
+            (screenHeight + crosshair.getLineHeight()) / 2 - offset,
+            0
+        );
+        
+        if (show){
+            moveNextText.setText("Press Space to escape!");
+        } else {
+            moveNextText.setText("");
+        }
+        guiNode.attachChild(moveNextText);
+    }
+    
     
     /*
     * Collision Check
@@ -432,10 +475,10 @@ public class Main extends SimpleApplication {
 
         // Calculate the distance between the player and the teleport gate
         float distance = playerPosition.distance(gatePosition);
-        //System.out.println(distance);
+        System.out.println(distance);
 
         // Define a threshold for the teleport range (e.g., 3 units)
-        float teleportThreshold = 3.8f;
+        float teleportThreshold = 7.4f;
 
         // Check if the player is within the range of the teleport gate
         return distance <= teleportThreshold;

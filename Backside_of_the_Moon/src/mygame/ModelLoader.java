@@ -53,7 +53,7 @@ public class ModelLoader {
         Node teleportGateNode = new Node("TeleportGate");
         Spatial teleportGate = assetManager.loadModel("Models/TeleportGate/scene.j3o");
         teleportGate.setLocalScale(15f);
-        teleportGate.setLocalTranslation(-12,10f,-1);
+        teleportGate.setLocalTranslation(-12,12f,-1);
         teleportGateNode.setCullHint(Spatial.CullHint.Never);
 
         // Gate lights
@@ -87,7 +87,7 @@ public class ModelLoader {
         Node classroomScene = new Node("ClassroomScene");
         Spatial classroom = assetManager.loadModel("Models/NoDeskClassroom/noDeskClassroom.j3o");
         classroom.setLocalScale(2.0f);
-        classroom.setLocalTranslation(0,0,0);
+        classroom.setLocalTranslation(0,8f,0);
         classroomScene.attachChild(classroom);
         sceneManager.addScene(classroomScene);
         
@@ -136,7 +136,7 @@ public class ModelLoader {
         Node blackholeScene = new Node("BlackholeScene");
         Spatial blackhole = assetManager.loadModel("Models/Blackhole/scene.j3o");
         blackhole.setLocalScale(12.0f);
-        blackhole.setLocalTranslation(0,0,-40.0f);
+        blackhole.setLocalTranslation(0,18f,-40.0f);
         blackholeScene.attachChild(blackhole);
         sceneManager.addScene(blackholeScene);
         
@@ -175,7 +175,7 @@ public class ModelLoader {
         Node bloodyMonkey = (Node) assetManager.loadModel("Models/Monkey/Jaime.j3o");
         bloodyMonkey.rotate(0, FastMath.DEG_TO_RAD * 180, 0);
         bloodyMonkey.setLocalScale(4.0f);
-        bloodyMonkey.setLocalTranslation(15.0f, 3.0f, 18.0f);
+        bloodyMonkey.setLocalTranslation(15.0f, 11.0f, 18.0f);
         classroomScene.attachChild(bloodyMonkey);
         
         //Load materials onto BloodyMonkey model
@@ -205,10 +205,6 @@ public class ModelLoader {
         Node Oto = (Node) assetManager.loadModel("Models/Oto/Oto.j3o");
         blackholeScene.attachChild(Oto);
         
-        // Oto Physics
-        RigidBodyControl OtoControl = new RigidBodyControl(0.5f); 
-        Oto.addControl(OtoControl);
-        bulletAppState.getPhysicsSpace().add(OtoControl); 
         
         // Set up the AnimControl for animations
         AnimControl animControl = Oto.getControl(AnimControl.class);
@@ -217,7 +213,7 @@ public class ModelLoader {
             animChannel.setAnim("Walk"); // Set the default animation to Idle
         }
         
-        Oto.setLocalTranslation(-10, 0, -10);
+        Oto.setLocalTranslation(-10, 25.0f, -10);
         BetterCharacterControl otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f);
         Oto.addControl(otoControl);
         bulletAppState.getPhysicsSpace().add(otoControl); // Ensure it is added to the physics space
@@ -246,7 +242,7 @@ public class ModelLoader {
 
             // Set different translations for each cake to avoid overlapping
             float xPos = 1.0f + i * 1.0f;  // Adjusted to give some spacing
-            float yPos = 6.0f;
+            float yPos = 14.0f;
             float zPos = 2.0f;
             cake.setLocalTranslation(xPos, yPos, zPos);
 
@@ -292,7 +288,7 @@ public class ModelLoader {
 
             // Set different translations for each star to avoid overlapping
             float xPos = 1.0f + (i % 3) * 4.0f;  // Adjusted to give some spacing
-            float yPos = 6.0f;
+            float yPos = 19.0f;
             float zPos = 2.0f + (i / 3) * 4.0f;
             star.setLocalTranslation(xPos, yPos, zPos);
 

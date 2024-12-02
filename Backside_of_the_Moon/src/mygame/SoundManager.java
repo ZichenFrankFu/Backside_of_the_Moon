@@ -134,7 +134,7 @@ public class SoundManager {
     public void playSFX(String name) {
         AudioNode sfx = sfxMap.get(name);
         if (sfx != null) {
-            sfx.playInstance();
+            //sfx.playInstance();
         } else {
             System.err.println("SFX with name '" + name + "' not found!");
         }
