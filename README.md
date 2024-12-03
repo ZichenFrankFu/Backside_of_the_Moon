@@ -195,16 +195,14 @@ For example, being caught by the monster in the classroom (Room 1) triggers "Att
 Being caught by the monster in the terrain with blackhole scene (Room 2) triggers "The Gravitational Hunger" Bad End:
 ![ending_blackhole](https://github.com/user-attachments/assets/402894d8-06ac-4a72-a6d1-62588f76f66b)
 
+**Please note that for many of the following images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
+in order to better show the specific effect we are focusing on demonstrating in each image.**
 
 *Particles*
 
 We have included a number of particle effects, including fire burning under the pot in the 3rd scene, and also fireworks & smoke and dust. 
 
 <img width="714" alt="Screenshot 2024-11-30 at 15 48 58" src="https://github.com/user-attachments/assets/e430d33e-2c21-4e3a-abf4-50cab3596272">
-
-
-**Please note that for some of the following images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
-in order to better show the specific effect we are focusing on demonstrating in each image.**
 
 
 *Terrains*
