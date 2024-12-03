@@ -183,6 +183,7 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 ![horror_door](https://github.com/user-attachments/assets/b275bcaa-ab0a-4a2f-8f6a-37e9f51a6973)
 
 To make the game more playable and complete, we have created a start scene, as well as a brief prologue at the start of the game for storytelling. 
+
 <img width="877" alt="Screenshot 2024-11-30 at 17 45 29" src="https://github.com/user-attachments/assets/8f608730-efd3-4ec3-9e76-cda46559be45">
 
 *Player Death and Bad Ends*
