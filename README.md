@@ -181,6 +181,9 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 
 We took out the angle model to optimize the engine performance. Instead, we used the low poly Oto as a replacement.
 
+*Oto Chasing Mechanism*
+It stops when the player's looking at it, moving faster when the player shows the back.
+
 *The Start Scene*
 
 ![horror_door](https://github.com/user-attachments/assets/b275bcaa-ab0a-4a2f-8f6a-37e9f51a6973)
@@ -273,6 +276,13 @@ After both keys have been obtained, the player escapes all rooms and achieves th
 they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
 
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
+
+*Contribution*
+Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction
+
+Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
+
+Tina Shen: Musics and music implements, UI icons, Ending images, Start screen and text displays
 
 *Open Source Model Reference*
 Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
