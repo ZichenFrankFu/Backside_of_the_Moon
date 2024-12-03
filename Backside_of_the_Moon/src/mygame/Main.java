@@ -103,7 +103,8 @@ public class Main extends SimpleApplication {
     
     //Endings
     private boolean enteredEnding = false;
-    private Ending ending;
+    private Ending ending1;
+    private Ending ending2;
     public static int keyCount;
     private boolean firstEndingComplete = false;
 
@@ -115,7 +116,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
-        ending = new Ending(this, soundManager);
+        ending1 = new Ending(this, soundManager);
+        ending2 = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
@@ -132,9 +134,9 @@ public class Main extends SimpleApplication {
         // Initialize text sequence
         textSequence = List.of("""
                                ...A faint whisper stirs the stillness;
-                               it calls to you, soft as breath on glass.....""",
-                "You might wonder why there’s no START button but only CONTINUE.",
-                "Perhaps... this isn’t the beginning at all.", 
+                               It calls to you, soft as breath on glass.....""",
+                "You might wonder why there is no START button but only CONTINUE.",
+                "Perhaps... this is not the beginning at all.", 
                                                                """
                                                                You think of choice, but choice has never been yours.
                                                                neither your birth,
@@ -189,9 +191,9 @@ public class Main extends SimpleApplication {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 
-                ending.cleanupEnding(rootNode);
+                ending1.cleanupEnding(rootNode);
               
-                if (firstEndingComplete == false){
+                if (!firstEndingComplete){
                     List<String> textSequenceMirror = List.of("The moment you picked up the last key, a mirror appeared ahead.",
                     "You could not help but look inside.", """
                                                            You reach out, but the reflection does not.
@@ -200,11 +202,12 @@ public class Main extends SimpleApplication {
                     "You are only hands, grasping at a memory of a body now lost.",
                     ""
                     );
-                    ending.setEnding(textSequenceMirror, "Textures/mirror.jpg", null);
+                    ending1.setEnding(textSequenceMirror, "Textures/mirror.jpg", null);
+                    ending1.startEnding();
                     firstEndingComplete = true;
-                    ending.startEnding();
-                }
-                else {
+                    
+                } else if (ending1.isActive()){
+                    
                     List<String> textSequenceMoonbase = List.of("You moved through the mirror and found yourself escaped the rooms, but not the truth.", 
                                                                 """
                                                                 The final puzzle is not one of locks or keys, but of recognition:
@@ -215,8 +218,8 @@ public class Main extends SimpleApplication {
                                                Survival is not the same as return.""",
                     ""
                     );
-                    ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
-                    ending.startEnding();
+                    ending2.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
+                    ending2.startEnding();
                 }
             }
             
@@ -247,7 +250,7 @@ public class Main extends SimpleApplication {
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
-                ending.cleanupEnding(rootNode);
+                ending1.cleanupEnding(rootNode);
                 
                 List<String> textSequenceClassroom = List.of(
                 "The desks have teeth. The windows have eyes.",
@@ -256,14 +259,14 @@ public class Main extends SimpleApplication {
                 "Attendance, mandatory.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
-                ending.startEnding();
+                ending1.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
+                ending1.startEnding();
             }
             
             if (checkMonsterPlayerCollision(otoNode)) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
-                ending.cleanupEnding(rootNode);
+                ending1.cleanupEnding(rootNode);
                 
                 List<String> textSequenceClassroom = List.of(
                 "The void knows no mercy, and the stars do not mourn.",
@@ -271,8 +274,8 @@ public class Main extends SimpleApplication {
                 "You are stretched thin, and now, you are no more.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
-                ending.startEnding();
+                ending1.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
+                ending1.startEnding();
             }
             
             });
@@ -484,7 +487,7 @@ public class Main extends SimpleApplication {
     private void setNotificationText(){
         notificationText = new BitmapText(guiFont, false);
         notificationText.setSize(guiFont.getCharSet().getRenderedSize());
-        textDisplay.setSize(guiFont.getCharSet().getRenderedSize() * 3);
+        notificationText.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         notificationText.setText("");
         notificationText.setColor(ColorRGBA.Red);
         guiNode.attachChild(notificationText);
@@ -589,19 +592,12 @@ public class Main extends SimpleApplication {
         
         // Define thresholds
         float fullSpeedThreshold = -0.7f; // Fully behind the player
-        float slowSpeedThreshold = 0.7f; // Visible on the side
         
         
         if (dotProduct < fullSpeedThreshold) {
             // Player is not looking at Oto, move at full speed
             Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
             otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed));
-            otoControl.setViewDirection(directionToPlayer);
-            otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
-        } else if (dotProduct < slowSpeedThreshold) {
-            // Player sees Oto partially, move at slow speed
-            Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
-            otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed * 0.5f)); // Adjust the slow speed multiplier
             otoControl.setViewDirection(directionToPlayer);
             otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
         } else {
