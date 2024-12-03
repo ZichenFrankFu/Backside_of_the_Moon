@@ -132,9 +132,9 @@ public class Main extends SimpleApplication {
         // Initialize text sequence
         textSequence = List.of("""
                                ...A faint whisper stirs the stillness;
-                               it calls to you, soft as breath on glass.....""",
-                "You might wonder why there’s no START button but only CONTINUE.",
-                "Perhaps... this isn’t the beginning at all.", 
+                               It calls to you, soft as breath on glass.....""",
+                "You might wonder why there is no START button but only CONTINUE.",
+                "Perhaps... this is not the beginning at all.", 
                                                                """
                                                                You think of choice, but choice has never been yours.
                                                                neither your birth,
@@ -191,21 +191,13 @@ public class Main extends SimpleApplication {
                 
                 ending.cleanupEnding(rootNode);
               
-                if (firstEndingComplete == false){
-                    List<String> textSequenceMirror = List.of("The moment you picked up the last key, a mirror appeared ahead.",
+                List<String> textSequenceMoonbase = List.of("The moment you picked up the last key, a mirror appeared ahead.",
                     "You could not help but look inside.", """
                                                            You reach out, but the reflection does not.
                                                            The glass does not distort, and yet it reveals a grotesque truth:""",
                     "You are hands.",
                     "You are only hands, grasping at a memory of a body now lost.",
-                    ""
-                    );
-                    ending.setEnding(textSequenceMirror, "Textures/mirror.jpg", null);
-                    firstEndingComplete = true;
-                    ending.startEnding();
-                }
-                else {
-                    List<String> textSequenceMoonbase = List.of("You moved through the mirror and found yourself escaped the rooms, but not the truth.", 
+                    "You moved through the mirror and found yourself escaped the rooms, but not the truth.", 
                                                                 """
                                                                 The final puzzle is not one of locks or keys, but of recognition:
                                                                 the desolation, the dust, the low hum of machines \u2014 all whisper this is no Earthly place.""",
@@ -215,10 +207,9 @@ public class Main extends SimpleApplication {
                                                Survival is not the same as return.""",
                     ""
                     );
-                    ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
-                    ending.startEnding();
+                ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
+                ending.startEnding();
                 }
-            }
             
             // Check if player is standing in the teleport gate
             if (isPlayerInTeleportGate() && sceneCount == 0) {
@@ -484,7 +475,7 @@ public class Main extends SimpleApplication {
     private void setNotificationText(){
         notificationText = new BitmapText(guiFont, false);
         notificationText.setSize(guiFont.getCharSet().getRenderedSize());
-        textDisplay.setSize(guiFont.getCharSet().getRenderedSize() * 3);
+        notificationText.setSize(guiFont.getCharSet().getRenderedSize() * 2);
         notificationText.setText("");
         notificationText.setColor(ColorRGBA.Red);
         guiNode.attachChild(notificationText);
@@ -589,19 +580,12 @@ public class Main extends SimpleApplication {
         
         // Define thresholds
         float fullSpeedThreshold = -0.7f; // Fully behind the player
-        float slowSpeedThreshold = 0.7f; // Visible on the side
         
         
         if (dotProduct < fullSpeedThreshold) {
             // Player is not looking at Oto, move at full speed
             Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
             otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed));
-            otoControl.setViewDirection(directionToPlayer);
-            otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
-        } else if (dotProduct < slowSpeedThreshold) {
-            // Player sees Oto partially, move at slow speed
-            Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
-            otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed * 0.5f)); // Adjust the slow speed multiplier
             otoControl.setViewDirection(directionToPlayer);
             otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
         } else {

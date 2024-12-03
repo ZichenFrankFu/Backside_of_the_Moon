@@ -114,7 +114,6 @@ public class Ending {
         public void onAction(String name, boolean isPressed, float tpf) {
             
             if (currentTextSequence == null) {
-                System.err.println("Error: currentTextSequence is null.");
                 return;
             }
             

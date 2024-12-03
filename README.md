@@ -218,7 +218,6 @@ There is a lake in the 3rd scene.
 
 <img width="712" alt="Screenshot 2024-11-30 at 15 50 23" src="https://github.com/user-attachments/assets/09d40898-21d5-4c60-ac9d-fb56ec0480c2">
 
-
 *Sky*
 
 A skybox is created, and the lake reflects the skybox. 
@@ -232,3 +231,8 @@ Different background music is played in different scenes.
 *Scene Transition*
 
 Scene transition now happens via a teleport gate that appears after the player has collected enough keys to move to the next scene. 
+
+*True End*
+After both keys have been obtained, the player escapes all rooms and achieves the True End: 
+they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
+![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
