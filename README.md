@@ -243,8 +243,11 @@ The Bloom Filter has been turned on for room 2.
 *Sounds and Music*
 
 Different background music is played in different scenes. All background music is ambient and is played in loops. 
+
 To make the game more juicy, we add a looping step sound whenever the player is walking, this include walking in every direction. 
+
 We also add a sound when the player presses "F" to pick up items interactively. 
+
 There is a positional sound associated with the monster, played every 5 FPS, and it is positioned so that it progresses forward. 
 
 
