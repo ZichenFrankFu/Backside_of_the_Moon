@@ -192,15 +192,8 @@ The player now dies if caught by a monster, triggering a game-over message follo
 For example, being caught by the monster in the classroom (Room 1) triggers "Attendence, Mandatory" Bad End:
 ![ending_classroom](https://github.com/user-attachments/assets/5df3514c-82ba-42d6-adb2-d395f35ef63b)
 
-Being caught by the monster in the blackhole (Room 2) triggers "The Gravitational Hunger" Bad End:
+Being caught by the monster in the terrain with blackhole scene (Room 2) triggers "The Gravitational Hunger" Bad End:
 ![ending_blackhole](https://github.com/user-attachments/assets/402894d8-06ac-4a72-a6d1-62588f76f66b)
-
-Being caught by the monster in the terrain scene (Room 3) triggers "The Silent Canopy" Bad End:
-![ending_tree](https://github.com/user-attachments/assets/0c299e37-6140-4353-bd18-55cafd6212b7)
-
-*The 3rd Room*
-
-We have created a 3rd "room" that the player can enter. It's a natural scenary room consisting of a terrain with a lake, trees, fog, sunlight and skybox. 
 
 *Particles*
 
@@ -210,11 +203,11 @@ We have included a number of particle effects, including fire burning under the 
 
 *Terrains*
 
-The 3rd scene is based on a terrain. 
+We added a natural scenary based on a terrain to the blackhole scene. (room 2)
 
 *Water*
 
-There is a lake in the 3rd scene. 
+There is a lake in the terrain in room 2. 
 
 <img width="712" alt="Screenshot 2024-11-30 at 15 50 23" src="https://github.com/user-attachments/assets/09d40898-21d5-4c60-ac9d-fb56ec0480c2">
 
@@ -223,6 +216,12 @@ There is a lake in the 3rd scene.
 A skybox is created, and the lake reflects the skybox. 
 
 <img width="711" alt="Screenshot 2024-11-30 at 15 50 59" src="https://github.com/user-attachments/assets/cd3bcbac-12ac-4d75-9c5c-c8f36d1848eb">
+
+*Fog*
+
+*Bloom Filter*
+
+The Bloom Filter has been turned on for room 2. 
 
 *Sounds and Music*
 
