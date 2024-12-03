@@ -144,7 +144,7 @@ public class Main extends SimpleApplication {
                                     """
                                    The truth? You've lost everything.
                                    Your memory is as ash upon the wind.""",
-                "We’ve stood here before... you and I... countless times", """
+                "We have stood here before... you and I... countless times", """
                                                                            Now, let us walk the same path again\u2014
                                                                            and see if, this time, you understand why.""");
         
@@ -247,10 +247,10 @@ public class Main extends SimpleApplication {
                 inputHandler.enableSpaceSwitching(enableSpaceSwitching);
                 //setMoveNextText(false);
             }
-            
-            /*
+           
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
-                
+                viewPort.removeProcessor(fpp);
+                fpp.cleanup();
                 ending.cleanupEnding(rootNode);
                 
                 List<String> textSequenceClassroom = List.of(
@@ -278,7 +278,7 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
                 ending.startEnding();
             }
-            */
+            
             });
             
         }
