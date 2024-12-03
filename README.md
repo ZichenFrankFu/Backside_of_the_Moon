@@ -180,10 +180,9 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 **Third Deliverable**
 
 *The Start Scene*
+![horror_door](https://github.com/user-attachments/assets/b275bcaa-ab0a-4a2f-8f6a-37e9f51a6973)
 
 To make the game more playable and complete, we have created a start scene, as well as a brief prologue at the start of the game for storytelling. 
-
-<img width="884" alt="Screenshot 2024-11-30 at 17 45 07" src="https://github.com/user-attachments/assets/9bea8504-9ae7-4bac-abba-0dbfdb3ef326">
 <img width="877" alt="Screenshot 2024-11-30 at 17 45 29" src="https://github.com/user-attachments/assets/8f608730-efd3-4ec3-9e76-cda46559be45">
 
 *Player Death and Bad Ends*
@@ -243,7 +242,10 @@ The Bloom Filter has been turned on for room 2.
 
 *Sounds and Music*
 
-Different background music is played in different scenes. 
+Different background music is played in different scenes. All background music is ambient and is played in loops. 
+To make the game more juicy, we add a looping step sound whenever the player is walking, this include walking in every direction. 
+We also add a sound when the player presses "F" to pick up items interactively. 
+There is a positional sound associated with the monster, played every 5 FPS, and it is positioned so that it progresses forward. 
 
 
 *Scene Transition*
