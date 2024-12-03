@@ -192,15 +192,9 @@ The player now dies if caught by a monster, triggering a game-over message follo
 For example, being caught by the monster in the classroom (Room 1) triggers "Attendence, Mandatory" Bad End:
 ![ending_classroom](https://github.com/user-attachments/assets/5df3514c-82ba-42d6-adb2-d395f35ef63b)
 
-Being caught by the monster in the blackhole (Room 2) triggers "The Gravitational Hunger" Bad End:
+Being caught by the monster in the terrain with blackhole scene (Room 2) triggers "The Gravitational Hunger" Bad End:
 ![ending_blackhole](https://github.com/user-attachments/assets/402894d8-06ac-4a72-a6d1-62588f76f66b)
 
-Being caught by the monster in the terrain scene (Room 3) triggers "The Silent Canopy" Bad End:
-![ending_tree](https://github.com/user-attachments/assets/0c299e37-6140-4353-bd18-55cafd6212b7)
-
-*The 3rd Room*
-
-We have created a 3rd "room" that the player can enter. It's a natural scenary room consisting of a terrain with a lake, trees, fog, sunlight and skybox. 
 
 *Particles*
 
@@ -208,13 +202,22 @@ We have included a number of particle effects, including fire burning under the 
 
 <img width="714" alt="Screenshot 2024-11-30 at 15 48 58" src="https://github.com/user-attachments/assets/e430d33e-2c21-4e3a-abf4-50cab3596272">
 
+
+**Please note that for some of the following images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
+in order to better show the specific effect we are focusing on demonstrating in each image.**
+
+
 *Terrains*
 
-The 3rd scene is based on a terrain. 
+We added a natural scenary based on a terrain (including grassland and hills) to the blackhole scene. (room 2)
+
+<img width="1098" alt="Screenshot 2024-12-03 at 15 17 30" src="https://github.com/user-attachments/assets/88306b9c-d372-4149-9edf-10d8e90193b6">
+<img width="1177" alt="Screenshot 2024-12-03 at 15 17 00" src="https://github.com/user-attachments/assets/a8a9ec51-180e-49da-8219-0765ec1e17f9">
+
 
 *Water*
 
-There is a lake in the 3rd scene. 
+There is a lake in the terrain in room 2. 
 
 <img width="712" alt="Screenshot 2024-11-30 at 15 50 23" src="https://github.com/user-attachments/assets/09d40898-21d5-4c60-ac9d-fb56ec0480c2">
 
@@ -225,10 +228,36 @@ A skybox is created, and the lake reflects the skybox.
 
 <img width="711" alt="Screenshot 2024-11-30 at 15 50 59" src="https://github.com/user-attachments/assets/cd3bcbac-12ac-4d75-9c5c-c8f36d1848eb">
 
+
+*Fog*
+
+A fog filter was added to room 2. 
+
+<img width="1180" alt="Screenshot 2024-12-03 at 14 57 54" src="https://github.com/user-attachments/assets/4cbdb721-1aea-4ecb-8ac1-4fd5895d3de5">
+
+
+*Bloom Filter*
+
+The Bloom Filter has been turned on for room 2. 
+
+<img width="1152" alt="Screenshot 2024-12-03 at 15 27 28" src="https://github.com/user-attachments/assets/064badd8-fd85-40e5-9a4b-a4bd79d2222a">
+
+
 *Sounds and Music*
 
 Different background music is played in different scenes. 
 
+
 *Scene Transition*
 
-Scene transition now happens via a teleport gate that appears after the player has collected enough keys to move to the next scene. 
+Scene transition now happens via a teleport gate that appears after the player has collected the keys needed to move to the next scene. 
+
+<img width="1004" alt="Screenshot 2024-12-03 at 15 29 25" src="https://github.com/user-attachments/assets/086f9d4e-2713-4136-8c4c-48fea52b4cd5">
+
+
+*True End*
+
+After both keys have been obtained, the player escapes all rooms and achieves the True End: 
+they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
+
+![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
