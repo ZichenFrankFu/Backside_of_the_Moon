@@ -103,8 +103,7 @@ public class Main extends SimpleApplication {
     
     //Endings
     private boolean enteredEnding = false;
-    private Ending ending1;
-    private Ending ending2;
+    private Ending ending;
     public static int keyCount;
     private boolean firstEndingComplete = false;
 
@@ -116,8 +115,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
-        ending1 = new Ending(this, soundManager);
-        ending2 = new Ending(this, soundManager);
+        ending = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
         this.setDisplayStatView(false);
@@ -191,24 +189,15 @@ public class Main extends SimpleApplication {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 
-                ending1.cleanupEnding(rootNode);
+                ending.cleanupEnding(rootNode);
               
-                if (!firstEndingComplete){
-                    List<String> textSequenceMirror = List.of("The moment you picked up the last key, a mirror appeared ahead.",
+                List<String> textSequenceMoonbase = List.of("The moment you picked up the last key, a mirror appeared ahead.",
                     "You could not help but look inside.", """
                                                            You reach out, but the reflection does not.
                                                            The glass does not distort, and yet it reveals a grotesque truth:""",
                     "You are hands.",
                     "You are only hands, grasping at a memory of a body now lost.",
-                    ""
-                    );
-                    ending1.setEnding(textSequenceMirror, "Textures/mirror.jpg", null);
-                    ending1.startEnding();
-                    firstEndingComplete = true;
-                    
-                } else if (ending1.isActive()){
-                    
-                    List<String> textSequenceMoonbase = List.of("You moved through the mirror and found yourself escaped the rooms, but not the truth.", 
+                    "You moved through the mirror and found yourself escaped the rooms, but not the truth.", 
                                                                 """
                                                                 The final puzzle is not one of locks or keys, but of recognition:
                                                                 the desolation, the dust, the low hum of machines \u2014 all whisper this is no Earthly place.""",
@@ -218,10 +207,9 @@ public class Main extends SimpleApplication {
                                                Survival is not the same as return.""",
                     ""
                     );
-                    ending2.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
-                    ending2.startEnding();
+                ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
+                ending.startEnding();
                 }
-            }
             
             // Check if player is standing in the teleport gate
             if (isPlayerInTeleportGate() && sceneCount == 0) {
@@ -250,7 +238,7 @@ public class Main extends SimpleApplication {
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
-                ending1.cleanupEnding(rootNode);
+                ending.cleanupEnding(rootNode);
                 
                 List<String> textSequenceClassroom = List.of(
                 "The desks have teeth. The windows have eyes.",
@@ -259,14 +247,14 @@ public class Main extends SimpleApplication {
                 "Attendance, mandatory.",
                 ""
                 );
-                ending1.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
-                ending1.startEnding();
+                ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
+                ending.startEnding();
             }
             
             if (checkMonsterPlayerCollision(otoNode)) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
-                ending1.cleanupEnding(rootNode);
+                ending.cleanupEnding(rootNode);
                 
                 List<String> textSequenceClassroom = List.of(
                 "The void knows no mercy, and the stars do not mourn.",
@@ -274,8 +262,8 @@ public class Main extends SimpleApplication {
                 "You are stretched thin, and now, you are no more.",
                 ""
                 );
-                ending1.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
-                ending1.startEnding();
+                ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
+                ending.startEnding();
             }
             
             });
