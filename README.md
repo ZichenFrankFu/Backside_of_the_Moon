@@ -282,7 +282,7 @@ Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, E
 
 Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
 
-Tina Shen: Musics and music implements, UI icons, Ending images, Start screen and text displays
+Tina Shen: Musics and music implements, UI icons, Ending images, Start screen, text displays, interactive sounds
 
 *Open Source Model Reference*
 Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
