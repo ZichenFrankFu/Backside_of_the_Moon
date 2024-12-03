@@ -203,11 +203,16 @@ We have included a number of particle effects, including fire burning under the 
 
 *Terrains*
 
-We added a natural scenary based on a terrain to the blackhole scene. (room 2)
+We added a natural scenary based on a terrain (including grassland and hills) to the blackhole scene. (room 2)
+
+<img width="1098" alt="Screenshot 2024-12-03 at 15 17 30" src="https://github.com/user-attachments/assets/88306b9c-d372-4149-9edf-10d8e90193b6">
+<img width="1177" alt="Screenshot 2024-12-03 at 15 17 00" src="https://github.com/user-attachments/assets/a8a9ec51-180e-49da-8219-0765ec1e17f9">
 
 *Water*
 
 There is a lake in the terrain in room 2. 
+Please note that for this image and the later images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
+in order to show the specific effect we are focusing on demonstrating in each image better. 
 
 <img width="712" alt="Screenshot 2024-11-30 at 15 50 23" src="https://github.com/user-attachments/assets/09d40898-21d5-4c60-ac9d-fb56ec0480c2">
 
@@ -218,6 +223,10 @@ A skybox is created, and the lake reflects the skybox.
 <img width="711" alt="Screenshot 2024-11-30 at 15 50 59" src="https://github.com/user-attachments/assets/cd3bcbac-12ac-4d75-9c5c-c8f36d1848eb">
 
 *Fog*
+
+A fog filter was added to room 2. 
+
+<img width="1180" alt="Screenshot 2024-12-03 at 14 57 54" src="https://github.com/user-attachments/assets/4cbdb721-1aea-4ecb-8ac1-4fd5895d3de5">
 
 *Bloom Filter*
 
@@ -232,6 +241,8 @@ Different background music is played in different scenes.
 Scene transition now happens via a teleport gate that appears after the player has collected enough keys to move to the next scene. 
 
 *True End*
+
 After both keys have been obtained, the player escapes all rooms and achieves the True End: 
 they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
+
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
