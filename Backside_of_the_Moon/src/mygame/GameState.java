@@ -81,8 +81,10 @@ public class GameState extends AbstractAppState {
             aimedItem.removeFromParent(); // Remove the item from the scene
             pickableItems.remove(aimedItem); // Remove the item from the list of pickable items
             System.out.println("Picked up: " + aimedItem.getName()); // Log the pick-up event
-            if ("Key".equals(aimedItem.getName()) && !gotKey) {
+            if ("Key".equals(aimedItem.getName())) {
                 gotKey = true;
+                Main.keyCount += 1;
+                System.out.println("Key Count + 1!");
             }
             aimedItem = null; // Reset the aimed item
         }

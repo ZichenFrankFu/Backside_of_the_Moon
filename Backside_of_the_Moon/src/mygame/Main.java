@@ -101,8 +101,11 @@ public class Main extends SimpleApplication {
     private BloomFilter bloom;
     private Node terrainScene;
     
-    private boolean enteredEnding;
+    //Endings
+    private boolean enteredEnding = false;
     private Ending ending;
+    public static int keyCount;
+    private boolean firstEndingComplete = false;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -111,6 +114,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        
         ending = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
@@ -126,16 +130,23 @@ public class Main extends SimpleApplication {
         inputManager.addListener(nextTextListener, "NextText");
 
         // Initialize text sequence
-        textSequence = List.of(
-                "...A faint whisper calls out to you...",
-                "You might wonder why there’s no START button but CONTINUE.",
-                "Perhaps... this isn’t the beginning at all.",
-                "You never have a choice, really. Not your birth, not here.",
-                "Just kidding",
-                "Actually, you’ve just lost all your memory.",
-                "We’ve been here before... you and I... countless times",
-                "Now, let’s see if you can figure out why."
-        );
+        textSequence = List.of("""
+                               ...A faint whisper stirs the stillness;
+                               it calls to you, soft as breath on glass.....""",
+                "You might wonder why there’s no START button but only CONTINUE.",
+                "Perhaps... this isn’t the beginning at all.", 
+                                                               """
+                                                               You think of choice, but choice has never been yours.
+                                                               neither your birth,
+                                                               nor this moment,
+                                                               nor the steps you take from here.""",
+                "Ah, but I jest.", 
+                                    """
+                                   The truth? You've lost everything.
+                                   Your memory is as ash upon the wind.""",
+                "We’ve stood here before... you and I... countless times", """
+                                                                           Now, let us walk the same path again\u2014
+                                                                           and see if, this time, you understand why.""");
         
     }
     
@@ -165,19 +176,53 @@ public class Main extends SimpleApplication {
                 monkeyChasePlayer();
                 otoChasePlayerWhenNotSeen();
             }
-            
-            
+          
             gotKey = inputHandler.getGotKey();
+            
+            this.enqueue(() -> {
+            
             if (gotKey && !hasTeleport && sceneCount == 0) {
                 teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
                 hasTeleport = true;
             }
-            if (gotKey && sceneCount == 1) {
-                // Good ending
+            
+            if (gotKey && keyCount == 2 && sceneCount == 1) {
+                viewPort.removeProcessor(fpp);
+                fpp.cleanup();
+                
+                ending.cleanupEnding(rootNode);
+              
+                if (firstEndingComplete == false){
+                    List<String> textSequenceMirror = List.of("The moment you picked up the last key, a mirror appeared ahead.",
+                    "You could not help but look inside.", """
+                                                           You reach out, but the reflection does not.
+                                                           The glass does not distort, and yet it reveals a grotesque truth:""",
+                    "You are hands.",
+                    "You are only hands, grasping at a memory of a body now lost.",
+                    ""
+                    );
+                    ending.setEnding(textSequenceMirror, "Textures/mirror.jpg", null);
+                    firstEndingComplete = true;
+                    ending.startEnding();
+                }
+                else {
+                    List<String> textSequenceMoonbase = List.of("You moved through the mirror and found yourself escaped the rooms, but not the truth.", 
+                                                                """
+                                                                The final puzzle is not one of locks or keys, but of recognition:
+                                                                the desolation, the dust, the low hum of machines \u2014 all whisper this is no Earthly place.""",
+                    "You are no longer home.", """
+                                               Beyond, the horizon is barren, and the Earth hangs like a pale wound in the black.
+                                               The Moon cradles you now, its cold, alien beauty reminds that --
+                                               Survival is not the same as return.""",
+                    ""
+                    );
+                    ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
+                    ending.startEnding();
+                }
             }
             
-            System.out.println("SceneCount " + sceneCount);
-            System.out.println("gotKey " + gotKey);
+            //System.out.println("SceneCount " + sceneCount);
+            //System.out.println("keyCount " + keyCount);
             
             // Check if player is standing in the teleport gate
             if (isPlayerInTeleportGate() && sceneCount == 0) {
@@ -189,7 +234,7 @@ public class Main extends SimpleApplication {
                     enableSpaceSwitching = true;
                     inputHandler.enableSpaceSwitching(enableSpaceSwitching);
                 }
-                stopChasing = true; 
+                stopChasing = true;
                 moveNext++; 
             }
             
@@ -203,10 +248,6 @@ public class Main extends SimpleApplication {
                 //setMoveNextText(false);
             }
             
-            
-            
-            
-           
             /*
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 
@@ -222,9 +263,10 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
                 ending.startEnding();
             }
-             
-            if (checkMonsterPlayerCollision(otoNode) && enteredEnding == false) {
-                
+            
+            if (checkMonsterPlayerCollision(otoNode)) {
+                viewPort.removeProcessor(fpp);
+                fpp.cleanup();
                 ending.cleanupEnding(rootNode);
                 
                 List<String> textSequenceClassroom = List.of(
@@ -237,6 +279,7 @@ public class Main extends SimpleApplication {
                 ending.startEnding();
             }
             */
+            });
             
         }
     }
@@ -249,6 +292,8 @@ public class Main extends SimpleApplication {
     */
     
     private void initializeGame() {
+        keyCount = 0;
+        
         // Physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
@@ -311,12 +356,8 @@ public class Main extends SimpleApplication {
         otoNode = modelLoader.loadOto(blackholeScene);
         otoControl = otoNode.getControl(BetterCharacterControl.class);
         otoAnimComposer = otoNode.getControl(AnimComposer.class);
-        
-        
-        
+
         terrainScene = loadTerrain();
-        
-        
 
         // Initialize the first scene
         sceneManager.switchToNextScene();
@@ -361,7 +402,7 @@ public class Main extends SimpleApplication {
 
     private void showTextSequence() {
         textDisplay = new BitmapText(guiFont, false);
-        textDisplay.setSize(guiFont.getCharSet().getRenderedSize() * 2);
+        textDisplay.setSize(guiFont.getCharSet().getRenderedSize() * 4.5f);
         textDisplay.setColor(ColorRGBA.White);
         guiNode.attachChild(textDisplay);
         textSequenceActive = true;
@@ -447,6 +488,7 @@ public class Main extends SimpleApplication {
     private void setNotificationText(){
         notificationText = new BitmapText(guiFont, false);
         notificationText.setSize(guiFont.getCharSet().getRenderedSize());
+        textDisplay.setSize(guiFont.getCharSet().getRenderedSize() * 3);
         notificationText.setText("");
         notificationText.setColor(ColorRGBA.Red);
         guiNode.attachChild(notificationText);
@@ -491,7 +533,7 @@ public class Main extends SimpleApplication {
 
         // Calculate the distance between the player and the teleport gate
         float distance = playerPosition.distance(gatePosition);
-        System.out.println(distance);
+        //System.out.println(distance);
 
         // Define a threshold for the teleport range (e.g., 3 units)
         float teleportThreshold = 7.4f;
@@ -632,11 +674,12 @@ public class Main extends SimpleApplication {
         particle.sparks();
         particle.burst();
         particle.fire();
-
+        
+        
         // Initialize fpp and Add Filters
         fpp = new FilterPostProcessor(assetManager);
         viewPort.addProcessor(fpp);
-
+        
         FogFilter fogFilter = new FogFilter();
         fogFilter.setFogDistance(500);
         fogFilter.setFogDensity(0.2f);

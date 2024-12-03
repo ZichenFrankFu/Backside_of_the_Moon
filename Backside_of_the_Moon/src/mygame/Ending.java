@@ -31,8 +31,9 @@ public class Ending {
 
         // Initialize textDisplay with the default font
         BitmapFont defaultFont = app.getAssetManager().loadFont("Interface/Fonts/Default.fnt");
+       
         this.textDisplay = new BitmapText(defaultFont, false);
-        this.textDisplay.setSize(defaultFont.getCharSet().getRenderedSize() * 1.5f);
+        this.textDisplay.setSize(defaultFont.getCharSet().getRenderedSize() * 4.5f);
         this.textDisplay.setColor(ColorRGBA.White);
         this.textDisplay.setText(""); // Start with no text
         this.endingNode = new Node("Ending Node");
@@ -121,7 +122,7 @@ public class Ending {
                 if (isTextPhase) {
                     updateTextDisplay();
                 } else {
-                    quitGame();
+                    //quitGame();
                     //((Main) app).resetGame();
                 }
             }
