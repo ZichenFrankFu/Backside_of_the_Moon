@@ -201,6 +201,9 @@ We have included a number of particle effects, including fire burning under the 
 
 <img width="714" alt="Screenshot 2024-11-30 at 15 48 58" src="https://github.com/user-attachments/assets/e430d33e-2c21-4e3a-abf4-50cab3596272">
 
+**Please note that for some of the following images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
+in order to better show the specific effect we are focusing on demonstrating in each image.**
+
 *Terrains*
 
 We added a natural scenary based on a terrain (including grassland and hills) to the blackhole scene. (room 2)
@@ -211,8 +214,6 @@ We added a natural scenary based on a terrain (including grassland and hills) to
 *Water*
 
 There is a lake in the terrain in room 2. 
-Please note that for this image and the later images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
-in order to show the specific effect we are focusing on demonstrating in each image better. 
 
 <img width="712" alt="Screenshot 2024-11-30 at 15 50 23" src="https://github.com/user-attachments/assets/09d40898-21d5-4c60-ac9d-fb56ec0480c2">
 
@@ -232,13 +233,17 @@ A fog filter was added to room 2.
 
 The Bloom Filter has been turned on for room 2. 
 
+<img width="1152" alt="Screenshot 2024-12-03 at 15 27 28" src="https://github.com/user-attachments/assets/064badd8-fd85-40e5-9a4b-a4bd79d2222a">
+
 *Sounds and Music*
 
 Different background music is played in different scenes. 
 
 *Scene Transition*
 
-Scene transition now happens via a teleport gate that appears after the player has collected enough keys to move to the next scene. 
+Scene transition now happens via a teleport gate that appears after the player has collected the keys needed to move to the next scene. 
+
+<img width="1004" alt="Screenshot 2024-12-03 at 15 29 25" src="https://github.com/user-attachments/assets/086f9d4e-2713-4136-8c4c-48fea52b4cd5">
 
 *True End*
 
