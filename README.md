@@ -180,6 +180,7 @@ We’ve implemented our game with a fun new physics effect! Now, when the monste
 **Third Deliverable**
 
 *The Start Scene*
+
 ![horror_door](https://github.com/user-attachments/assets/b275bcaa-ab0a-4a2f-8f6a-37e9f51a6973)
 
 To make the game more playable and complete, we have created a start scene, as well as a brief prologue at the start of the game for storytelling. 
@@ -190,9 +191,11 @@ To make the game more playable and complete, we have created a start scene, as w
 
 The player now dies if caught by a monster, triggering a game-over message followed by a death scene. There are three distinct “Bad Endings,” each corresponding to being caught by a specific monster in a different room. 
 For example, being caught by the monster in the classroom (Room 1) triggers "Attendence, Mandatory" Bad End:
+
 ![ending_classroom](https://github.com/user-attachments/assets/5df3514c-82ba-42d6-adb2-d395f35ef63b)
 
 Being caught by the monster in the terrain with blackhole scene (Room 2) triggers "The Gravitational Hunger" Bad End:
+
 ![ending_blackhole](https://github.com/user-attachments/assets/402894d8-06ac-4a72-a6d1-62588f76f66b)
 
 **Please note that for many of the following images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
