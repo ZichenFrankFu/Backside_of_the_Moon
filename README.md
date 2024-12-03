@@ -271,3 +271,11 @@ After both keys have been obtained, the player escapes all rooms and achieves th
 they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
 
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
+
+*Open Source Model Reference*
+Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
+Blackhole Scene: https://sketchfab.com/3d-models/blackhole-74cbeaeae2174a218fe9455d77902b5c
+Pickable Cake: https://alberto-luviano.itch.io/lowpoly-classroom-pack
+Pickable Mini Moon: https://sketchfab.com/3d-models/low-poly-moon-d671eb35d2244c8cb98d06b4948d9937
+True Ending Scene: https://sketchfab.com/3d-models/hopelessness-fb4b075c2f5c49818b46b843c5d4a244
+Jaime and Oto: from the JMonkey Guide Textbook
