@@ -51,8 +51,8 @@ public class Main extends SimpleApplication {
     private Picture startScreen;
     private boolean startScreenActive = true;
     private boolean textSequenceActive = false;
-    float iconWidth = 52;
-    float iconHeight = 47;
+    float iconWidth = 104;
+    float iconHeight = 94;
     private BitmapText moveNextText;
     
     // Scene Manage
@@ -115,6 +115,8 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         
+        flyCam.setEnabled(true); // Enable FlyCam
+        flyCam.setMoveSpeed(50);
         ending = new Ending(this, soundManager);
         // Settings
         this.setDisplayFps(false);
@@ -152,6 +154,7 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleUpdate(float tpf) {
+        
         if (!startScreenActive && !textSequenceActive) {
             inputHandler.firstPersonNavigationUpdate(tpf, playerNode, playerControl);
 
@@ -234,7 +237,8 @@ public class Main extends SimpleApplication {
                 inputHandler.enableSpaceSwitching(enableSpaceSwitching);
                 //setMoveNextText(false);
             }
-           
+            
+            
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
@@ -265,7 +269,6 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
                 ending.startEnding();
             }
-            
             });
             
         }
@@ -284,6 +287,7 @@ public class Main extends SimpleApplication {
         // Physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
+        
 
         // Add gravity
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
@@ -294,11 +298,7 @@ public class Main extends SimpleApplication {
 
         // Create player Node
         playerNode = new Node("the player");
-        /*
-        Spatial handsModel = assetManager.loadModel("Models/Hands/arms.glb");
-        handsModel.scale(2f);
-        playerNode.attachChild(handsModel);
-        */
+        
         playerNode.setLocalTranslation(new Vector3f(5f, 13f, 1f));
         rootNode.attachChild(playerNode);
 
@@ -660,21 +660,22 @@ public class Main extends SimpleApplication {
         viewPort.addProcessor(fpp);
         
         FogFilter fogFilter = new FogFilter();
-        fogFilter.setFogDistance(500);
-        fogFilter.setFogDensity(0.2f);
+        fogFilter.setFogDistance(50);
+        fogFilter.setFogDensity(0.8f);
         fogFilter.setFogColor(new ColorRGBA(0.9f, 0.9f, 0.9f, 1.0f));
         fpp.addFilter(fogFilter);
-
+        
         WaterFilter water = new WaterFilter(reflectedScene, lightDir);
         water.setWaterHeight(2f);
         fpp.addFilter(water);
 
         LightScatteringFilter sunLightFilter = new LightScatteringFilter(lightDir.mult(-3000));
         fpp.addFilter(sunLightFilter);
-
+        
         BloomFilter bloom = new BloomFilter();
         fpp.addFilter(bloom);
-
+        
+        
         DirectionalLight sun = new DirectionalLight();
         sun.setDirection(lightDir);
         sun.setColor(ColorRGBA.White.clone().multLocal(2));
