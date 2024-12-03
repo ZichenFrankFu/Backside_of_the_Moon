@@ -202,7 +202,7 @@ in order to better show the specific effect we are focusing on demonstrating in 
 We have included a number of particle effects, including fire burning under the pot in the 3rd scene, and also fireworks & smoke and dust. 
 
 <img width="714" alt="Screenshot 2024-11-30 at 15 48 58" src="https://github.com/user-attachments/assets/e430d33e-2c21-4e3a-abf4-50cab3596272">
-
+<img width="531" alt="Screenshot 2024-12-03 at 15 55 31" src="https://github.com/user-attachments/assets/45270c4d-e12f-4a37-93ff-cb9a16c49d2b">
 
 *Terrains*
 
@@ -238,6 +238,9 @@ A fog filter was added to room 2.
 The Bloom Filter has been turned on for room 2. 
 
 <img width="1152" alt="Screenshot 2024-12-03 at 15 27 28" src="https://github.com/user-attachments/assets/064badd8-fd85-40e5-9a4b-a4bd79d2222a">
+
+Fog + Bloom filter:
+<img width="1127" alt="Screenshot 2024-12-03 at 15 55 39" src="https://github.com/user-attachments/assets/5e8beb35-f9e7-42ad-913c-b39093ef103c">
 
 
 *Sounds and Music*
