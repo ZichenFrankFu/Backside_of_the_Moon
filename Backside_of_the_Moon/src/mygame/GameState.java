@@ -84,7 +84,6 @@ public class GameState extends AbstractAppState {
             if ("Key".equals(aimedItem.getName())) {
                 gotKey = true;
                 Main.keyCount += 1;
-                System.out.println("Key Count + 1!");
             }
             aimedItem = null; // Reset the aimed item
         }

@@ -165,7 +165,6 @@ public class Main extends SimpleApplication {
                 if (monkeyNode != null) { // Ensure the monster node exists
                     Vector3f monsterPosition = monkeyNode.getWorldTranslation();
                     soundManager.playPositionalSFX("monster", monsterPosition); // Use the new method
-                    System.out.println("Monster sound played at position: " + monsterPosition);
                 } else {
                     System.err.println("Monster node (monkeyNode) is null!");
                 }
@@ -220,9 +219,6 @@ public class Main extends SimpleApplication {
                     ending.startEnding();
                 }
             }
-            
-            //System.out.println("SceneCount " + sceneCount);
-            //System.out.println("keyCount " + keyCount);
             
             // Check if player is standing in the teleport gate
             if (isPlayerInTeleportGate() && sceneCount == 0) {
@@ -496,7 +492,7 @@ public class Main extends SimpleApplication {
     
     private void setMoveNextText(boolean show){
         moveNextText = new BitmapText(guiFont, false);
-        moveNextText.setSize(guiFont.getCharSet().getRenderedSize());
+        moveNextText.setSize(guiFont.getCharSet().getRenderedSize() * 3);
         
         moveNextText.setColor(ColorRGBA.Red);
         // Position the message text slightly below the crosshair
@@ -533,7 +529,6 @@ public class Main extends SimpleApplication {
 
         // Calculate the distance between the player and the teleport gate
         float distance = playerPosition.distance(gatePosition);
-        //System.out.println(distance);
 
         // Define a threshold for the teleport range (e.g., 3 units)
         float teleportThreshold = 7.4f;
