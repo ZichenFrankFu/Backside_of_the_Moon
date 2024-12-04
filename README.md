@@ -313,6 +313,7 @@ If they encountered a bug / failed to implement, other team members will join an
 we either do voice call or meet in person somewhere to implement the function / debug it together. 
 
 *Open Source Model Reference*
+
 Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
 
 Blackhole Scene: https://sketchfab.com/3d-models/blackhole-74cbeaeae2174a218fe9455d77902b5c
