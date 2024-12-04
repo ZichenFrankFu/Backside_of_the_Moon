@@ -299,6 +299,7 @@ they discover that themselves are merely a pair of hands, and that they are in f
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
 
 *Contribution*
+
 Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction (Water, Sky, Filters, etc), Particle Effects
 
 Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
