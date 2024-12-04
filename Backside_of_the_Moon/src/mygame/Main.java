@@ -148,7 +148,11 @@ public class Main extends SimpleApplication {
                                    Your memory is as ash upon the wind.""",
                 "We have stood here before... you and I... countless times", """
                                                                            Now, let us walk the same path again\u2014
-                                                                           and see if, this time, you understand why.""");
+                                                                           and see if, this time, you understand why.""", 
+                    """
+                    Press W S A D to run, Press Shift to speed up, 
+                    Press F to pick things up. Run from what? You'll see. 
+                    """);
         
     }
     
