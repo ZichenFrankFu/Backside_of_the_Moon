@@ -203,6 +203,34 @@ Being caught by the monster in the terrain with blackhole scene (Room 2) trigger
 
 ![ending_blackhole](https://github.com/user-attachments/assets/402894d8-06ac-4a72-a6d1-62588f76f66b)
 
+*Picking Up Cakes, Stars, and Key* 
+
+Now, in the first room, there are 10 cakes that can be picked up by the player. When player aims at the cakes, it will either say "cake" or "key'.
+Once the player finds the cake named "key" and picks it up, they are able to progress to the next part of the game. 
+
+In the second room, there are 10 stars that can be picked up by the player, one of which is also a key. 
+
+<img width="1283" alt="Screenshot 2024-12-03 at 20 42 51" src="https://github.com/user-attachments/assets/68438a5c-1401-47bb-b282-db961ef62054">
+
+*Scene Transition*
+
+Scene transition now happens via a teleport gate that appears after the player has collected the keys needed to move to the next scene. 
+Player will see an interface asking them to "Press Space To Escape" when they reach the teleport gate. 
+
+<img width="1004" alt="Screenshot 2024-12-03 at 15 29 25" src="https://github.com/user-attachments/assets/086f9d4e-2713-4136-8c4c-48fea52b4cd5">
+
+
+*More Monster Chasing: Oto*
+
+We added a monster (Oto from the jMonkey textbook) to the 2nd room. This monster has a different chasing mechanism: 
+As long as the player stares at this monster, it cannot move and cannot harm the player. 
+However, once the player turns their back on the monster, it moves very quickly towards the player to kill them.
+Thus, in room 2, the player is expected to find the key without turning their back on the monster for too long.
+This monster does have animations, but it's only animated while moving. 
+Player can view its animations by turning your back on it and then quickly turning back, so that it exhibits the walking animation but has not had enough time to kill player yet. 
+
+<img width="819" alt="Oto" src="https://github.com/user-attachments/assets/0db105ba-1300-4c5f-ae67-916fbbd06b29">
+
 **Please note that for many of the following images, some effects (E.g., fog, bloom) have been temporarily turned of while taking the screenshot,
 in order to better show the specific effect we are focusing on demonstrating in each image.**
 
@@ -263,13 +291,6 @@ We also add a sound when the player presses "F" to pick up items interactively.
 There is a positional sound associated with the monster, played every 5 FPS, and it is positioned so that it progresses forward. 
 
 
-*Scene Transition*
-
-Scene transition now happens via a teleport gate that appears after the player has collected the keys needed to move to the next scene. 
-
-<img width="1004" alt="Screenshot 2024-12-03 at 15 29 25" src="https://github.com/user-attachments/assets/086f9d4e-2713-4136-8c4c-48fea52b4cd5">
-
-
 *True End*
 
 After both keys have been obtained, the player escapes all rooms and achieves the True End: 
@@ -278,11 +299,17 @@ they discover that themselves are merely a pair of hands, and that they are in f
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
 
 *Contribution*
-Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction
+Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction (Water, Sky, Filters, etc), Particle Effects
 
 Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
 
 Tina Shen: Musics and music implements, UI icons, Ending images, Start screen, text displays, interactive sounds
+
+All team members contributed to finding free assets to use, implementing physics effects. Annie and Frank collaborated on scene switching. 
+
+Description of Collaboration: Usually, 1 team member starts out implementing an aspect of the game (E.g., physics). 
+If they encountered a bug / failed to implement, other team members will join and attempt to debug separately. If the problem is still not solved,
+we either do voice call or meet in person somewhere to implement the function / debug it together. 
 
 *Open Source Model Reference*
 Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
@@ -296,3 +323,9 @@ Pickable Mini Moon: https://sketchfab.com/3d-models/low-poly-moon-d671eb35d2244c
 True Ending Scene: https://sketchfab.com/3d-models/hopelessness-fb4b075c2f5c49818b46b843c5d4a244
 
 Jaime and Oto: from the JMonkey Guide Textbook
+
+Bonfire Pot: https://sketchfab.com/3d-models/pot-with-food-and-bonfire-lowpoly-abc82e73ce074545a6daa3c9bc111f8f
+
+Birch Tree Forest: https://sketchfab.com/3d-models/five-birch-trees-pack-lowpoly-lods-08fe5117138e4fdaa7ca440ef1201e07
+
+Swan Boat: https://sketchfab.com/3d-models/swan-boat-acfb0a0236894ef6aa1f8a232f37b762
