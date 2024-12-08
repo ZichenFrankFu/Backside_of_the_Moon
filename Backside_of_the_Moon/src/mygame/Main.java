@@ -106,6 +106,7 @@ public class Main extends SimpleApplication {
     private Ending ending;
     public static int keyCount;
     private boolean firstEndingComplete = false;
+    private boolean beforeRoom2 = false;
 
     public static void main(String[] args) {
         Main app = new Main();
@@ -250,7 +251,7 @@ public class Main extends SimpleApplication {
                 //setMoveNextText(false);
             }
             
-            
+            /*
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
@@ -266,7 +267,7 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
                 ending.startEnding();
             }
-            
+            */
             if (checkMonsterPlayerCollision(otoNode)) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
@@ -419,6 +420,9 @@ public class Main extends SimpleApplication {
                 0
             );
             currentTextIndex++;
+            
+        } else if (beforeRoom2) {
+            return;
         } else {
             dismissTextSequence();
             initializeGame();
@@ -665,7 +669,6 @@ public class Main extends SimpleApplication {
         particle.sparks();
         particle.burst();
         particle.fire();
-        
         
         // Initialize fpp and Add Filters
         fpp = new FilterPostProcessor(assetManager);
