@@ -152,6 +152,12 @@ public class Main extends SimpleApplication {
                     """
                     Press W S A D to run, Press Shift to speed up, 
                     Press F to pick things up. Run from what? You'll see. 
+                    """,
+                    """
+                    Room 1 | The Feast of the Red Monkey
+                    The crimson shadow has awakened, chasing the scent of sweetness. 
+                    Do not halt, do not let his grasp find you.
+                    The key hides in the false sweetness, and only those who touch its truth may escape.
                     """);
         
     }
