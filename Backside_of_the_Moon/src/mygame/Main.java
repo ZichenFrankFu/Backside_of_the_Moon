@@ -188,11 +188,13 @@ public class Main extends SimpleApplication {
             this.enqueue(() -> {
             
             if (gotKey && !hasTeleport && sceneCount == 0) {
+                soundManager.playSFX("getkey");
                 teleportGateNode = modelLoader.loadTeleportGate(classroomScene);
                 hasTeleport = true;
             }
             
             if (gotKey && keyCount == 2 && sceneCount == 1) {
+                soundManager.playSFX("getkey");
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 

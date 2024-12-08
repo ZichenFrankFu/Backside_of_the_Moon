@@ -38,12 +38,13 @@ public class SoundManager {
      */
     private void loadSFX(AssetManager assetManager) {
         sfxMap.put("pickup", createAudioNode(assetManager, "Sounds/click.wav", false, 1.0f));
-        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 0.7f));
+        sfxMap.put("step", createAudioNode(assetManager, "Sounds/wood_step.ogg", true, 1.0f));
         sfxMap.put("elevator_step", createAudioNode(assetManager, "Sounds/elevator_steps.ogg", false, 1.0f));
         sfxMap.put("game_over", createAudioNode(assetManager, "Sounds/game-over.ogg", false, 0.3f));
         sfxMap.put("bang", createAudioNode(assetManager, "Sounds/Bang.wav", false, 0.3f));
 
         sfxMap.put("monster", createAudioNode_pos(assetManager, "Sounds/Bang.wav", false, 0.5f));
+        sfxMap.put("getkey", createAudioNode(assetManager, "Sounds/positive.wav", false, 1.0f));
     }
 
     /**
