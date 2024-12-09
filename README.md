@@ -288,5 +288,27 @@ For example, a dedicated introductory room could be created as the game’s open
 With a larger number of rooms and a diverse roster of monsters, we could design a system where the connections between rooms and the monsters within them play a significant role in gameplay and storytelling. Monsters can collaborate / rival with each other. 
 
 5. More rooms and more monsters!
-We will add more rooms with different scenes and different monsters. 
+We will add more rooms with different scenes and different monsters.
+
+**Contribution**
+Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction (Water, Sky, Filters, etc), Particle Effects
+Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
+Tina Shen: Musics and music implements, UI icons, Ending images, Start screen, text displays, interactive sounds
+
+All team members contributed to finding free assets to use, implementing physics effects. Annie and Frank collaborated on scene switching. 
+
+Description of Collaboration: Usually, 1 team member starts out implementing an aspect of the game (E.g., physics). 
+If they encountered a bug / failed to implement, other team members will join and attempt to debug separately. If the problem is still not solved,
+we either do voice call or meet in person somewhere to implement the function / debug it together. 
+
+**Open Source Model Reference**
+Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
+Blackhole Scene: https://sketchfab.com/3d-models/blackhole-74cbeaeae2174a218fe9455d77902b5c
+Pickable Cake: https://alberto-luviano.itch.io/lowpoly-classroom-pack
+Pickable Mini Moon: https://sketchfab.com/3d-models/low-poly-moon-d671eb35d2244c8cb98d06b4948d9937
+True Ending Scene: https://sketchfab.com/3d-models/hopelessness-fb4b075c2f5c49818b46b843c5d4a244
+Jaime and Oto: from the JMonkey Guide Textbook
+Bonfire Pot: https://sketchfab.com/3d-models/pot-with-food-and-bonfire-lowpoly-abc82e73ce074545a6daa3c9bc111f8f
+Birch Tree Forest: https://sketchfab.com/3d-models/five-birch-trees-pack-lowpoly-lods-08fe5117138e4fdaa7ca440ef1201e07
+Swan Boat: https://sketchfab.com/3d-models/swan-boat-acfb0a0236894ef6aa1f8a232f37b762
 
