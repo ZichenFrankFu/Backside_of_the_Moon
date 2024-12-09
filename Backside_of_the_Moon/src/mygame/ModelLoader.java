@@ -240,10 +240,12 @@ public class ModelLoader {
             Spatial cake = cakeModel.clone();
             cake.setLocalScale(5.0f);
 
+            int row = i / 3;
+            int col = i % 3;
             // Set different translations for each cake to avoid overlapping
-            float xPos = -10.0f + (i % 3) * 3.0f;  // Adjusted to give some spacing
-            float yPos = 14.0f;
-            float zPos = 2.0f + (i % 3) * 6.0f;
+            float xPos = -12.0f + col * 10.0f;  // Adjusted to give some spacing
+            float yPos = 7.0f;
+            float zPos = 2.0f + row * 15.0f;
 
             cake.setLocalTranslation(xPos, yPos, zPos);
 
@@ -287,10 +289,12 @@ public class ModelLoader {
             star.setMaterial(starMat);  // Reuse the same material for all stars
             star.setLocalScale(0.05f);
 
-            // Set different translations for each star to avoid overlapping
-            float xPos = -10.0f + (i % 3) * 3.0f;  // Adjusted to give some spacing
-            float yPos = 14.0f;
-            float zPos = 2.0f + (i % 3) * 3.0f;
+            int row = i / 3;
+            int col = i % 3;
+            // Set different translations for each cake to avoid overlapping
+            float xPos = -12.0f + col * 10.0f;  // Adjusted to give some spacing
+            float yPos = 7.0f;
+            float zPos = 2.0f + row * 15.0f;
             star.setLocalTranslation(xPos, yPos, zPos);
 
             // Set unique name for the key star
