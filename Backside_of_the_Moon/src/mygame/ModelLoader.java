@@ -175,7 +175,7 @@ public class ModelLoader {
         Node bloodyMonkey = (Node) assetManager.loadModel("Models/Monkey/Jaime.j3o");
         bloodyMonkey.rotate(0, FastMath.DEG_TO_RAD * 180, 0);
         bloodyMonkey.setLocalScale(4.0f);
-        bloodyMonkey.setLocalTranslation(15.0f, 11.0f, 18.0f);
+        bloodyMonkey.setLocalTranslation(-7.0f, 11.0f, 18.0f);
         classroomScene.attachChild(bloodyMonkey);
         
         //Load materials onto BloodyMonkey model
@@ -241,9 +241,10 @@ public class ModelLoader {
             cake.setLocalScale(5.0f);
 
             // Set different translations for each cake to avoid overlapping
-            float xPos = 1.0f + i * 1.0f;  // Adjusted to give some spacing
+            float xPos = -10.0f + (i % 3) * 3.0f;  // Adjusted to give some spacing
             float yPos = 14.0f;
-            float zPos = 2.0f;
+            float zPos = 2.0f + (i % 3) * 6.0f;
+
             cake.setLocalTranslation(xPos, yPos, zPos);
 
             // Set unique name for the key cake
@@ -287,9 +288,9 @@ public class ModelLoader {
             star.setLocalScale(0.05f);
 
             // Set different translations for each star to avoid overlapping
-            float xPos = 1.0f + (i % 3) * 4.0f;  // Adjusted to give some spacing
-            float yPos = 19.0f;
-            float zPos = 2.0f + (i / 3) * 4.0f;
+            float xPos = -10.0f + (i % 3) * 3.0f;  // Adjusted to give some spacing
+            float yPos = 14.0f;
+            float zPos = 2.0f + (i % 3) * 3.0f;
             star.setLocalTranslation(xPos, yPos, zPos);
 
             // Set unique name for the key star

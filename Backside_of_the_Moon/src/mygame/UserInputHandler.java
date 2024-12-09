@@ -36,7 +36,7 @@ public class UserInputHandler {
     // Movement controls
     private Vector3f walkDirection = new Vector3f(0, 0, 0);
     private Vector3f viewDirection = new Vector3f(0, 0, 1);
-    private float speed = 5f;
+    private float speed = 7f;
     private boolean isSpeedUp = false;
     private boolean left = false, right = false, up = false, down = false;
 

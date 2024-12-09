@@ -195,9 +195,9 @@ public class Main extends SimpleApplication {
             
             if (!stopChasing){
                 monkeyChasePlayer();
-                otoChasePlayerWhenNotSeen();
             }
-          
+            otoChasePlayerWhenNotSeen();
+
             gotKey = inputHandler.getGotKey();
             
             this.enqueue(() -> {
@@ -247,6 +247,11 @@ public class Main extends SimpleApplication {
                     inputHandler.resetGotKey();
                     enableSpaceSwitching = true;
                     inputHandler.enableSpaceSwitching(enableSpaceSwitching);
+                    if (classroomScene.getControl(RigidBodyControl.class) != null) {
+                        RigidBodyControl control = classroomScene.getControl(RigidBodyControl.class);
+                        bulletAppState.getPhysicsSpace().remove(control);
+                        classroomScene.removeControl(control);
+                    }
                 }
                 stopChasing = true;
                 moveNext++; 
@@ -262,6 +267,7 @@ public class Main extends SimpleApplication {
                 //setMoveNextText(false);
             }
             
+            /*
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
@@ -292,6 +298,7 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", "terrin_ending");
                 ending.startEnding();
             }
+            */
             });
             
         }
@@ -557,24 +564,6 @@ public class Main extends SimpleApplication {
     }
 
     
-    private boolean checkMonsterPlayerCollision(Node monsterNode) {
-        if (playerNode == null || monsterNode == null) {
-            return false;
-        }
-
-        // Get the positions of the player and the monkey
-        Vector3f playerPosition = playerNode.getWorldTranslation();
-        Vector3f monsterPosition = monsterNode.getWorldTranslation();
-
-        // Calculate the distance between them
-        float distance = playerPosition.distance(monsterPosition);
-
-        // Define a collision threshold (e.g., 2.0f units)
-        float collisionThreshold = 3.0f;
-
-        // Check if the player and monkey are close enough
-        return distance <= collisionThreshold;
-    }
     
     
     /*
@@ -607,7 +596,7 @@ public class Main extends SimpleApplication {
         float dotProduct = playerViewDirection.dot(directionToOto);
         
         // Define thresholds
-        float fullSpeedThreshold = -0.7f; // Fully behind the player
+        float fullSpeedThreshold = -0.3f; // Fully behind the player
         
         
         if (dotProduct < fullSpeedThreshold) {
