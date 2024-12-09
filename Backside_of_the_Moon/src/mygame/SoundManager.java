@@ -31,6 +31,10 @@ public class SoundManager {
         bgmMap.put("quiet_bgm", createAudioNode(assetManager, "Sounds/bgm/quiet_bgm.ogg", true, 0.3f));
         bgmMap.put("mystery_bgm", createAudioNode(assetManager, "Sounds/bgm/quite_unsettled_bgm.ogg", true, 0.3f));
         bgmMap.put("movement_bgm", createAudioNode(assetManager, "Sounds/bgm/Movement_bgm.ogg", true, 0.3f));
+        
+        bgmMap.put("classroom_ending", createAudioNode(assetManager, "Sounds/bgm/classroom_ending.wav", true, 0.3f));
+        bgmMap.put("terrin_ending", createAudioNode(assetManager, "Sounds/bgm/terrin_ending.wav", true, 0.3f));
+        bgmMap.put("moon_ending", createAudioNode(assetManager, "Sounds/bgm/moon_ending.wav", true, 0.3f));
     }
 
     /**

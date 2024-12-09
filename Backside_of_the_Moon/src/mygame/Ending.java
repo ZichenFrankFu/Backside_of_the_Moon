@@ -24,6 +24,8 @@ public class Ending {
     private int currentTextIndex = 0;
     private boolean isTextPhase;
     private boolean isActive;
+    
+    private int endingCallCounter = 0;
 
     public Ending(SimpleApplication app, SoundManager soundManager) {
         this.app = app;
@@ -59,8 +61,11 @@ public class Ending {
      * @param soundKey     Sound effect to play for this ending (SoundManager key).
      */
     public void setEnding(List<String> textSequence, String imagePath, String soundKey) {
+        if (endingCallCounter > 0) {
+            return; // Prevent further execution if already called
+        }
+
         this.currentTextSequence = textSequence;
-        //this.currentTextIndex = 0;
 
         // Configure the ending image
         endingImage.setImage(app.getAssetManager(), imagePath, true);
@@ -70,9 +75,14 @@ public class Ending {
 
         // Play the associated sound effect
         if (soundKey != null && !soundKey.isEmpty()) {
-            soundManager.playSFX(soundKey);
+            soundManager.stopCurrentBGM();
+            soundManager.playBGM(soundKey);
+        } else if (soundKey == null) {
+            soundManager.playBGM(soundKey);
         }
-        
+
+        endingCallCounter++; // Increment counter after execution
+        System.out.println("Ending set successfully, counter: " + endingCallCounter);
     }
 
     public void startEnding() {
@@ -154,4 +164,3 @@ public class Ending {
         this.isActive = false; // Reset active state
     }
 }
-

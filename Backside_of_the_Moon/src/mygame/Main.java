@@ -72,6 +72,7 @@ public class Main extends SimpleApplication {
     
     // Monster sound timer
     private float monsterSoundTimer = 0.0f;
+    private Boolean isPlayed = false;
     
     // Oto Chasing
     private Node otoNode;
@@ -115,6 +116,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
+        soundManager = new SoundManager(assetManager);
         
         flyCam.setEnabled(true); // Enable FlyCam
         flyCam.setMoveSpeed(50);
@@ -207,7 +209,10 @@ public class Main extends SimpleApplication {
             }
             
             if (gotKey && keyCount == 2 && sceneCount == 1) {
-                soundManager.playSFX("getkey");
+                if (!isPlayed) {
+                    soundManager.playSFX("getkey");
+                    isPlayed = true;
+                }
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 
@@ -229,7 +234,7 @@ public class Main extends SimpleApplication {
                                                Survival is not the same as return.""",
                     ""
                     );
-                ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", null);
+                ending.setEnding(textSequenceMoonbase, "Textures/ending_moonbase.jpg", "moon_ending");
                 ending.startEnding();
                 }
             
@@ -257,7 +262,6 @@ public class Main extends SimpleApplication {
                 //setMoveNextText(false);
             }
             
-            /*
              if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
@@ -270,10 +274,10 @@ public class Main extends SimpleApplication {
                 "Attendance, mandatory.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", null);
+                ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", "classroom_ending");
                 ending.startEnding();
             }
-            */
+            
             if (checkMonsterPlayerCollision(otoNode)) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
@@ -285,7 +289,7 @@ public class Main extends SimpleApplication {
                 "You are stretched thin, and now, you are no more.",
                 ""
                 );
-                ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", null);
+                ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", "terrin_ending");
                 ending.startEnding();
             }
             });
@@ -312,7 +316,6 @@ public class Main extends SimpleApplication {
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
 
         // Sound Manager
-        soundManager = new SoundManager(assetManager);
         soundManager.playBGM("quiet_bgm"); // Play background music for the classroom
 
         // Create player Node
@@ -379,6 +382,8 @@ public class Main extends SimpleApplication {
             case "BlackholeScene":
                 soundManager.playBGM("mystery_bgm");
                 break;
+            case "terrainNode":
+                soundManager.playBGM("mystery_bgm");
             default:
                 System.out.println("No BGM mapped for scene: " + sceneName);
                 break;
@@ -390,6 +395,7 @@ public class Main extends SimpleApplication {
     */
     
     private void showStartScreen() {
+        soundManager.playBGM("classroom_ending");
         startScreen = new Picture("Start Screen");
         startScreen.setImage(assetManager, "Textures/horror_door.jpg", true);
         startScreen.setWidth(settings.getWidth());
