@@ -259,3 +259,34 @@ After both keys have been obtained, the player escapes all rooms and achieves th
 they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
 
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
+
+**Final Updates**
+
+1. Added hints about how to solve each room in the game's prologue.
+2. Spread out the positions of the cakes and the moon more evenly across the room.
+3. Special sound effect when key is picked up. Made footsteps and sound effects when picking up items more obvious.
+4. Problem about movement constraints in terrain scene has been solved.
+
+**Demo**
+
+To be recorded. 
+
+**Download**
+
+To be made.
+
+**Future Work**
+If given more time and resources, we could add the following to our game:
+
+1. Incorporating New Room Types
+We would add a variety of rooms beyond the current monster-chase rooms. For example, we could include puzzle-solving rooms where players must use logic and observation to progress, and choice-based rooms where decisions lead to branching paths with different consequences, as we originally planned.
+
+3. Expanding Storytelling
+For example, a dedicated introductory room could be created as the game’s opening scene, weaving in storytelling elements such as environmental clues, cryptic messages, and cinematic moments, to hint at the player character’s true identity and purpose in the game world.
+
+4. Having more interactions and relationships between different rooms & monsters (this can only happen after having a large number of rooms)
+With a larger number of rooms and a diverse roster of monsters, we could design a system where the connections between rooms and the monsters within them play a significant role in gameplay and storytelling. Monsters can collaborate / rival with each other. 
+
+5. More rooms and more monsters!
+We will add more rooms with different scenes and different monsters. 
+
