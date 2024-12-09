@@ -395,7 +395,7 @@ public class Main extends SimpleApplication {
     */
     
     private void showStartScreen() {
-        soundManager.playBGM("classroom_ending");
+        soundManager.playBGM("starting");
         startScreen = new Picture("Start Screen");
         startScreen.setImage(assetManager, "Textures/horror_door.jpg", true);
         startScreen.setWidth(settings.getWidth());

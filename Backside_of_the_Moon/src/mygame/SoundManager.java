@@ -35,6 +35,7 @@ public class SoundManager {
         bgmMap.put("classroom_ending", createAudioNode(assetManager, "Sounds/bgm/classroom_ending.wav", true, 0.3f));
         bgmMap.put("terrin_ending", createAudioNode(assetManager, "Sounds/bgm/terrin_ending.wav", true, 0.3f));
         bgmMap.put("moon_ending", createAudioNode(assetManager, "Sounds/bgm/moon_ending.wav", true, 0.3f));
+        bgmMap.put("starting", createAudioNode(assetManager, "Sounds/bgm/starting.wav", true, 0.3f));
     }
 
     /**
