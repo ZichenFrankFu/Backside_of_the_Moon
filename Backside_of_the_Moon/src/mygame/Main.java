@@ -159,6 +159,12 @@ public class Main extends SimpleApplication {
                     The crimson shadow has awakened, chasing the scent of sweetness. 
                     Do not halt, do not let his grasp find you.
                     The key hides in the false sweetness, and only those who touch its truth may escape.
+                    """,
+                    """
+                    Room 2 | The Cage of the Watchful
+                    This being freezes under light, stops under gaze.
+                    But when your eyes falter, the shadow approaches silently.
+                    Keep your gaze steady, search for salvation, and do not waver.
                     """);
         
     }
