@@ -213,10 +213,11 @@ public class ModelLoader {
             animChannel.setAnim("Walk"); // Set the default animation to Idle
         }
         
-        Oto.setLocalTranslation(10, 14.0f, 0);
+        Oto.setLocalTranslation(-50, 20.0f, -50);
         BetterCharacterControl otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f);
         Oto.addControl(otoControl);
-
+        bulletAppState.getPhysicsSpace().add(otoControl); // Ensure it is added to the physics space
+        
         return Oto;
     }
     

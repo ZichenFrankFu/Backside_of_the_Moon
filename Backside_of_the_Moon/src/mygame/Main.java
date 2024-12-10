@@ -196,9 +196,8 @@ public class Main extends SimpleApplication {
             if (!stopChasing){
                 monkeyChasePlayer();
             }
-            
             otoChasePlayerWhenNotSeen();
-            
+
             gotKey = inputHandler.getGotKey();
             
             this.enqueue(() -> {
@@ -366,10 +365,10 @@ public class Main extends SimpleApplication {
         monkeyNode = modelLoader.loadMonkey(classroomScene);
         monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
         monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
-        
-        terrainScene = loadTerrain();
+
         blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadStars(10, blackholeScene, gameState);
+        terrainScene = loadTerrain();
         otoNode = modelLoader.loadOto(terrainScene);
         otoControl = otoNode.getControl(BetterCharacterControl.class);
         otoAnimComposer = otoNode.getControl(AnimComposer.class);
