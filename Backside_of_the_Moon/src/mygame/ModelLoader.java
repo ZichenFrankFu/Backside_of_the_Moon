@@ -201,25 +201,29 @@ public class ModelLoader {
     }
        
     public Node loadOto(Node blackholeScene) {
-        
-        Node Oto = (Node) assetManager.loadModel("Models/Oto/Oto.j3o");
-        blackholeScene.attachChild(Oto);
-        
-        
-        // Set up the AnimControl for animations
-        AnimControl animControl = Oto.getControl(AnimControl.class);
+        // Create a parent node for Oto to deal with offset
+        Node otoNode = new Node("OtoNode");
+        blackholeScene.attachChild(otoNode);
+
+        Spatial otoModel = assetManager.loadModel("Models/Oto/Oto.j3o");
+        otoModel.setLocalTranslation(0, 5f, 0); 
+        // Offset Oto by 5 units above its parent node
+        otoNode.attachChild(otoModel);
+
+        otoNode.setLocalTranslation(-50, 20.0f, -50);
+
+        BetterCharacterControl otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f);
+        otoNode.addControl(otoControl);
+        bulletAppState.getPhysicsSpace().add(otoControl);
+        AnimControl animControl = otoModel.getControl(AnimControl.class);
         if (animControl != null) {
             AnimChannel animChannel = animControl.createChannel();
-            animChannel.setAnim("Walk"); // Set the default animation to Idle
+            animChannel.setAnim("Walk");
         }
-        
-        Oto.setLocalTranslation(-50, 20.0f, -50);
-        BetterCharacterControl otoControl = new BetterCharacterControl(0.5f, 1.8f, 80f);
-        Oto.addControl(otoControl);
-        bulletAppState.getPhysicsSpace().add(otoControl); // Ensure it is added to the physics space
-        
-        return Oto;
+
+        return otoNode;
     }
+
     
     /*
     * Pickable Items
