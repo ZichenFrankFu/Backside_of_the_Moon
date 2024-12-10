@@ -196,7 +196,6 @@ public class Main extends SimpleApplication {
             if (!stopChasing){
                 monkeyChasePlayer();
             }
-            otoChasePlayerWhenNotSeen();
 
             gotKey = inputHandler.getGotKey();
             
@@ -256,8 +255,9 @@ public class Main extends SimpleApplication {
                 stopChasing = true;
                 moveNext++; 
             }
-            
+            otoChasePlayerWhenNotSeen();
             if (sceneCount == 1){
+                
                 playerNode.setLocalTranslation(new Vector3f(5f, 13f, 1f));
                 moveNextText.setText("");
                 guiNode.attachChild(moveNextText);
@@ -361,13 +361,13 @@ public class Main extends SimpleApplication {
         // Load Model
         modelLoader = new ModelLoader(assetManager, rootNode, bulletAppState, sceneManager);
         classroomScene = modelLoader.loadClassroom();
-        modelLoader.loadCakes(10, classroomScene, gameState);
+        modelLoader.loadCakes(9, classroomScene, gameState);
         monkeyNode = modelLoader.loadMonkey(classroomScene);
         monkeyControl = monkeyNode.getControl(BetterCharacterControl.class);
         monkeyAnimComposer = monkeyNode.getControl(AnimComposer.class);
 
         blackholeScene = modelLoader.loadBlackhole();
-        modelLoader.loadStars(10, blackholeScene, gameState);
+        modelLoader.loadStars(9, blackholeScene, gameState);
         terrainScene = loadTerrain();
         otoNode = modelLoader.loadOto(terrainScene);
         otoControl = otoNode.getControl(BetterCharacterControl.class);
@@ -561,6 +561,25 @@ public class Main extends SimpleApplication {
         // Check if the player is within the range of the teleport gate
         return distance <= teleportThreshold;
     }
+    
+    private boolean checkMonsterPlayerCollision(Node monsterNode) {
+        if (playerNode == null || monsterNode == null) {
+            return false;
+        }
+
+        // Get the positions of the player and the monkey
+        Vector3f playerPosition = playerNode.getWorldTranslation();
+        Vector3f monsterPosition = monsterNode.getWorldTranslation();
+
+        // Calculate the distance between them
+        float distance = playerPosition.distance(monsterPosition);
+
+        // Define a collision threshold (e.g., 2.0f units)
+        float collisionThreshold = 3.0f;
+
+        // Check if the player and monkey are close enough
+        return distance <= collisionThreshold;
+    }
 
     
     
@@ -622,6 +641,7 @@ public class Main extends SimpleApplication {
         terrainScene.attachChild(terrainGeo);
 
         // Add Trees
+        /*
         Spatial tree1 = assetManager.loadModel("Models/Tree/Tree.j3o");
         tree1.scale(10);
         tree1.setQueueBucket(RenderQueue.Bucket.Transparent);
@@ -633,7 +653,7 @@ public class Main extends SimpleApplication {
         tree2.setLocalTranslation(-50, 7f, -50);
         tree2.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         terrainScene.attachChild(tree2);
-
+        */
         // Add Sky
         Spatial mySky = assetManager.loadModel("Scenes/mySky.j3o");
         terrainScene.attachChild(mySky);
