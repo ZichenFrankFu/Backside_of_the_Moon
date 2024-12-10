@@ -271,7 +271,8 @@ they discover that themselves are merely a pair of hands and that they are in fa
 2. Spread out the positions of the cakes and the moon more evenly across the room.
 <img width="1512" alt="Screenshot 2024-12-10 at 3 39 21 PM 1" src="https://github.com/user-attachments/assets/70f8e21c-a09e-4fff-b188-14df76146f1e">
 4. Add a special "positive" sound effect when the key is picked up. We also adjusted the weight of the FPX sounds so that footsteps are obvious.
-5. The problem of movement constraints in the terrain scene has been solved.
+5. The oto monster now does not "walk". Now, it stands still when the player is not watching, yet approaches the player quickly once the player turns away. 
+6. The problem of movement constraints in the terrain scene has been solved.
 
 **Demo**
 
@@ -282,19 +283,19 @@ To be recorded.
 To be made.
 
 **Future Work**
-If given more time and resources, we could add the following to our game:
+If given more time and resources, we would add the following to our game:
 
 1. Incorporating New Room Types
 We would add various types of rooms beyond the current monster-chase rooms. For example, we could include puzzle-solving rooms where players must use logic and observation to progress, and choice-based rooms where decisions lead to branching paths with different consequences, as we originally planned.
 
 3. Expanding Storytelling
-For example, a dedicated introductory room could be created as the game’s opening scene, weaving in storytelling elements such as environmental clues, cryptic messages, and cinematic moments, to hint at the player character’s true identity and purpose in the game world.
+For example, a dedicated introductory room could be created as the game’s opening scene, weaving in storytelling elements such as environmental clues, cryptic messages, and cinematic moments, to hint at the player character’s true identity and purpose in the game world. We would also make the storyline more obvious, e.g. give hints about the true identity of the player. 
 
 4. Having more interactions and relationships between different rooms & monsters (this can only happen after having a large number of rooms)
 With a larger number of rooms and a diverse roster of monsters, we could design a system where the connections between rooms and the monsters within them play a significant role in gameplay and storytelling. Monsters can collaborate / rival with each other. 
 
 5. More rooms and more monsters!
-We will add more rooms with different scenes and different monsters.
+We will add more rooms with different scenes and different monsters. This includes finding more suitable monster models and room models. 
 
 **Contribution**
 
