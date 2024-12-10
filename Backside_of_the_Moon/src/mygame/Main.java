@@ -78,7 +78,7 @@ public class Main extends SimpleApplication {
     private Node otoNode;
     private BetterCharacterControl otoControl;
     private AnimComposer otoAnimComposer;
-    private float otoSpeed = 15.0f;
+    private float otoSpeed = 10.0f;
     private float otoHalfSpeed = 2.0f;
    
     // Bag check
@@ -257,6 +257,7 @@ public class Main extends SimpleApplication {
             }
             
             if (sceneCount >= 1) {
+                System.out.println("count>=1");
                 otoChasePlayerWhenNotSeen();
             }
 
@@ -271,8 +272,7 @@ public class Main extends SimpleApplication {
                 //setMoveNextText(false);
             }
             
-            /*
-             if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false) {
+            if (checkMonsterPlayerCollision(monkeyNode) && enteredEnding == false && (sceneCount == 0)) {
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 ending.cleanupEnding(rootNode);
@@ -287,10 +287,9 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", "classroom_ending");
                 ending.startEnding();
             }
-            */
             
             if (checkMonsterPlayerCollision(otoNode)) {
-                System.out.println("Entered Ending");
+                System.out.println("Entered oto Ending");
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 ending.cleanupEnding(rootNode);
@@ -570,6 +569,7 @@ public class Main extends SimpleApplication {
     
     private boolean checkMonsterPlayerCollision(Node monsterNode) {
         if (playerNode == null || monsterNode == null) {
+            System.out.println("either null");
             return false;
         }
 
@@ -587,7 +587,7 @@ public class Main extends SimpleApplication {
         if (sceneCount == 0){
             collisionThreshold = 3.0f;
         } else {
-            collisionThreshold = 38.1f;
+            collisionThreshold = 44.1f;
         }
         System.out.println(distance);
         // Check if the player and monkey are close enough
