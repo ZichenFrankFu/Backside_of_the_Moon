@@ -250,6 +250,7 @@ There are 6 bgm in total, including:
 1 for blackhole scene, 1 for blackhole bad ending; 
 1 for true ending. 
 
+SFX sounds are added interactively for walking (for WASD input) and a pick up sound for "F". There is also a positional "bang" sound from the monster, and a positive sound when the player picks up the actual key. 
 
 *Scene Transition*
 
@@ -261,6 +262,7 @@ Scene transition now happens via a teleport gate that appears after the player h
 *True End*
 
 After both keys have been obtained, the player escapes all rooms and achieves the True End: 
+
 they discover that themselves are merely a pair of hands and that they are in fact on a moonbase. The owner of these hands, you, is one of the monsters isolated on the moon. 
 
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
