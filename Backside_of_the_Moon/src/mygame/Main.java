@@ -255,7 +255,11 @@ public class Main extends SimpleApplication {
                 stopChasing = true;
                 moveNext++; 
             }
-            otoChasePlayerWhenNotSeen();
+            
+            if (sceneCount >= 1) {
+                otoChasePlayerWhenNotSeen();
+            }
+
             if (sceneCount == 1){
                 
                 playerNode.setLocalTranslation(new Vector3f(5f, 13f, 1f));
@@ -283,8 +287,10 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_classroom.jpg", "classroom_ending");
                 ending.startEnding();
             }
+            */
             
             if (checkMonsterPlayerCollision(otoNode)) {
+                System.out.println("Entered Ending");
                 viewPort.removeProcessor(fpp);
                 fpp.cleanup();
                 ending.cleanupEnding(rootNode);
@@ -298,7 +304,7 @@ public class Main extends SimpleApplication {
                 ending.setEnding(textSequenceClassroom, "Textures/ending_blackhole.jpg", "terrin_ending");
                 ending.startEnding();
             }
-            */
+            
             });
             
         }
@@ -575,14 +581,18 @@ public class Main extends SimpleApplication {
         float distance = playerPosition.distance(monsterPosition);
 
         // Define a collision threshold (e.g., 2.0f units)
-        float collisionThreshold = 3.0f;
-
+        
+        float collisionThreshold;
+        
+        if (sceneCount == 0){
+            collisionThreshold = 3.0f;
+        } else {
+            collisionThreshold = 38.1f;
+        }
+        System.out.println(distance);
         // Check if the player and monkey are close enough
         return distance <= collisionThreshold;
     }
-
-    
-    
     
     /*
     * Monster Logic
@@ -641,7 +651,7 @@ public class Main extends SimpleApplication {
         terrainScene.attachChild(terrainGeo);
 
         // Add Trees
-        /*
+        
         Spatial tree1 = assetManager.loadModel("Models/Tree/Tree.j3o");
         tree1.scale(10);
         tree1.setQueueBucket(RenderQueue.Bucket.Transparent);
@@ -653,7 +663,7 @@ public class Main extends SimpleApplication {
         tree2.setLocalTranslation(-50, 7f, -50);
         tree2.setShadowMode(RenderQueue.ShadowMode.CastAndReceive);
         terrainScene.attachChild(tree2);
-        */
+        
         // Add Sky
         Spatial mySky = assetManager.loadModel("Scenes/mySky.j3o");
         terrainScene.attachChild(mySky);
