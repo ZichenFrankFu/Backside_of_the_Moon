@@ -278,7 +278,7 @@ they discover that themselves are merely a pair of hands and that they are in fa
 
 **Demo**
 
-To be recorded. 
+The link of our game demo: https://drive.google.com/file/d/14ICcdmwVziyOKdauEf6IX1bTuaNr5xHI/view?usp=sharing
 
 **Download**
 
