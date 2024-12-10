@@ -244,7 +244,7 @@ public class ModelLoader {
             int col = i % 3;
             // Set different translations for each cake to avoid overlapping
             float xPos = -12.0f + col * 10.0f;  // Adjusted to give some spacing
-            float yPos = 7.0f;
+            float yPos = 8.0f;
             float zPos = 2.0f + row * 15.0f;
 
             cake.setLocalTranslation(xPos, yPos, zPos);

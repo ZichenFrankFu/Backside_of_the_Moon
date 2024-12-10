@@ -196,9 +196,9 @@ public class Main extends SimpleApplication {
             if (!stopChasing){
                 monkeyChasePlayer();
             }
-            if (sceneCount == 1){
-                otoChasePlayerWhenNotSeen();
-            }
+            
+            otoChasePlayerWhenNotSeen();
+            
             gotKey = inputHandler.getGotKey();
             
             this.enqueue(() -> {
