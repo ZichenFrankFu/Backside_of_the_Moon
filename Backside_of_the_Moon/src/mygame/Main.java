@@ -196,8 +196,9 @@ public class Main extends SimpleApplication {
             if (!stopChasing){
                 monkeyChasePlayer();
             }
-            otoChasePlayerWhenNotSeen();
-
+            if (sceneCount == 1){
+                otoChasePlayerWhenNotSeen();
+            }
             gotKey = inputHandler.getGotKey();
             
             this.enqueue(() -> {
@@ -317,7 +318,6 @@ public class Main extends SimpleApplication {
         // Physics
         bulletAppState = new BulletAppState();
         stateManager.attach(bulletAppState);
-        
 
         // Add gravity
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
@@ -369,11 +369,11 @@ public class Main extends SimpleApplication {
 
         blackholeScene = modelLoader.loadBlackhole();
         modelLoader.loadStars(10, blackholeScene, gameState);
-        otoNode = modelLoader.loadOto(blackholeScene);
+        terrainScene = loadTerrain();
+        otoNode = modelLoader.loadOto(terrainScene);
         otoControl = otoNode.getControl(BetterCharacterControl.class);
         otoAnimComposer = otoNode.getControl(AnimComposer.class);
 
-        terrainScene = loadTerrain();
 
         // Initialize the first scene
         sceneManager.switchToNextScene();
