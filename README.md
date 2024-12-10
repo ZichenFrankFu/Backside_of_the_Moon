@@ -243,7 +243,12 @@ The Bloom Filter has been turned on for room 2.
 
 *Sounds and Music*
 
-Different background music is played in different scenes. 
+Different background music is played in different scenes. All the background music are made by Suno AI https://suno.com/. 
+There are 6 bgm in total, including: 
+1 for starting screen and dialogue; 
+1 for classroom scene, 1 for classroom bad ending; 
+1 for blackhole scene, 1 for blackhole bad ending; 
+1 for true ending. 
 
 
 *Scene Transition*
@@ -256,7 +261,7 @@ Scene transition now happens via a teleport gate that appears after the player h
 *True End*
 
 After both keys have been obtained, the player escapes all rooms and achieves the True End: 
-they discover that themselves are merely a pair of hands, and that they are in fact on a moonbase.
+they discover that themselves are merely a pair of hands and that they are in fact on a moonbase. The owner of these hands, you, is one of the monsters isolated on the moon. 
 
 ![ending_moonbase](https://github.com/user-attachments/assets/f4544315-4f40-4cea-9455-de28674ff385)
 
@@ -264,8 +269,9 @@ they discover that themselves are merely a pair of hands, and that they are in f
 
 1. Added hints about how to solve each room in the game's prologue.
 2. Spread out the positions of the cakes and the moon more evenly across the room.
-3. Special sound effect when key is picked up. Made footsteps and sound effects when picking up items more obvious.
-4. Problem about movement constraints in terrain scene has been solved.
+<img width="1512" alt="Screenshot 2024-12-10 at 3 39 21 PM 1" src="https://github.com/user-attachments/assets/70f8e21c-a09e-4fff-b188-14df76146f1e">
+4. Add a special "positive" sound effect when the key is picked up. We also adjusted the weight of the FPX sounds so that footsteps are obvious.
+5. The problem of movement constraints in the terrain scene has been solved.
 
 **Demo**
 
@@ -279,7 +285,7 @@ To be made.
 If given more time and resources, we could add the following to our game:
 
 1. Incorporating New Room Types
-We would add a variety of rooms beyond the current monster-chase rooms. For example, we could include puzzle-solving rooms where players must use logic and observation to progress, and choice-based rooms where decisions lead to branching paths with different consequences, as we originally planned.
+We would add various types of rooms beyond the current monster-chase rooms. For example, we could include puzzle-solving rooms where players must use logic and observation to progress, and choice-based rooms where decisions lead to branching paths with different consequences, as we originally planned.
 
 3. Expanding Storytelling
 For example, a dedicated introductory room could be created as the game’s opening scene, weaving in storytelling elements such as environmental clues, cryptic messages, and cinematic moments, to hint at the player character’s true identity and purpose in the game world.
@@ -295,13 +301,15 @@ We will add more rooms with different scenes and different monsters.
 Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction (Water, Sky, Filters, etc), Particle Effects
 
 Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
-Tina Shen: Musics and music implements, UI icons, Ending images, Start screen, text displays, interactive sounds
+Tina Shen: Musics and music implements, UI icons, Ending images, Start screen, text displays, first monster animation, interactive sounds
 
-All team members contributed to finding free assets to use, implementing physics effects. Annie and Frank collaborated on scene switching. 
+All team members contributed to finding free assets to use, implementing physics effects, debugging. Annie and Frank collaborated on scene switching. 
 
 Description of Collaboration: Usually, 1 team member starts out implementing an aspect of the game (E.g., physics). 
-If they encountered a bug / failed to implement, other team members will join and attempt to debug separately. If the problem is still not solved,
-we either do voice call or meet in person somewhere to implement the function / debug it together. 
+If we encounter a bug / fail to implement it, other team members will join and attempt to debug separately. If the problem is still not solved,
+we either do a voice call or meet in person somewhere to implement the function / debug it together. We also held meetings every week where we worked on it together. 
+
+Everyone put in a lot of time and effort. Our collaboration is seamless :)
 
 **Open Source Model Reference**
 
@@ -314,4 +322,7 @@ Jaime and Oto: from the JMonkey Guide Textbook
 Bonfire Pot: https://sketchfab.com/3d-models/pot-with-food-and-bonfire-lowpoly-abc82e73ce074545a6daa3c9bc111f8f
 Birch Tree Forest: https://sketchfab.com/3d-models/five-birch-trees-pack-lowpoly-lods-08fe5117138e4fdaa7ca440ef1201e07
 Swan Boat: https://sketchfab.com/3d-models/swan-boat-acfb0a0236894ef6aa1f8a232f37b762
+Blackhole Ending Background Image: https://lifeboat.com/blog/2022/08/black-holes-are-the-terrifying-behemoths-of-space-heres-how-they-tick
+Image font: https://www.fontspace.com/popular/fonts
+All the icons and texts are self-designed. 
 
