@@ -302,6 +302,7 @@ We will add more rooms with different scenes and different monsters. This includ
 Annie Xian: Scene Switching, Bag check updates, Collision check with monsters, Ending triggering, Oto chasing, Terrain construction (Water, Sky, Filters, etc), Particle Effects
 
 Frank Fu: Monkey chasing, Scene Switching, Pick-up function, Notification texts, Bag check, Position check with the teleport gate, User input
+
 Tina Shen: Musics and music implements, UI icons, Ending images, Start screen, text displays, first monster animation, interactive sounds
 
 All team members contributed to finding free assets to use, implementing physics effects, debugging. Annie and Frank collaborated on scene switching. 
