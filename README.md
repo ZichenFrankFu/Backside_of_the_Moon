@@ -270,15 +270,19 @@ they discover that themselves are merely a pair of hands and that they are in fa
 **Final Updates**
 
 1. Added hints about how to solve each room in the game's prologue.
-2. Spread out the positions of the cakes and the moon more evenly across the room.
+  
+2. Spread out the positions of the cakes and the moon more evenly across the room. 
 <img width="1512" alt="Screenshot 2024-12-10 at 3 39 21 PM 1" src="https://github.com/user-attachments/assets/70f8e21c-a09e-4fff-b188-14df76146f1e">
-4. Add a special "positive" sound effect when the key is picked up. We also adjusted the weight of the FPX sounds so that footsteps are obvious.
-5. The oto monster now does not "walk". Now, it stands still when the player is not watching, yet approaches the player quickly once the player turns away. This mimics the logic from SCP-173. 
-6. The problem of movement constraints in the terrain scene has been solved.
+
+3. Add a special "positive" sound effect when the key is picked up. We also adjusted the weight of the sound effects so that footsteps are obvious.
+
+4. The oto monster now does not "walk." It stands still when the player is not watching yet approaches the player quickly once the player turns away, mimicking the logic from SCP-173. 
+
+5. The problem of movement constraints in the terrain scene has been solved.
 
 **Demo**
 
-The link of our game demo: https://drive.google.com/file/d/14ICcdmwVziyOKdauEf6IX1bTuaNr5xHI/view?usp=sharing
+The link to our game demo: https://drive.google.com/file/d/14ICcdmwVziyOKdauEf6IX1bTuaNr5xHI/view?usp=sharing
 
 **Download**
 
