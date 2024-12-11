@@ -276,7 +276,7 @@ they discover that themselves are merely a pair of hands and that they are in fa
 
 3. Add a special "positive" sound effect when the key is picked up. We also adjusted the weight of the sound effects so that footsteps are obvious.
 
-4. The oto monster now does not "walk." It stands still when the player is not watching yet approaches the player quickly once the player turns away, mimicking the logic from SCP-173. 
+4. The oto monster now does not "walk." It stands still when the player is not watching yet approaches the player quickly once the player turns away, mimicking the logic from SCP-173 https://scp-wiki.wikidot.com/scp-173. 
 
 5. The problem of movement constraints in the terrain scene has been solved.
 
