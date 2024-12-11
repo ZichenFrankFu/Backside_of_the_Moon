@@ -282,7 +282,7 @@ The link of our game demo: https://drive.google.com/file/d/14ICcdmwVziyOKdauEf6I
 
 **Download**
 
-To be made.
+(https://drive.google.com/file/d/1FjWBDJ9bEyU2fhCsqXvaJyG5r5EvYOH0/view?usp=sharing)
 
 **Future Work**
 If given more time and resources, we would add the following to our game:
