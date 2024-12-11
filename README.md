@@ -326,15 +326,26 @@ Everyone put in a lot of time and effort. Our collaboration is seamless :)
 **Open Source Model Reference**
 
 Classroom Scene: https://sketchfab.com/3d-models/anime-class-room-4faa1d57304d446995bc3a01af763239
+
 Blackhole Scene: https://sketchfab.com/3d-models/blackhole-74cbeaeae2174a218fe9455d77902b5c
+
 Pickable Cake: https://alberto-luviano.itch.io/lowpoly-classroom-pack
+
 Pickable Mini Moon: https://sketchfab.com/3d-models/low-poly-moon-d671eb35d2244c8cb98d06b4948d9937
+
 True Ending Scene: https://sketchfab.com/3d-models/hopelessness-fb4b075c2f5c49818b46b843c5d4a244
+
 Jaime and Oto: from the JMonkey Guide Textbook
+
 Bonfire Pot: https://sketchfab.com/3d-models/pot-with-food-and-bonfire-lowpoly-abc82e73ce074545a6daa3c9bc111f8f
+
 Birch Tree Forest: https://sketchfab.com/3d-models/five-birch-trees-pack-lowpoly-lods-08fe5117138e4fdaa7ca440ef1201e07
+
 Swan Boat: https://sketchfab.com/3d-models/swan-boat-acfb0a0236894ef6aa1f8a232f37b762
+
 Blackhole Ending Background Image: https://lifeboat.com/blog/2022/08/black-holes-are-the-terrifying-behemoths-of-space-heres-how-they-tick
+
 Image font: https://www.fontspace.com/popular/fonts
+
 All the icons and texts are self-designed. 
 
