@@ -27,6 +27,14 @@ public class ModelLoader {
     private final BulletAppState bulletAppState;
     
 
+    /**
+     * Constructs a new ModelLoader.
+     *
+     * @param assetManager    The asset manager used to load models and assets.
+     * @param rootNode        The root node of the scene graph.
+     * @param bulletAppState  The Bullet physics state for handling physics.
+     * @param sceneManager    The manager for switching between scenes.
+     */
     public ModelLoader(AssetManager assetManager, Node rootNode, BulletAppState bulletAppState, SceneSwitchingManager sceneManager) {
         this.assetManager = assetManager;
         this.rootNode = rootNode;
@@ -46,6 +54,12 @@ public class ModelLoader {
     * Scenes
     */
     
+    /**
+     * Loads a teleport gate model into the specified scene.
+     *
+     * @param scene The scene to which the teleport gate should be added.
+     * @return The node representing the teleport gate.
+     */
      public Node loadTeleportGate(Node scene){
         /*
          * Transition Teleport gate
@@ -77,7 +91,11 @@ public class ModelLoader {
         return teleportGateNode;
     }
     
-    
+    /**
+     * Loads and configures the classroom scene.
+     *
+     * @return The node representing the classroom scene.
+     */
     public Node loadClassroom() {        
         /*
         * Scene 1: Classroom
@@ -128,6 +146,11 @@ public class ModelLoader {
         return classroomScene;
     }
  
+    /**
+     * Loads and configures the blackhole scene.
+     *
+     * @return The node representing the blackhole scene.
+     */
     public Node loadBlackhole() {
         /*
         * Scene 2: Blackhole
@@ -170,44 +193,58 @@ public class ModelLoader {
     /*
     * Monsters
     */
-       public Node loadMonkey(Node classroomScene) {
+    
+    /**
+     * Loads and configures the "Bloody Monkey" character in the classroom scene.
+     *
+     * @param classroomScene The scene to which the monkey should be added.
+     * @return The node representing the "Bloody Monkey".
+     */
+    public Node loadMonkey(Node classroomScene) {
         // Load and scale the BloodyMonkey model
         Node bloodyMonkey = (Node) assetManager.loadModel("Models/Monkey/Jaime.j3o");
         bloodyMonkey.rotate(0, FastMath.DEG_TO_RAD * 180, 0);
         bloodyMonkey.setLocalScale(4.0f);
         bloodyMonkey.setLocalTranslation(-7.0f, 11.0f, 18.0f);
         classroomScene.attachChild(bloodyMonkey);
-        
+
         //Load materials onto BloodyMonkey model
         Material bloodyMonkeyMaterial = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
         TextureKey bloodyMonkeyTextureKey = new TextureKey("Textures/blood.png", true); 
         Texture bloodyMonkeyTexture = assetManager.loadTexture(bloodyMonkeyTextureKey);
         bloodyMonkeyMaterial.setTexture("DiffuseMap", bloodyMonkeyTexture);
         bloodyMonkey.setMaterial(bloodyMonkeyMaterial);
-        
+
         // Monkey Physics using BetterCharacterControl for proper movement
         BetterCharacterControl monkeyControl = new BetterCharacterControl(1.5f, 4, 30f);
         bloodyMonkey.addControl(monkeyControl);
         bulletAppState.getPhysicsSpace().add(monkeyControl);
-        
+
         // Set up the AnimControl for animations
         AnimControl animControl = bloodyMonkey.getControl(AnimControl.class);
         if (animControl != null) {
             AnimChannel animChannel = animControl.createChannel();
-            animChannel.setAnim("Walk"); // Set the default animation to Idle
+            // Set the default animation to Idle
+            animChannel.setAnim("Walk"); 
         }
-        
         return bloodyMonkey;
     }
        
+    /**
+     * Loads and configures the "Oto" character in the blackhole scene.
+     *
+     * @param blackholeScene The scene to which Oto should be added.
+     * @return The node representing Oto.
+     */
     public Node loadOto(Node blackholeScene) {
         // Create a parent node for Oto to deal with offset
         Node otoNode = new Node("OtoNode");
         blackholeScene.attachChild(otoNode);
 
         Spatial otoModel = assetManager.loadModel("Models/Oto/Oto.j3o");
-        otoModel.setLocalTranslation(0, 5f, 0); 
         // Offset Oto by 5 units above its parent node
+        otoModel.setLocalTranslation(0, 5f, 0); 
+        
         otoNode.attachChild(otoModel);
 
         otoNode.setLocalTranslation(-50, 20.0f, -50);
@@ -229,6 +266,14 @@ public class ModelLoader {
     * Pickable Items
     */
     
+     /**
+     * Loads a specified number of cake items into the given scene.
+     * One of the cakes is randomly designated as the "Key."
+     *
+     * @param num       The number of cakes to generate.
+     * @param scene     The scene where the cakes will be placed.
+     * @param gameState The game state to track pickable items.
+     */
     public void loadCakes(int num, Node scene, GameState gameState) {
         // Randomly select one cake to be the "Key"
         int keyInd = (int) (Math.random() * num);
@@ -246,8 +291,8 @@ public class ModelLoader {
 
             int row = i / 3;
             int col = i % 3;
-            // Set different translations for each cake to avoid overlapping
-            float xPos = -12.0f + col * 10.0f;  // Adjusted to give some spacing
+            // Spread out
+            float xPos = -12.0f + col * 10.0f;  
             float yPos = 8.0f;
             float zPos = 2.0f + row * 15.0f;
 
@@ -271,7 +316,14 @@ public class ModelLoader {
         }
     }
 
-    
+    /**
+     * Loads a specified number of star items into the given scene.
+     * One of the stars is randomly designated as the "Key."
+     *
+     * @param num       The number of stars to generate.
+     * @param scene     The scene where the stars will be placed.
+     * @param gameState The game state to track pickable items.
+     */
     public void loadStars(int num, Node scene, GameState gameState) {
         // Randomly select one star to be the "Key"
         int keyInd = (int) (Math.random() * num);
@@ -279,10 +331,12 @@ public class ModelLoader {
         // Load the star model and create a reusable material
         Spatial starModel = assetManager.loadModel("Models/Star/scene.j3o");
         Material starMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+        
         // Set a moon-like color (soft grayish white)
-        starMat.setColor("Diffuse", new ColorRGBA(0.3f, 0.3f, 0.3f, 1.0f));  // Dark gray to reduce brightness
-        starMat.setColor("Ambient", new ColorRGBA(0.2f, 0.2f, 0.2f, 1.0f));  // Even darker for ambient light
+        starMat.setColor("Diffuse", new ColorRGBA(0.3f, 0.3f, 0.3f, 1.0f)); 
+        starMat.setColor("Ambient", new ColorRGBA(0.2f, 0.2f, 0.2f, 1.0f));
         starMat.setBoolean("UseMaterialColors", true);
+        
         // Remove or reduce shininess
         starMat.setFloat("Shininess", 8f);
 
@@ -290,13 +344,14 @@ public class ModelLoader {
         for (int i = 0; i < num; i++) {
             // Clone the star model to create a new instance for each star
             Spatial star = starModel.clone();
-            star.setMaterial(starMat);  // Reuse the same material for all stars
+            star.setMaterial(starMat);
             star.setLocalScale(0.05f);
 
             int row = i / 3;
             int col = i % 3;
-            // Set different translations for each cake to avoid overlapping
-            float xPos = -12.0f + col * 10.0f;  // Adjusted to give some spacing
+            
+            // Spread out
+            float xPos = -12.0f + col * 10.0f;  
             float yPos = 7.0f;
             float zPos = 2.0f + row * 15.0f;
             star.setLocalTranslation(xPos, yPos, zPos);

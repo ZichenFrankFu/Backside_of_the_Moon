@@ -68,7 +68,7 @@ public class Main extends SimpleApplication {
     private Node monkeyNode;
     private BetterCharacterControl monkeyControl;
     private AnimComposer monkeyAnimComposer;
-    private float monkeySpeed = 4.0f;
+    private final float monkeySpeed = 4.0f;
     
     // Monster sound timer
     private float monsterSoundTimer = 0.0f;
@@ -78,8 +78,7 @@ public class Main extends SimpleApplication {
     private Node otoNode;
     private BetterCharacterControl otoControl;
     private AnimComposer otoAnimComposer;
-    private float otoSpeed = 10.0f;
-    private float otoHalfSpeed = 2.0f;
+    private final float otoSpeed = 10.0f;
    
     // Bag check
     private boolean gotKey = false;
@@ -174,6 +173,7 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleUpdate(float tpf) {
         
+        // Start screen before the game
         if (!startScreenActive && !textSequenceActive) {
             inputHandler.firstPersonNavigationUpdate(tpf, playerNode, playerControl);
 
@@ -183,22 +183,23 @@ public class Main extends SimpleApplication {
 
             // Add positional sound from monster
             monsterSoundTimer += tpf;
-            if (monsterSoundTimer >= 5f) { // Play every 5 seconds
-                if (monkeyNode != null) { // Ensure the monster node exists
+            if (monsterSoundTimer >= 5f) { 
+                if (monkeyNode != null) {
                     Vector3f monsterPosition = monkeyNode.getWorldTranslation();
-                    soundManager.playPositionalSFX("monster", monsterPosition); // Use the new method
+                    soundManager.playPositionalSFX("monster", monsterPosition);
                 } else {
                     System.err.println("Monster node (monkeyNode) is null!");
                 }
-                monsterSoundTimer = 0f; // Reset the timer
+                monsterSoundTimer = 0f; 
             }
             
+            // Chasing and stop chasing of the Monkey
             if (!stopChasing){
                 monkeyChasePlayer();
             }
 
+            // Key bag checking
             gotKey = inputHandler.getGotKey();
-            
             this.enqueue(() -> {
             
             if (gotKey && !hasTeleport && sceneCount == 0) {
@@ -316,6 +317,10 @@ public class Main extends SimpleApplication {
     * Helper functions
     */
     
+    /**
+    * Sets up the game's initial state, including physics, player controls, scenes, and models.
+    */
+    
     private void initializeGame() {
         keyCount = 0;
         
@@ -327,7 +332,7 @@ public class Main extends SimpleApplication {
         bulletAppState.getPhysicsSpace().setGravity(new Vector3f(0, -9.8f, 0));
 
         // Sound Manager
-        soundManager.playBGM("quiet_bgm"); // Play background music for the classroom
+        soundManager.playBGM("quiet_bgm"); 
 
         // Create player Node
         playerNode = new Node("the player");
@@ -383,6 +388,11 @@ public class Main extends SimpleApplication {
         sceneManager.switchToNextScene();
     }
     
+    /**
+    * Plays background music appropriate for the current scene.
+    *
+    * @param sceneName The name of the current scene.
+    */
     private void playSceneMusic(String sceneName) {
         soundManager.stopCurrentBGM();
 
@@ -405,6 +415,9 @@ public class Main extends SimpleApplication {
     * Static UI
     */
     
+    /**
+    * Displays the game's start screen and plays the starting music.
+    */
     private void showStartScreen() {
         soundManager.playBGM("starting");
         startScreen = new Picture("Start Screen");
@@ -416,6 +429,9 @@ public class Main extends SimpleApplication {
         startScreenActive = true;
     }
 
+    /**
+    * Removes the start screen from the UI and sets the active state to false.
+    */
     private void dismissStartScreen() {
         if (startScreen != null) {
             guiNode.detachChild(startScreen);
@@ -423,6 +439,9 @@ public class Main extends SimpleApplication {
         }
     }
 
+    /**
+    * Displays a sequence of text to the player at the start of the game.
+    */
     private void showTextSequence() {
         textDisplay = new BitmapText(guiFont, false);
         textDisplay.setSize(guiFont.getCharSet().getRenderedSize() * 4.5f);
@@ -433,6 +452,10 @@ public class Main extends SimpleApplication {
         updateTextDisplay();
     }
 
+    /**
+    * Updates the text being displayed from the sequence. If the sequence is complete, 
+    * dismisses the sequence and initializes the game.
+    */
     private void updateTextDisplay() {
         if (currentTextIndex < textSequence.size()) {
             String text = textSequence.get(currentTextIndex);
@@ -452,6 +475,9 @@ public class Main extends SimpleApplication {
         }
     }
 
+    /**
+    * Removes the text sequence from the UI and sets the active state to false.
+    */
     private void dismissTextSequence() {
         if (textDisplay != null) {
             guiNode.detachChild(textDisplay);
@@ -477,6 +503,9 @@ public class Main extends SimpleApplication {
         }
     };
     
+    /**
+    * Adds a save button to the UI.
+    */
     public void createSaveButton(){
         Picture frame = new Picture("User interface frame");
         frame.setImage(assetManager, "Interface/save.png", false); 
@@ -488,6 +517,9 @@ public class Main extends SimpleApplication {
         frame.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
     }
     
+    /**
+    * Adds a load button to the UI.
+    */
     public void createLoadButton(){
         Picture frame2 = new Picture("Button 2");
         frame2.setImage(assetManager, "Interface/load.png", false);
@@ -499,7 +531,9 @@ public class Main extends SimpleApplication {
         frame2.getMaterial().getAdditionalRenderState().setBlendMode(RenderState.BlendMode.Alpha);
     }
     
-    
+    /**
+    * Creates and displays a crosshair in the center of the screen.
+    */
     private void createCrosshair() {
         crosshair = new BitmapText(guiFont, false);
         crosshair.setSize(guiFont.getCharSet().getRenderedSize());
@@ -511,6 +545,9 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(crosshair);
     }
     
+    /**
+    * Configures the notification text element for displaying messages to the player.
+    */
     private void setNotificationText(){
         notificationText = new BitmapText(guiFont, false);
         notificationText.setSize(guiFont.getCharSet().getRenderedSize());
@@ -520,6 +557,11 @@ public class Main extends SimpleApplication {
         guiNode.attachChild(notificationText);
     }
     
+    /**
+    * Displays or hides the text prompt for proceeding to the next scene.
+    *
+    * @param show Whether to show or hide the prompt.
+    */
     private void setMoveNextText(boolean show){
         moveNextText = new BitmapText(guiFont, false);
         moveNextText.setSize(guiFont.getCharSet().getRenderedSize() * 3);
@@ -548,39 +590,39 @@ public class Main extends SimpleApplication {
     * Collision Check
     */
         
+    /**
+    * Checks if the player is within the teleport gate's proximity.
+    *
+    * @return true if the player is in range, otherwise false.
+    */
     private boolean isPlayerInTeleportGate() {
         if (teleportGateNode == null || playerNode == null) {
             return false;
         }
-
-        // Get the position of both the player and the teleport gate
         Vector3f playerPosition = playerNode.getWorldTranslation();
         Vector3f gatePosition = teleportGateNode.getWorldTranslation();
 
-        // Calculate the distance between the player and the teleport gate
         float distance = playerPosition.distance(gatePosition);
-
-        // Define a threshold for the teleport range (e.g., 3 units)
         float teleportThreshold = 7.4f;
-
-        // Check if the player is within the range of the teleport gate
         return distance <= teleportThreshold;
     }
     
+    /**
+    * Determines if a monster has collided with the player.
+    *
+    * @param monsterNode The node representing the monster.
+    * @return true if the player and monster are within collision distance, otherwise false.
+    */
     private boolean checkMonsterPlayerCollision(Node monsterNode) {
         if (playerNode == null || monsterNode == null) {
             System.out.println("either null");
             return false;
         }
 
-        // Get the positions of the player and the monkey
         Vector3f playerPosition = playerNode.getWorldTranslation();
         Vector3f monsterPosition = monsterNode.getWorldTranslation();
 
-        // Calculate the distance between them
         float distance = playerPosition.distance(monsterPosition);
-
-        // Define a collision threshold (e.g., 2.0f units)
         
         float collisionThreshold;
         
@@ -590,12 +632,15 @@ public class Main extends SimpleApplication {
             collisionThreshold = 44.1f;
         }
         System.out.println(distance);
-        // Check if the player and monkey are close enough
         return distance <= collisionThreshold;
     }
     
     /*
     * Monster Logic
+    */
+    
+    /**
+    * Moves the monkey character towards the player.
     */
     private void monkeyChasePlayer() {
         if (monkeyNode != null && playerNode != null) {
@@ -608,38 +653,40 @@ public class Main extends SimpleApplication {
         }
     }
     
+    /**
+    * Makes the Oto character chase the player only when not being observed.
+    */
     private void otoChasePlayerWhenNotSeen() {
-    if (otoNode != null && playerNode != null) {
-        // Get positions
-        Vector3f otoPosition = otoNode.getWorldTranslation();
-        Vector3f playerPosition = playerNode.getWorldTranslation();
-        
-        // Calculate direction to Oto from player
-        Vector3f directionToOto = otoPosition.subtract(playerPosition).normalizeLocal();
-        
-        // Get the player's view direction (you might need to adjust how to get this in your framework)
-        Vector3f playerViewDirection = playerNode.getControl(BetterCharacterControl.class).getViewDirection();
-        
-        // Calculate the dot product to determine if the player is looking at Oto
-        float dotProduct = playerViewDirection.dot(directionToOto);
-        
-        // Define thresholds
-        float fullSpeedThreshold = -0.3f; // Fully behind the player
-        
-        
-        if (dotProduct < fullSpeedThreshold) {
-            // Player is not looking at Oto, move at full speed
-            Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
-            otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed));
-            otoControl.setViewDirection(directionToPlayer);
-            otoAnimComposer.setCurrentAction("Walk"); // Play walk animation
-        } else {
-            // Player is looking directly at Oto, stop moving
-            otoControl.setWalkDirection(Vector3f.ZERO);
+        if (otoNode != null && playerNode != null) {
+            // Get positions
+            Vector3f otoPosition = otoNode.getWorldTranslation();
+            Vector3f playerPosition = playerNode.getWorldTranslation();
+
+            Vector3f directionToOto = otoPosition.subtract(playerPosition).normalizeLocal();
+            Vector3f playerViewDirection = playerNode.getControl(BetterCharacterControl.class).getViewDirection();
+
+            // Calculate the dot product to determine if the player is looking at Oto
+            float dotProduct = playerViewDirection.dot(directionToOto);
+            float fullSpeedThreshold = -0.3f; // Fully behind the player
+
+
+            if (dotProduct < fullSpeedThreshold) {
+                Vector3f directionToPlayer = playerPosition.subtract(otoPosition).normalizeLocal();
+                otoControl.setWalkDirection(directionToPlayer.mult(otoSpeed));
+                otoControl.setViewDirection(directionToPlayer);
+                otoAnimComposer.setCurrentAction("Walk");
+            } else {
+                // Player is looking directly at Oto, stop moving
+                otoControl.setWalkDirection(Vector3f.ZERO);
+            }
         }
     }
-    }
     
+    /**
+    * Loads and configures the terrain scene, including terrain, objects, lighting, and post-processing effects.
+    *
+    * @return The Node representing the terrain scene.
+    */
     public Node loadTerrain() {
         
         terrainScene = new Node("terrainNode");
